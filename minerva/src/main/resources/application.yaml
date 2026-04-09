@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: minerva
+  datasource:
+    url: jdbc:mysql://localhost:3306/apolo?useSSL=false&serverTimezone=UTC  # URL de conexión a MySQL
+    username: root  # Usuario de la base de datos
+    password: "Drakotako147258369#"   # Contraseña de la base de datos
+  jpa:
+    hibernate:
+      ddl-auto: none  # 🔧 Controla cómo se crea o actualiza el esquema de DB
+        # - update: actualiza el esquema automáticamente (útil en desarrollo)
+        # - create: crea las tablas desde cero
+      # - none: desactiva cambios automáticos (usar Flyway/Liquibase en producción)
+    show-sql: true  # 🔍 Muestra las consultas SQL en consola (activar solo en desarrollo)
+
+server:
+  port: 8080  # Puerto donde correrá la aplicación
+  #ssl:
+  #  key-store: classpath:sierdgtt.p12  # Ruta del keystore
+  #  key-store-password: mongo1234       # Contraseña del keystore
+  #  key-store-type: PKCS12              # Tipo de keystore
+
+# 🚨 Propiedad opcional para MySQL 8.x
+#spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+# ❗ Si usas MySQL 8, descomentar para evitar problemas con el dialect
