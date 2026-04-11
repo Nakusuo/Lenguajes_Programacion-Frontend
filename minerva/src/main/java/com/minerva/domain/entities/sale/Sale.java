@@ -27,30 +27,30 @@ public class Sale {
         this.registrationDate =  LocalDateTime.now();
     }
 
-    public static Result<Sale> create(String customerNameId, String productId, BigDecimal priceUnit, BigDecimal quantity) {
+    public static Result<Sale> create(String customerNameId, String productId, BigDecimal unitPrice, BigDecimal quantity) {
 
         Result<CustomerId> customerIdResult = CustomerId.of(customerNameId);
         if (customerIdResult.isFail()) return Result.fail(customerIdResult.getMessage());
 
         Sale saleCreated = new Sale(customerIdResult.getData());
 
-        Result<Void> result = saleCreated.addDetail(productId, priceUnit, quantity);
+        Result<Void> result = saleCreated.addDetail(productId, unitPrice, quantity);
         if (result.isFail()) return Result.fail(result.getMessage());
 
         return Result.success(saleCreated);
     }
 
-    public Result<Void> addDetail(String productId, BigDecimal priceUnit, BigDecimal quantity) {
+    public Result<Void> addDetail(String productId, BigDecimal unitPrice, BigDecimal quantity) {
         Result<ProductId> productIdResult = ProductId.of(productId);
         if (productIdResult.isFail()) return Result.fail(productIdResult.getMessage());
 
-        Result<Money> priceUnitResult = Money.of(priceUnit);
-        if (priceUnitResult.isFail()) return Result.fail(priceUnitResult.getMessage());
+        Result<Money> unitPriceResult = Money.of(unitPrice);
+        if (unitPriceResult.isFail()) return Result.fail(unitPriceResult.getMessage());
 
         Result<ProductQuantity> quantityResult = ProductQuantity.of(quantity);
         if (quantityResult.isFail()) return Result.fail(quantityResult.getMessage());
 
-        Result<SaleDetail> detailResult = SaleDetail.create(productIdResult.getData(), quantityResult.getData(), priceUnitResult.getData());
+        Result<SaleDetail> detailResult = SaleDetail.create(productIdResult.getData(), quantityResult.getData(), unitPriceResult.getData());
         if (detailResult.isFail()) return Result.fail(detailResult.getMessage());
 
         saleDetails.add(detailResult.getData());

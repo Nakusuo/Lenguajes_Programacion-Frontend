@@ -12,25 +12,25 @@ public class SaleDetail {
     private final UUID id;
     private final ProductId productNameId;
     private final ProductQuantity quantity;
-    private final Money priceUnit;
+    private final Money unitPrice;
 
-    private SaleDetail(ProductId productNameId, ProductQuantity quantity, Money priceUnit) {
+    private SaleDetail(ProductId productNameId, ProductQuantity quantity, Money unitPrice) {
         this.id = UUID.randomUUID();
         this.productNameId = productNameId;
         this.quantity = quantity;
-        this.priceUnit = priceUnit;
+        this.unitPrice = unitPrice;
     }
 
-    static Result<SaleDetail> create(ProductId productId, ProductQuantity quantity, Money priceUnit) {
+    static Result<SaleDetail> create(ProductId productId, ProductQuantity quantity, Money unitPrice) {
         if (productId == null) return Result.fail("El PRODUCTO es requerido.");
         if (quantity != null && quantity.isZeroOrLess()) return Result.fail("La CANTIDAD DE PRODUCTO debe ser mayor a 0.");
-        if (priceUnit != null && priceUnit.isZeroOrLess()) return Result.fail("El PRECIO UNITARIO debe ser mayor a 0.");
+        if (unitPrice != null && unitPrice.isZeroOrLess()) return Result.fail("El PRECIO UNITARIO debe ser mayor a 0.");
 
-        return Result.success(new SaleDetail(productId, quantity, priceUnit));
+        return Result.success(new SaleDetail(productId, quantity, unitPrice));
     }
 
     public BigDecimal calculateTotal() {
-        return priceUnit.value().multiply(quantity.value());
+        return unitPrice.value().multiply(quantity.value());
     }
 
     public UUID getId() {
@@ -45,7 +45,7 @@ public class SaleDetail {
         return quantity;
     }
 
-    public Money getPriceUnit() {
-        return priceUnit;
+    public Money getUnitPrice() {
+        return unitPrice;
     }
 }

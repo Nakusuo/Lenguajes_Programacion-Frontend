@@ -50,7 +50,7 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Result<Void> registerStockEntry(String productId, String supplierNameId, BigDecimal priceUnit, BigDecimal quantity, LocalDateTime expirationDate) {
+    public Result<Void> registerStockEntry(String productId, String supplierNameId, BigDecimal unitPrice, BigDecimal quantity, LocalDateTime expirationDate) {
 
         Optional<Product> optional = findProductById(productId);
         if (optional.isEmpty()) return Result.fail("El producto no esta registrado.");
@@ -58,7 +58,7 @@ public class ProductService implements ProductUseCase {
 
         Product product = optional.get();
 
-        Result<StockEntry> stockEntryResult = product.generateStockEntry(supplierNameId, priceUnit, quantity, expirationDate);
+        Result<StockEntry> stockEntryResult = product.generateStockEntry(supplierNameId, unitPrice, quantity, expirationDate);
         if (stockEntryResult.isFail()) return Result.fail(stockEntryResult.getMessage());
 
         productRepository.save(stockEntryResult.getData());

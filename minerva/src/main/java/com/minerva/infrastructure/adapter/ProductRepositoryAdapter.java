@@ -16,7 +16,6 @@ import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class ProductRepositoryAdapter implements ProductRepository {
     @PersistenceContext
@@ -57,7 +56,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
                 stockEntry.getId(),
                 productEntity,
                 supplierEntity,
-                stockEntry.getPriceUnit().value(),
+                stockEntry.getUnitPrice().value(),
                 stockEntry.getQuantity().value(),
                 stockEntry.getExpirationDate(),
                 stockEntry.getRegistrationDate()
