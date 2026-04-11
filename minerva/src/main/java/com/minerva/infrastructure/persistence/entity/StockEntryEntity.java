@@ -30,8 +30,8 @@ public class StockEntryEntity {
     @JoinColumn(name = "supplierNameId", nullable = false)
     private SupplierEntity supplierEntity;
 
-    @Column(name = "priceUnit", precision = 10, scale = 2, nullable = false)
-    private BigDecimal priceUnit;
+    @Column(name = "unitPrice", precision = 10, scale = 2, nullable = false)
+    private BigDecimal unitPrice;
 
     @Column(name = "quantity", precision = 10, scale = 3, nullable = false)
     private BigDecimal quantity;

@@ -23,6 +23,6 @@ public class StockPricingService {
             return Result.fail("No existe una entrada de stock del día anterior.");
         }
 
-        return Result.success(entryOpt.get().getPriceUnit());
+        return Result.success(entryOpt.get().getUnitPrice());
     }
 }
