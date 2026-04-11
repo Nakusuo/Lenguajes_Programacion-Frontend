@@ -18,7 +18,7 @@ public class StockEntry {
     private final LocalDateTime expirationDate;
     private final LocalDateTime registrationDate;
 
-    public StockEntry(UUID stockEntryId, ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate, LocalDateTime registrationDate) {
+    private StockEntry(UUID stockEntryId, ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate, LocalDateTime registrationDate) {
         this.stockEntryId = stockEntryId;
         this.productNameId = productNameId;
         this.supplierNameId = supplierNameId;
@@ -27,7 +27,7 @@ public class StockEntry {
         this.expirationDate = expirationDate;
         this.registrationDate = registrationDate;
     }
-    
+
     static Result<StockEntry> create(ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate) {
 
         if (productNameId == null) return Result.fail("El nombre del producto no puede estar vacío.");
