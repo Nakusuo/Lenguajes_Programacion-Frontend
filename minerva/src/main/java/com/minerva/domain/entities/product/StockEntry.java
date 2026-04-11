@@ -18,17 +18,16 @@ public class StockEntry {
     private final LocalDateTime expirationDate;
     private final LocalDateTime registrationDate;
 
-    private StockEntry(ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate) {
+    public StockEntry(UUID stockEntryId, ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate, LocalDateTime registrationDate) {
+        this.stockEntryId = stockEntryId;
         this.productNameId = productNameId;
         this.supplierNameId = supplierNameId;
         this.priceUnit = priceUnit;
         this.quantity = quantity;
         this.expirationDate = expirationDate;
-        // DATOS POR DEFECTO
-        this.stockEntryId = UUID.randomUUID();
-        this.registrationDate = LocalDateTime.now();
+        this.registrationDate = registrationDate;
     }
-
+    
     static Result<StockEntry> create(ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate) {
 
         if (productNameId == null) return Result.fail("El nombre del producto no puede estar vacío.");
@@ -39,7 +38,10 @@ public class StockEntry {
         if (expirationDate != null && (expirationDate.isBefore(LocalDateTime.now()) || expirationDate.isEqual(LocalDateTime.now())))
             return Result.fail("La fecha de expiración debe ser posterior a la fecha actual.");
 
-        StockEntry stockEntry = new StockEntry(productNameId, supplierNameId, priceUnit, quantity, expirationDate);
+        UUID stockEntryId = UUID.randomUUID();
+        LocalDateTime registrationDate = LocalDateTime.now();
+
+        StockEntry stockEntry = new StockEntry(stockEntryId, productNameId, supplierNameId, priceUnit, quantity, expirationDate, registrationDate);
 
         return Result.success(stockEntry);
     }
