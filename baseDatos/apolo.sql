@@ -70,9 +70,9 @@ CREATE TABLE stockEntry (
     stockEntryId CHAR(36) PRIMARY KEY,
     productNameId VARCHAR(100) NOT NULL,
     supplierNameId VARCHAR(100) NOT NULL,
-    priceUnit DECIMAL(10,2) NOT NULL,
+    unitPrice DECIMAL(10,2) NOT NULL,
     quantity DECIMAL(10,3) NOT NULL,
-    ExpirationDate TIMESTAMP,
+    expirationDate TIMESTAMP,
     registrationDate TIMESTAMP NOT NULL,
  
     CONSTRAINT fk_stockEntry_product FOREIGN KEY (productNameId)
@@ -104,7 +104,7 @@ CREATE TABLE saleDetail (
     saleId CHAR(36) NOT NULL,
     productNameId VARCHAR(100) NOT NULL,
     quantity DECIMAL(10,3) NOT NULL,
-    priceUnit DECIMAL(10,2) NOT NULL,
+    unitPrice DECIMAL(10,2) NOT NULL,
 
     CONSTRAINT fk_sd_sale FOREIGN KEY (saleId)
         REFERENCES sale(saleId)
