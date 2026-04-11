@@ -4,6 +4,7 @@ import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.supplier.SupplierId;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,6 +28,31 @@ public class StockEntry {
         this.expirationDate = expirationDate;
         this.registrationDate = registrationDate;
     }
+
+    public static StockEntry restore(
+        UUID stockEntryId,
+        String productNameId,
+        String supplierNameId,
+        BigDecimal priceUnit,
+        BigDecimal quantity,
+        LocalDateTime expirationDate,
+        LocalDateTime registrationDate) 
+    {
+    ProductId productId = ProductId.of(productNameId).getData();
+    SupplierId supplierId = SupplierId.of(supplierNameId).getData();
+    Money unitPrice = Money.of(priceUnit).getData();
+    ProductQuantity productQuantity = ProductQuantity.of(quantity).getData();
+
+    return new StockEntry(
+            stockEntryId,
+            productId,
+            supplierId,
+            unitPrice,
+            productQuantity,
+            expirationDate,
+            registrationDate
+    );
+}
 
     static Result<StockEntry> create(ProductId productNameId, SupplierId supplierNameId, Money priceUnit, ProductQuantity quantity, LocalDateTime expirationDate) {
 
