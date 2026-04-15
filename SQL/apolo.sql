@@ -21,6 +21,7 @@ CREATE TABLE product (
     productNameId VARCHAR(100) PRIMARY KEY,--
     gainStrategy ENUM('PORCENTAJE', 'INCREMENTAL') NOT NULL,--
     gainAmount DECIMAL(10,2) NOT NULL,--
+    price DECIMAL(10,2) NOT NULL,--
     stock DECIMAL(10,3) NOT NULL, --
     reorderLevel DECIMAL(10,3),
     barCode CHAR(13) UNIQUE,
@@ -158,8 +159,8 @@ CREATE TABLE productReturn (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Datos iniciales
-INSERT INTO supplier (supplierNameId) VALUES ('anonimo');
-INSERT INTO customer (customerNameId) VALUES ('anonimo');
+INSERT INTO supplier (supplierNameId, registrationDate) VALUES ('anonimo', NOW());
+INSERT INTO customer (customerNameId, registrationDate) VALUES ('anonimo', NOW());
 
 -- TRIGGERS
 -- SHOW TRIGGERS
