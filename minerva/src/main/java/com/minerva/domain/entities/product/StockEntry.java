@@ -58,17 +58,27 @@ public class StockEntry {
     );
 }
 
-    static Result<StockEntry> create(
-            ProductId productNameId,
-            SupplierId supplierNameId,
-            Money unitPrice,
-            ProductQuantity quantity,
-            LocalDateTime expirationDate
-    ) {
-        if (productNameId == null) return Result.fail("El nombre del producto no puede estar vacío.");
-        if (supplierNameId == null) return Result.fail("El nombre del proveedor no puede estar vacío.");
-        if (unitPrice != null && unitPrice.isZeroOrLess()) return Result.fail("El precio del producto debe ser mayor a 0.");
-        if (quantity != null && quantity.isZeroOrLess()) return Result.fail("La cantidad del producto debe ser mayor a 0.");
+    public static Result<StockEntry> create(
+            String productNameId,
+            String supplierNameId,
+            BigDecimal unitPrice,
+            BigDecimal quantity,
+            LocalDateTime expirationDate)
+    {
+        Result<ProductId> productIdResult = ProductId.of(productNameId);
+        if (productIdResult.isFail()) return Result.fail(productIdResult.getMessage());
+
+        Result<SupplierId> supplierIdResult = SupplierId.of(supplierNameId);
+        if (supplierIdResult.isFail()) return Result.fail(supplierIdResult.getMessage());
+
+        Result<Money> unitPriceResult = Money.of(unitPrice);
+        if (unitPriceResult.isFail()) return Result.fail(unitPriceResult.getMessage());
+
+        Result<ProductQuantity> quantityResult = ProductQuantity.of(quantity);
+        if (quantityResult.isFail()) return Result.fail(quantityResult.getMessage());
+
+        if (unitPriceResult.getData().isZeroOrLess()) return Result.fail("El precio del producto debe ser mayor a 0.");
+        if (quantityResult.getData().isZeroOrLess()) return Result.fail("La cantidad del producto debe ser mayor a 0.");
 
         if (expirationDate != null && (expirationDate.isBefore(LocalDateTime.now()) || expirationDate.isEqual(LocalDateTime.now())))
             return Result.fail("La fecha de expiración debe ser posterior a la fecha actual.");
@@ -76,7 +86,7 @@ public class StockEntry {
         UUID stockEntryId = UUID.randomUUID();
         LocalDateTime registrationDate = LocalDateTime.now();
 
-        StockEntry stockEntry = new StockEntry(stockEntryId, productNameId, supplierNameId, unitPrice, quantity, expirationDate, registrationDate);
+        StockEntry stockEntry = new StockEntry(stockEntryId, productIdResult.getData(), supplierIdResult.getData(), unitPriceResult.getData(), quantityResult.getData(), expirationDate, registrationDate);
 
         return Result.success(stockEntry);
     }
