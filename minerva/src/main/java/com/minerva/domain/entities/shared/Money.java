@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public final class Money {
-    private static final BigDecimal MIN_AMOUNT = BigDecimal.ZERO;
-    private static final int MAX_DECIMALS = 2;
+    public static final BigDecimal MIN_AMOUNT = BigDecimal.ZERO;
+    public static final int MAX_DECIMALS = 2;
 
     private final BigDecimal value;
 
