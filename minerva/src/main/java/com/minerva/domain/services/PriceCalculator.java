@@ -2,9 +2,9 @@ package com.minerva.domain.services;
 
 import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.entities.product.Product;
-import com.minerva.domain.entities.product.StockEntry;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.entities.stockEntry.StockEntry;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
