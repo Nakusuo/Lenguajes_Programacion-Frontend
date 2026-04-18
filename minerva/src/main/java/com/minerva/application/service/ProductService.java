@@ -6,6 +6,7 @@ import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.product.*;
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.domain.repositories.SupplierRepository;
 
