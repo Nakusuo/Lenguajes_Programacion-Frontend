@@ -1,6 +1,8 @@
-package com.minerva.domain.entities.product;
+package com.minerva.domain.entities.stockEntry;
 
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.entities.product.ProductId;
+import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.supplier.SupplierId;
 

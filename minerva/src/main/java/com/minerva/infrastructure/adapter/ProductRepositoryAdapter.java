@@ -1,6 +1,7 @@
 package com.minerva.infrastructure.adapter;
 
 import com.minerva.domain.entities.product.*;
+import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.infrastructure.persistence.entity.ProductEntity;
 import com.minerva.infrastructure.persistence.entity.StockEntryEntity;
