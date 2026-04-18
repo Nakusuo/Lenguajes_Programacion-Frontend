@@ -5,7 +5,8 @@ import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
-import com.minerva.domain.entities.supplier.SupplierId;
+import com.minerva.domain.entities.stockEntry.StockEntry;
+import com.minerva.domain.services.PriceCalculator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,10 +27,11 @@ public class Product {
     //----------------------------------------------
 
     private SaleType saleType;
+    private Money price;
     private final Category category;
     private final LocalDateTime registrationDate;
 
-    private Product(ProductId productNameId, ProductQuantity stock, GainStrategy gainStrategy, Money gainAmount, ProductQuantity reorderLevel, BarCode barCode, SaleType saleType, Category category, LocalDateTime registrationDate) {
+    private Product(ProductId productNameId, ProductQuantity stock, GainStrategy gainStrategy, Money gainAmount, ProductQuantity reorderLevel, BarCode barCode, SaleType saleType, Money price,Category category, LocalDateTime registrationDate) {
         this.productNameId = productNameId;
         this.stock = stock;
         this.gainStrategy = gainStrategy;
@@ -37,15 +39,17 @@ public class Product {
         this.reorderLevel = reorderLevel;
         this.barCode = barCode;
         this.saleType = saleType;
+        this.price = price;
         this.category = category;
         this.registrationDate = registrationDate;
     }
 
-    public static Product restore () {
+    public static Product restore (String id, String productNameId, BigDecimal stock, GainStrategy gainStrategy, BigDecimal gainAmount, BigDecimal reorderLevel, String barCode, SaleType saleType, Category category, LocalDateTime registrationDate, StockEntry stockEntry) {
 
     }
 
-    public static Result<Product> create(String productName, GainStrategy gainStrategy, BigDecimal gainAmount, BigDecimal reorderLevel, String barCode, SaleType saleType, Category category) {
+    // Stock entry debe estar en una capa anticorrupción
+    public static Result<Product> create(String productName, GainStrategy gainStrategy, BigDecimal gainAmount, BigDecimal reorderLevel, String barCode, SaleType saleType, Category category, StockEntry stockEntry) {
 
         if (gainStrategy == null) return Result.fail("Seleccione una estrategia de ganancia.");
         if (saleType == null) return Result.fail("Seleccione el tipo de venta.");
@@ -56,10 +60,10 @@ public class Product {
         if (productIdResult.isFail()) return Result.fail(productIdResult.getMessage());
 
         //----------------------------------
-        Result<Money> moneyResult = Money.of(gainAmount);
-        if (moneyResult.isFail()) return Result.fail(moneyResult.getMessage());
+        Result<Money> gainAmountResult = Money.of(gainAmount);
+        if (gainAmountResult.isFail()) return Result.fail(gainAmountResult.getMessage());
 
-        if (moneyResult.getData().isZeroOrLess()) return Result.fail("El monto de ganancia debe ser mayor a cero.");
+        if (gainAmountResult.getData().isZeroOrLess()) return Result.fail("El monto de ganancia debe ser mayor a cero.");
 
         //----------------------------------
 
@@ -90,18 +94,24 @@ public class Product {
             barCodeValue = barCodeResult.getData();
         }
         //----------------------------------
+        Result<Money> priceResult = PriceCalculator.calculate(stockEntry, gainStrategy, gainAmountResult.getData());
+        if (priceResult.isFail()) return Result.fail(priceResult.getMessage());
+
+        //----------------------------------
 
         LocalDateTime registrationDate = LocalDateTime.now();
-        ProductQuantity initialStock = ProductQuantity.zero();
+        ProductQuantity initialStock = stockEntry.getQuantity();
+        
 
         Product productCreated = new Product(
                 productIdResult.getData(),
                 initialStock,
                 gainStrategy,
-                moneyResult.getData(),
+                gainAmountResult.getData(),
                 reorderLevelValue,
                 barCodeValue,
                 saleType,
+                priceResult.getData(),
                 category,
                 registrationDate
         );
@@ -161,19 +171,6 @@ public class Product {
 
         return Result.success(null);
     }
-    // -------------------------------------------
-    public Result<StockEntry> generateStockEntry(String supplierNameId, BigDecimal priceUnit, BigDecimal quantity, LocalDateTime expirationDate) {
-        Result<SupplierId> supplierIdResult = SupplierId.of(supplierNameId);
-        if (supplierIdResult.isFail()) return Result.fail(supplierIdResult.getMessage());
-
-        Result<Money> priceUnitResult = Money.of(priceUnit);
-        if (priceUnitResult.isFail()) return Result.fail(priceUnitResult.getMessage());
-
-        Result<ProductQuantity> quantityResult = ProductQuantity.of(quantity);
-        if (quantityResult.isFail()) return Result.fail(quantityResult.getMessage());
-
-        return StockEntry.create(this.productNameId, supplierIdResult.getData(), priceUnitResult.getData(), quantityResult.getData(), expirationDate);
-    }
     // ---------------------------------------------
 
     public ProductId getNameId() {
@@ -212,6 +209,10 @@ public class Product {
 
     public LocalDateTime getRegistrationDate() {
         return registrationDate;
+    }
+
+    public Money getPrice() {
+        return price;
     }
 
     @Override
