@@ -1,6 +1,8 @@
 package com.minerva.domain.entities.shared;
 
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.MoneyOperationException;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -56,12 +58,11 @@ public final class Money {
         }
     }
 
-    public Money subtract(Money other) {
+    public Money subtract(Money other) throws MoneyOperationException {
         try {
             return new Money(this.value.subtract(other.value));
         } catch (DomainException e) {
-            // Si esto truena, recenle al de arriba
-            throw new RuntimeException("Error al restar montos: " + e.getMessage(), e);
+            throw new MoneyOperationException("Error al restar montos: " + e.getMessage(), e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.minerva.domain.entities.product;
 
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.ProductQuantityOperationException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -64,6 +65,14 @@ public class ProductQuantity {
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
             throw new RuntimeException("Error al sumar cantidades de producto: " + e.getMessage(), e);
+        }
+    }
+
+    public ProductQuantity subtract(ProductQuantity other) throws ProductQuantityOperationException {
+        try {
+            return new ProductQuantity(this.value.subtract(other.value));
+        } catch (DomainException e) {
+            throw new ProductQuantityOperationException("Error al restar cantidades de producto: " + e.getMessage(), e);
         }
     }
 
