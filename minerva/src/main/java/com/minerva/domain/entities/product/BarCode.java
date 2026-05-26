@@ -1,28 +1,22 @@
 package com.minerva.domain.entities.product;
 
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.DomainException;
 
 import java.util.Objects;
 
 public class BarCode {
 
-    private final String value;
+    public final String value;
 
-    private BarCode(String value) {
+    public BarCode(String value) throws DomainException {
+
+        if (value == null) throw new DomainException("Ingrese el código de barras.");
+        if (value.isBlank()) throw new DomainException("El código de barras no puede estar vacío.");
+        if (value.length() != 13) throw new DomainException("El código de barras debe tener 13 dígitos.");
+        if (!value.matches("^\\d+$")) throw new DomainException("El código de barras solo puede contener números.");
+
+
         this.value = value;
-    }
-
-    public static Result<BarCode> of(String value) {
-        if (value == null) return Result.fail("Ingrese el código de barras.");
-        if (value.isBlank()) return Result.fail("El código de barras no puede estar vacío.");
-        if (value.length() != 13) return Result.fail("El código de barras debe tener 13 dígitos.");
-        if (!value.matches("^\\d+$")) return Result.fail("El código de barras solo puede contener números.");
-
-        return Result.success(new BarCode(value));
-    }
-
-    public String value() {
-        return value;
     }
 
     @Override

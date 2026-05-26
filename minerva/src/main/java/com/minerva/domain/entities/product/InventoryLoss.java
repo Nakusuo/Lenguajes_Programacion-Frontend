@@ -1,7 +1,7 @@
 package com.minerva.domain.entities.product;
 
 import com.minerva.domain.constants.ReasonProductLoss;
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.DomainException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,7 +16,17 @@ public class InventoryLoss {
     private String observation;
     private final LocalDateTime registrationDate;
 
-    private InventoryLoss(ProductId productNameId, ProductQuantity quantity, ReasonProductLoss reason, String observation) {
+    public InventoryLoss(
+            ProductId productNameId,
+            ProductQuantity quantity,
+            ReasonProductLoss reason,
+            String observation
+    ) throws DomainException {
+
+        if (productNameId == null) throw new DomainException("El nombre del producto no puede estar vacío.");
+        if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La cantidad debe ser mayor a cero.");
+        if (reason == null) throw new DomainException("Debe especificar la razón de la pérdida.");
+
         this.productNameId = productNameId;
         this.quantity = quantity;
         this.reason = reason;
@@ -24,17 +34,6 @@ public class InventoryLoss {
         // VALORES POR DEFECTO
         this.inventoryLossId = UUID.randomUUID();
         this.registrationDate = LocalDateTime.now();
-    }
-
-    // Poner parametros a observacion
-    static Result<InventoryLoss> create(ProductId productNameId, ProductQuantity quantity, ReasonProductLoss reason, String observation) {
-        if (productNameId == null) return Result.fail("El nombre del producto no puede estar vacío.");
-        if (quantity != null && quantity.isZeroOrLess()) return Result.fail("La cantidad debe ser mayor a cero.");
-        if (reason == null) return Result.fail("Debe especificar la razón de la pérdida.");
-
-        InventoryLoss loss = new InventoryLoss(productNameId, quantity, reason, observation);
-
-        return Result.success(loss);
     }
 
     public UUID getInventoryLossId() {

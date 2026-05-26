@@ -1,5 +1,6 @@
 package com.minerva.domain.entities.shared;
 
+import com.minerva.domain.exceptions.DomainException;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -7,18 +8,15 @@ public final class Money {
     public static final BigDecimal MIN_AMOUNT = BigDecimal.ZERO;
     public static final int MAX_DECIMALS = 2;
 
-    private final BigDecimal value;
+    public final BigDecimal value;
 
-    private Money(BigDecimal amount) {
-        this.value = amount;
-    }
+    public Money(BigDecimal value) throws DomainException {
 
-    public static Result<Money> of(BigDecimal value) {
-        if (value == null) return Result.fail("Ingrese el monto.");
-        if (value.scale() > MAX_DECIMALS) return Result.fail("El monto solo puede tener " + MAX_DECIMALS + " decimales.");
-        if (value.compareTo(MIN_AMOUNT) < 0) return Result.fail("El monto no puede ser menor que " + MIN_AMOUNT + ".");
+        if (value == null) throw new DomainException("Ingrese el monto.");
+        if (value.scale() > MAX_DECIMALS) throw new DomainException("El monto solo puede tener " + MAX_DECIMALS + " decimales.");
+        if (value.compareTo(MIN_AMOUNT) < 0) throw new DomainException("El monto no puede ser menor que " + MIN_AMOUNT + ".");
 
-        return Result.success(new Money(value));
+        this.value = value;
     }
 
     public boolean isGreaterThanZero() {
@@ -41,8 +39,48 @@ public final class Money {
         return value.compareTo(BigDecimal.ZERO) >= 0;
     }
 
-    public BigDecimal value() {
-        return value;
+    public boolean isLessThan(Money other) {
+        return this.value.compareTo(other.value) < 0;
+    }
+
+    public boolean isGreaterThan(Money other) {
+        return this.value.compareTo(other.value) > 0;
+    }
+
+    public Money add(Money other) {
+        try {
+            return new Money(this.value.add(other.value));
+        } catch (DomainException e) {
+            // Si esto truena, recenle al de arriba
+            throw new RuntimeException("Error al sumar montos: " + e.getMessage(), e);
+        }
+    }
+
+    public Money subtract(Money other) {
+        try {
+            return new Money(this.value.subtract(other.value));
+        } catch (DomainException e) {
+            // Si esto truena, recenle al de arriba
+            throw new RuntimeException("Error al restar montos: " + e.getMessage(), e);
+        }
+    }
+
+    public static Money zero() {
+        try {
+            return new Money(BigDecimal.ZERO);
+        } catch (DomainException e) {
+            // Si esto truena, récenle al de arriba
+            throw new RuntimeException("Error al crear el monto cero.", e);
+        }
+    }
+
+    public static Money tenCents() {
+        try {
+            return new Money(new BigDecimal("0.10"));
+        } catch (DomainException e) {
+            // Si esto truena, récenle al de arriba
+            throw new RuntimeException("Error al crear el monto mínimo.", e);
+        }
     }
 
     @Override
