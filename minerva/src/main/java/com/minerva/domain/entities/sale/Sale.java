@@ -92,7 +92,11 @@ public class Sale {
     }
 
     public Money calculateAmountDue() {
-        return calculateTotal().subtract(calculateTotalPaid());
+        try {
+            return calculateTotal().subtract(calculateTotalPaid());
+        } catch (DomainException e) {
+            throw new RuntimeException("Error al calcular el monto adeudado: " + e.getMessage(), e);
+        }
     }
 
     public boolean isDueCanceled() {
