@@ -1,40 +1,37 @@
 package com.minerva.domain.entities.customer;
 
 import com.minerva.domain.entities.shared.PhoneNumber;
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.DomainException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Customer {
     private final CustomerId customerNameId;
+    // Puede ser null
     private PhoneNumber phoneNumber;
+    // ------------
     private final LocalDateTime registrationDate;
 
-    private Customer(CustomerId customerNameId, PhoneNumber phoneNumber) {
-        this.customerNameId = customerNameId;
-        this.phoneNumber = phoneNumber;
+    public Customer(String name, String phoneNumber) throws DomainException {
+
+        this.customerNameId = new CustomerId(name);
+        this.phoneNumber = (phoneNumber != null)
+                ? new PhoneNumber(phoneNumber)
+                : null;
+
         // VALORES POR DEFECTO
         this.registrationDate = LocalDateTime.now();
-    }
-
-    public Result<Customer> create(String name, String phoneNumber) {
-        Result<CustomerId> customerIdResult = CustomerId.of(name);
-        if (customerIdResult.isFail()) return Result.fail(customerIdResult.getMessage());
-
-        Result<PhoneNumber> phoneNumberResult = PhoneNumber.of(phoneNumber);
-        if (phoneNumberResult.isFail()) return Result.fail(phoneNumberResult.getMessage());
-
-
-        return Result.success(new Customer(customerIdResult.getData(), phoneNumberResult.getData()));
     }
 
     public CustomerId getCustomerNameId() {
         return customerNameId;
     }
 
-    public PhoneNumber getPhoneNumber() {
-        return phoneNumber;
+    public Optional<PhoneNumber> getPhoneNumber() {
+        if (phoneNumber == null) return Optional.empty();
+        return Optional.of(phoneNumber);
     }
 
     public LocalDateTime getRegistrationDate() {

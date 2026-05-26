@@ -1,6 +1,6 @@
 package com.minerva.domain.entities.product;
 
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.DomainException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -11,23 +11,25 @@ public class ProductQuantity {
     private static final int MAX_DECIMALS = 3;
 
 
-    private final BigDecimal value;
+    public final BigDecimal value;
 
-    private ProductQuantity(BigDecimal value) {
+    public ProductQuantity(BigDecimal value) throws DomainException {
+
+        if (value == null) throw new DomainException("Ingrese la cantidad del producto.");
+        if (value.scale() > MAX_DECIMALS) throw new DomainException("La cantidad no puede tener decimales.");
+        if (value.compareTo(MIN_AMOUNT) < 0) throw new DomainException("La cantidad no puede ser menor que " + MIN_AMOUNT + ".");
+
         this.value = value;
-    }
-
-    public static Result<ProductQuantity> of(BigDecimal value) {
-        if (value == null) return Result.fail("Ingrese la cantidad del producto.");
-        if (value.scale() > MAX_DECIMALS) return Result.fail("El monto solo puede tener " + MAX_DECIMALS + " decimales.");
-        if (value.compareTo(MIN_AMOUNT) < 0) return Result.fail("La cantidad no puede ser menor que " + MIN_AMOUNT + ".");
-
-        return Result.success(new ProductQuantity(value));
     }
 
     // Nota: Mejorar el nombre
     public static ProductQuantity zero() {
-        return new ProductQuantity(BigDecimal.ZERO);
+        try {
+            return new ProductQuantity(BigDecimal.ZERO);
+        } catch (DomainException e) {
+            // Si esto truena, récenle al de arriba
+            throw new RuntimeException("Error al crear la cantidad cero.", e);
+        }
     }
 
     public boolean isGreaterThanZero() {
@@ -56,8 +58,13 @@ public class ProductQuantity {
         return this.value.compareTo(other.value) < 0;
     }
 
-    public BigDecimal value() {
-        return value;
+    public ProductQuantity add(ProductQuantity other) {
+        try {
+            return new ProductQuantity(this.value.add(other.value));
+        } catch (DomainException e) {
+            // Si esto truena, récenle al de arriba
+            throw new RuntimeException("Error al sumar cantidades de producto: " + e.getMessage(), e);
+        }
     }
 
     @Override

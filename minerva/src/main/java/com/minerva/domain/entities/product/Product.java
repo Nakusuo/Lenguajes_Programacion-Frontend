@@ -6,6 +6,7 @@ import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.entities.stockEntry.StockEntry;
+import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.services.PriceCalculator;
 
 import java.math.BigDecimal;
@@ -15,7 +16,6 @@ import java.util.Optional;
 
 import static com.minerva.domain.services.Math.isDecimal;
 
-@SuppressWarnings("LombokGetterMayBeUsed")
 public class Product {
     private final ProductId productNameId;
     private ProductQuantity stock;
@@ -31,131 +31,90 @@ public class Product {
     private final Category category;
     private final LocalDateTime registrationDate;
 
-    private Product(ProductId productNameId, ProductQuantity stock, GainStrategy gainStrategy, Money gainAmount, ProductQuantity reorderLevel, BarCode barCode, SaleType saleType, Money price,Category category, LocalDateTime registrationDate) {
-        this.productNameId = productNameId;
-        this.stock = stock;
+    // STOCK ENTRY debe estar en una capa anticorrupcion
+    public Product(
+            String productName,
+            GainStrategy gainStrategy,
+            BigDecimal gainAmount,
+            BigDecimal reorderLevel,
+            String barCode,
+            SaleType saleType,
+            Category category,
+            StockEntry stockEntry,
+            String borrarEsto
+    ) throws DomainException {
+        this.productNameId = new ProductId(productName);
+        this.stock = stockEntry.getQuantity();
+        this.gainAmount = new Money(gainAmount);
         this.gainStrategy = gainStrategy;
-        this.gainAmount = gainAmount;
-        this.reorderLevel = reorderLevel;
-        this.barCode = barCode;
         this.saleType = saleType;
-        this.price = price;
         this.category = category;
-        this.registrationDate = registrationDate;
-    }
-
-    public static Product restore (String id, String productNameId, BigDecimal stock, GainStrategy gainStrategy, BigDecimal gainAmount, BigDecimal reorderLevel, String barCode, SaleType saleType, Category category, LocalDateTime registrationDate, StockEntry stockEntry) {
-
-    }
-
-    // Stock entry debe estar en una capa anticorrupción
-    public static Result<Product> create(String productName, GainStrategy gainStrategy, BigDecimal gainAmount, BigDecimal reorderLevel, String barCode, SaleType saleType, Category category, StockEntry stockEntry) {
-
-        if (gainStrategy == null) return Result.fail("Seleccione una estrategia de ganancia.");
-        if (saleType == null) return Result.fail("Seleccione el tipo de venta.");
-        if (category == null) return Result.fail("Seleccione una categoría.");
 
 
-        Result<ProductId> productIdResult = ProductId.of(productName);
-        if (productIdResult.isFail()) return Result.fail(productIdResult.getMessage());
+        if (gainStrategy == null) throw new DomainException("Seleccione una estrategia de ganancia.");
+        if (saleType == null) throw new DomainException("Seleccione el tipo de venta.");
+        if (category == null) throw new DomainException("Seleccione una categoría.");
+        if (this.gainAmount.isZeroOrLess()) throw new DomainException("El monto de ganancia debe ser mayor a cero.");
 
-        //----------------------------------
-        Result<Money> gainAmountResult = Money.of(gainAmount);
-        if (gainAmountResult.isFail()) return Result.fail(gainAmountResult.getMessage());
 
-        if (gainAmountResult.getData().isZeroOrLess()) return Result.fail("El monto de ganancia debe ser mayor a cero.");
+        if (reorderLevel == null ) {
+            this.reorderLevel = null;
+        } else {
+            if (SaleType.UNIDAD.equals(saleType) && isDecimal(reorderLevel))
+                throw new DomainException("El nivel de reposición no puede ser decimal para productos vendidos por unidad.");
 
-        //----------------------------------
-
-        ProductQuantity reorderLevelValue = null;
-
-        if (reorderLevel != null) {
-            Result<ProductQuantity> reorderLevelResult = ProductQuantity.of(reorderLevel);
-            if (reorderLevelResult.isFail()) return Result.fail(reorderLevelResult.getMessage());
-
-            if (SaleType.UNIDAD.equals(saleType) && isDecimal(reorderLevelResult.getData().value())){
-                return Result.fail("El nivel de reposición no puede ser decimal para productos vendidos por unidad.");
-            }
-
-            reorderLevelValue = reorderLevelResult.getData();
+            this.reorderLevel = new ProductQuantity(reorderLevel);
         }
 
-        //----------------------------------
-
-        BarCode barCodeValue = null;
-
-        if (SaleType.UNIDAD.equals(saleType)) {
-
-            if (barCode == null) return Result.fail("Ingrese el código de barras para productos vendidos por unidad.");
-
-            Result<BarCode> barCodeResult = BarCode.of(barCode);
-            if (barCodeResult.isFail()) return Result.fail(barCodeResult.getMessage());
-
-            barCodeValue = barCodeResult.getData();
+        if (barCode == null) {
+            if (SaleType.UNIDAD.equals(saleType))
+                throw new DomainException("Ingrese el código de barras para productos vendidos por unidad.");
+            this.barCode = null;
+        } else {
+            this.barCode = new BarCode(barCode);
         }
-        //----------------------------------
-        Result<Money> priceResult = PriceCalculator.calculate(stockEntry, gainStrategy, gainAmountResult.getData());
-        if (priceResult.isFail()) return Result.fail(priceResult.getMessage());
 
-        //----------------------------------
+        Result<Money> priceResult = PriceCalculator.calculate(stockEntry, this);
+        if (priceResult.isFail()) throw new DomainException(priceResult.getMessage());
 
-        LocalDateTime registrationDate = LocalDateTime.now();
-        ProductQuantity initialStock = stockEntry.getQuantity();
-        
-
-        Product productCreated = new Product(
-                productIdResult.getData(),
-                initialStock,
-                gainStrategy,
-                gainAmountResult.getData(),
-                reorderLevelValue,
-                barCodeValue,
-                saleType,
-                priceResult.getData(),
-                category,
-                registrationDate
-        );
-
-        return Result.success(productCreated);
+        this.price = priceResult.getData();
+        this.registrationDate = LocalDateTime.now();
     }
 
     //----------------------------------
 
     private Result<Void> increaseStock(BigDecimal quantityToAdd) {
-        if (quantityToAdd == null) {
+        if (quantityToAdd == null)
             return Result.fail("La cantidad a sumar no puede ser nula.");
-        }
 
-        BigDecimal newStockValue = this.getStock().value().add(quantityToAdd);
+        BigDecimal newStockValue = this.getStock().value.add(quantityToAdd);
 
         return updateStock(newStockValue);
     }
 
     private Result<Void> decreaseStock(BigDecimal quantityToSubtract) {
-        if (quantityToSubtract == null) {
+        if (quantityToSubtract == null)
             return Result.fail("La cantidad a restar no puede ser nula.");
-        }
 
-        BigDecimal newStockValue = this.getStock().value().subtract(quantityToSubtract);
+        BigDecimal newStockValue = this.getStock().value.subtract(quantityToSubtract);
 
-        if (newStockValue.compareTo(BigDecimal.ZERO) < 0) {
+        if (newStockValue.compareTo(BigDecimal.ZERO) < 0)
             return Result.fail("No hay stock suficiente para realizar esta operación.");
-        }
 
         return updateStock(newStockValue);
     }
 
     private Result<Void> updateStock(BigDecimal newStockValue) {
-        Result<ProductQuantity> newStockResult = ProductQuantity.of(newStockValue);
-        if (newStockResult.isFail()) return Result.fail(newStockResult.getMessage());
 
-        ProductQuantity newStock = newStockResult.getData();
-
-        if (this.saleType == SaleType.UNIDAD && isDecimal(newStock.value()))
+        if (this.saleType == SaleType.UNIDAD && isDecimal(newStockValue))
             return Result.fail("Este producto se maneja por unidades. Ingrese una cantidad entera.");
 
-        this.stock = newStock;
-        return Result.success(null);
+        try {
+            this.stock = new ProductQuantity(newStockValue);
+            return Result.success(null);
+        } catch (DomainException domainException) {
+            return Result.fail(domainException.getMessage());
+        }
     }
 
     // -----------------------------------------------------

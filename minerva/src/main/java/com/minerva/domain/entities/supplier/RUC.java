@@ -1,27 +1,20 @@
 package com.minerva.domain.entities.supplier;
 
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.DomainException;
 
 import java.util.Objects;
 
 public class RUC {
     private static final int LENGTH = 11;
-    private final String value;
+    public final String value;
 
-    private RUC(String value) {
+    public RUC(String value) throws DomainException {
+
+        if (value == null) throw new DomainException("El RUC no puede ser nulo.");
+        if (value.length() != LENGTH) throw new DomainException("El RUC debe tener exactamente " + LENGTH + " caracteres.");
+        if (!value.matches("^\\d+$")) throw new DomainException("El RUC debe contener solo números.");
+
         this.value = value;
-    }
-
-    public static Result<RUC> of(String value) {
-        if (value == null) return Result.fail("El RUC no puede ser nulo.");
-        if (value.length() != LENGTH) return Result.fail("El RUC debe tener exactamente " + LENGTH + " caracteres.");
-        if (!value.matches("^\\d+$")) return Result.fail("El RUC debe contener solo números.");
-
-        return Result.success(new RUC(value));
-    }
-
-    public String value() {
-        return value;
     }
 
     @Override

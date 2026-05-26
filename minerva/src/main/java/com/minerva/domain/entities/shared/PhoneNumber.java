@@ -1,27 +1,21 @@
 package com.minerva.domain.entities.shared;
 
+import com.minerva.domain.exceptions.DomainException;
+
 import java.util.Objects;
 
 // MEJORAS: Los regex
 public class PhoneNumber {
     private static final int LENGTH = 9;
-    private final String value;
+    public final String value;
 
-    private PhoneNumber(String value) {
+    public PhoneNumber(String value) throws DomainException {
+
+        if (value == null) throw new DomainException("Ingrese un número de teléfono.");
+        if (value.length() != LENGTH) throw new DomainException("El número de teléfono debe tener " + LENGTH + " dígitos.");
+        if (!value.matches("^\\d+$")) throw new DomainException("El número de teléfono solo puede contener números.");
+
         this.value = value;
-    }
-
-    public static Result<PhoneNumber> of(String value) {
-        if (value == null) return Result.fail("Ingrese un número de teléfono.");
-        if (value.length() != LENGTH) return Result.fail("El número de teléfono debe tener " + LENGTH + " dígitos.");
-        if (!value.matches("^\\d+$")) return Result.fail("El número de teléfono solo puede contener números.");
-
-        return Result.success(new PhoneNumber(value));
-    }
-
-
-    public String value() {
-        return value;
     }
 
     @Override

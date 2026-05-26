@@ -4,6 +4,7 @@ import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.constants.PaymentMethod;
 import com.minerva.domain.entities.customer.CustomerId;
 
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Sale {
@@ -21,78 +23,80 @@ public class Sale {
     private final List<Pay>  pays =  new LinkedList<>();
     private final List<SaleDetail> saleDetails = new LinkedList<SaleDetail>();
 
-    private Sale(CustomerId customerId) {
-        this.customerId = customerId;
+    public Sale(String customerNameId, String productId, BigDecimal unitPrice, BigDecimal quantity) throws DomainException {
+        this.customerId = new CustomerId(customerNameId);
+   
+        // Valores por defecto
         this.saleId = UUID.randomUUID();
         this.registrationDate =  LocalDateTime.now();
+
+        this.addDetail(productId, unitPrice, quantity);
     }
 
-    public static Result<Sale> create(String customerNameId, String productId, BigDecimal unitPrice, BigDecimal quantity) {
+    public Result<Void> addDetail(String productIdStr, BigDecimal unitPrice, BigDecimal quantityBigDecimal) {
+        try {
+            ProductId productId = new ProductId(productIdStr);
+            Money price = new Money(unitPrice);
+            ProductQuantity quantity = new ProductQuantity(quantityBigDecimal);
 
-        Result<CustomerId> customerIdResult = CustomerId.of(customerNameId);
-        if (customerIdResult.isFail()) return Result.fail(customerIdResult.getMessage());
+            Optional<SaleDetail> existingDetailOpt = saleDetails.stream()
+                    .filter(detail -> detail.getProductNameId().equals(productId))
+                    .findFirst();
 
-        Sale saleCreated = new Sale(customerIdResult.getData());
+            if (existingDetailOpt.isPresent()) {
+                SaleDetail existingDetail = existingDetailOpt.get();
 
-        Result<Void> result = saleCreated.addDetail(productId, unitPrice, quantity);
-        if (result.isFail()) return Result.fail(result.getMessage());
+                quantity = quantity.add(existingDetail.getQuantity());
 
-        return Result.success(saleCreated);
-    }
+                saleDetails.remove(existingDetail);
+            }
 
-    public Result<Void> addDetail(String productId, BigDecimal unitPrice, BigDecimal quantity) {
-        Result<ProductId> productIdResult = ProductId.of(productId);
-        if (productIdResult.isFail()) return Result.fail(productIdResult.getMessage());
+            SaleDetail newDetail = new SaleDetail(productId, quantity, price);
 
-        Result<Money> unitPriceResult = Money.of(unitPrice);
-        if (unitPriceResult.isFail()) return Result.fail(unitPriceResult.getMessage());
+            saleDetails.add(newDetail);
 
-        Result<ProductQuantity> quantityResult = ProductQuantity.of(quantity);
-        if (quantityResult.isFail()) return Result.fail(quantityResult.getMessage());
+            return Result.success(null);
 
-        Result<SaleDetail> detailResult = SaleDetail.create(productIdResult.getData(), quantityResult.getData(), unitPriceResult.getData());
-        if (detailResult.isFail()) return Result.fail(detailResult.getMessage());
-
-        saleDetails.add(detailResult.getData());
-        return Result.success(null);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
     }
 
     public Result<Void> addPayment(BigDecimal amount, PaymentMethod paymentMethod) {
         if (isDueCanceled()) return Result.fail("La VENTA ya esta CANCELADA");
 
-        Result<Money> amountResult = Money.of(amount);
-        if (amountResult.isFail()) return Result.fail(amountResult.getMessage());
-
-        Result<Pay> payResult = Pay.create(amountResult.getData(), paymentMethod);
-        if (payResult.isFail()) return Result.fail(payResult.getMessage());
-
-        Pay payCreated = payResult.getData();
-
-        if (payCreated.getAmount().compareTo(calculateAmountDue()) > 0)
+        Pay payCreated;
+        try {
+            payCreated = new Pay(new Money(amount), paymentMethod);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
+        
+        if (payCreated.getAmount().isGreaterThan(calculateAmountDue()))
             return Result.fail("El PAGO sobrepasa la DEUDA de la VENTA.");
 
         pays.add(payCreated);
         return Result.success(null);
     }
 
-    public BigDecimal calculateTotal() {
+    public Money calculateTotal() {
         return saleDetails.stream()
-                .map(SaleDetail::calculateTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(SaleDetail::calculateSubTotal)
+                .reduce(Money.zero(), Money::add);
     }
 
-    public BigDecimal calculateTotalPaid() {
+    public Money calculateTotalPaid() {
         return pays.stream()
                 .map(Pay::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(Money.zero(), Money::add);
     }
 
-    public BigDecimal calculateAmountDue() {
+    public Money calculateAmountDue() {
         return calculateTotal().subtract(calculateTotalPaid());
     }
 
     public boolean isDueCanceled() {
-        return calculateAmountDue().compareTo(BigDecimal.ZERO) == 0;
+        return calculateAmountDue().isZero();
     }
 
     public UUID getId() {
@@ -103,7 +107,15 @@ public class Sale {
         return registrationDate;
     }
 
-    public String getCustomerId() {
-        return customerId.value();
+    public CustomerId getCustomerId() {
+        return customerId;
+    }
+
+    public List<Pay> getPays() {
+        return List.copyOf(pays);
+    }
+
+    public List<SaleDetail> getSaleDetails() {
+        return List.copyOf(saleDetails);
     }
 }

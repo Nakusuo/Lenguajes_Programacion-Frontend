@@ -1,7 +1,7 @@
 package com.minerva.domain.entities.supplier;
 
-import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.entities.shared.PhoneNumber;
+import com.minerva.domain.exceptions.DomainException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -12,64 +12,28 @@ public class Supplier {
     private PhoneNumber phoneNumber;
     private final LocalDateTime registrationDate;
 
-    private Supplier(SupplierId supplierNameId, RUC ruc, PhoneNumber phoneNumber) {
-        this.supplierNameId = supplierNameId;
-        this.ruc = ruc;
-        this.phoneNumber = phoneNumber;
+    public Supplier(String supplierName, String ruc, String phoneNumber) throws DomainException {
+        this.supplierNameId = new SupplierId(supplierName);
+        this.ruc = (ruc == null) ? null : new RUC(ruc);
+        this.phoneNumber = (phoneNumber == null) ? null : new PhoneNumber(phoneNumber);
         // VALORES POR DEFECTO
         this.registrationDate = LocalDateTime.now();
     }
 
-    public static Result<Supplier> create(String supplierName, String ruc, String phoneNumber) {
-
-        Result<SupplierId> supplierIdResult = SupplierId.of(supplierName);
-        if (supplierIdResult.isFail()) return Result.fail(supplierIdResult.getMessage());
-
-        RUC rucValue = null;
-        if (ruc != null) {
-            Result<RUC> rucResult = RUC.of(ruc);
-            if (rucResult.isFail()) return Result.fail(rucResult.getMessage());
-            rucValue = rucResult.getData();
-        }
-
-        PhoneNumber phoneValue = null;
-        if (phoneNumber != null) {
-            Result<PhoneNumber> phoneResult = PhoneNumber.of(phoneNumber);
-            if (phoneResult.isFail()) return Result.fail(phoneResult.getMessage());
-            phoneValue = phoneResult.getData();
-        }
-
-        return Result.success(new Supplier(supplierIdResult.getData(), rucValue, phoneValue));
+    public void updatePhoneNumber(String phoneNumber) throws DomainException {
+        this.phoneNumber = (phoneNumber == null) ? null : new PhoneNumber(phoneNumber);
     }
 
-    public Result<Void> updatePhoneNumber(String phoneNumber) {
-        if (phoneNumber == null) {
-            this.phoneNumber = null;
-            return Result.success(null);
-        }
-
-        Result<PhoneNumber> phoneResult = PhoneNumber.of(phoneNumber);
-        if (phoneResult.isFail()) return Result.fail(phoneResult.getMessage());
-
-        this.phoneNumber = phoneResult.getData();
-        return Result.success(null);
-    }
-
-    public Result<Void> updateRuc(String ruc) {
-        if (ruc == null) {
-            this.ruc = null;
-            return Result.success(null);
-        }
-
-        Result<RUC> rucResult = RUC.of(ruc);
-        if (rucResult.isFail()) return Result.fail(rucResult.getMessage());
-
-        this.ruc = rucResult.getData();
-        return Result.success(null);
+    public void updateRuc(String ruc) throws DomainException {
+        this.ruc = (ruc == null) ? null : new RUC(ruc);
     }
 
     public SupplierId getSupplierNameId() {
         return supplierNameId;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
     }
 
     public Optional<RUC> getRuc() {
@@ -80,10 +44,6 @@ public class Supplier {
     public Optional<PhoneNumber> getPhoneNumber() {
         if (phoneNumber == null) return Optional.empty();
         return Optional.of(phoneNumber);
-    }
-
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
     }
 }
 
