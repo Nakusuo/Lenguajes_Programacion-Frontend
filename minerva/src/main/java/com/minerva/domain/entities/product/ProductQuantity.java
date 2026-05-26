@@ -1,7 +1,7 @@
 package com.minerva.domain.entities.product;
 
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.exceptions.ProductQuantityOperationException;
+import com.minerva.domain.exceptions.MinimumAmountException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -18,7 +18,7 @@ public class ProductQuantity {
 
         if (value == null) throw new DomainException("Ingrese la cantidad del producto.");
         if (value.scale() > MAX_DECIMALS) throw new DomainException("La cantidad no puede tener decimales.");
-        if (value.compareTo(MIN_AMOUNT) < 0) throw new DomainException("La cantidad no puede ser menor que " + MIN_AMOUNT + ".");
+        if (value.compareTo(MIN_AMOUNT) < 0) throw new MinimumAmountException(MIN_AMOUNT.toString());
 
         this.value = value;
     }
@@ -68,11 +68,14 @@ public class ProductQuantity {
         }
     }
 
-    public ProductQuantity subtract(ProductQuantity other) throws ProductQuantityOperationException {
+    public ProductQuantity subtract(ProductQuantity other) throws MinimumAmountException {
         try {
             return new ProductQuantity(this.value.subtract(other.value));
+        } catch (MinimumAmountException e) {
+            throw e;
         } catch (DomainException e) {
-            throw new ProductQuantityOperationException("Error al restar cantidades de producto: " + e.getMessage(), e);
+            // Si esto truena, récenle al de arriba
+            throw new RuntimeException("Error al restar cantidades de producto: " + e.getMessage(), e);
         }
     }
 
