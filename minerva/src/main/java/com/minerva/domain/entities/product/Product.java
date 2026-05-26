@@ -50,6 +50,9 @@ public class Product {
         this.saleType = saleType;
         this.category = category;
 
+        if  (!stockEntry.getProductNameId().equals(this.productNameId))
+            throw new DomainException("El producto del stock entry no coincide con el producto que se está creando.");
+
 
         if (gainStrategy == null) throw new DomainException("Seleccione una estrategia de ganancia.");
         if (saleType == null) throw new DomainException("Seleccione el tipo de venta.");
