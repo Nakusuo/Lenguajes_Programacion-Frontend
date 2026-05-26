@@ -1,7 +1,7 @@
 package com.minerva.domain.entities.shared;
 
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.exceptions.MoneyOperationException;
+import com.minerva.domain.exceptions.MinimumAmountException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -16,7 +16,7 @@ public final class Money {
 
         if (value == null) throw new DomainException("Ingrese el monto.");
         if (value.scale() > MAX_DECIMALS) throw new DomainException("El monto solo puede tener " + MAX_DECIMALS + " decimales.");
-        if (value.compareTo(MIN_AMOUNT) < 0) throw new DomainException("El monto no puede ser menor que " + MIN_AMOUNT + ".");
+        if (value.compareTo(MIN_AMOUNT) < 0) throw new MinimumAmountException(MIN_AMOUNT.toString());
 
         this.value = value;
     }
@@ -58,11 +58,14 @@ public final class Money {
         }
     }
 
-    public Money subtract(Money other) throws MoneyOperationException {
+    public Money subtract(Money other) throws MinimumAmountException {
         try {
             return new Money(this.value.subtract(other.value));
+        } catch (MinimumAmountException e) {
+            throw e;
         } catch (DomainException e) {
-            throw new MoneyOperationException("Error al restar montos: " + e.getMessage(), e);
+            // Si esto truena, récenle al de arriba
+            throw new RuntimeException("Error al restar montos: " + e.getMessage(), e);
         }
     }
 
