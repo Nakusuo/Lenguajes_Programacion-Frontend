@@ -90,37 +90,28 @@ public class SupplierService implements SupplierUseCase {
 
     @Override
     public Optional<Supplier> findById(String supplierName) {
-        SupplierId supplierId;
         try {
-            supplierId = new SupplierId(supplierName);
+            return supplierRepository.findById(new SupplierId(supplierName));
         } catch (DomainException e) {
             return Optional.empty();
         }
-        
-        return supplierRepository.findById(supplierId);
     }
 
     @Override
     public Optional<Supplier> findByRuc(String ruc) {
-        RUC rucObj;
         try {
-            rucObj = new RUC(ruc);
+            return supplierRepository.findByRuc(new RUC(ruc));
         } catch (DomainException e) {
             return Optional.empty();
-        }
-
-        return supplierRepository.findByRuc(rucObj);
+        }        
     }
 
     @Override
     public Optional<Supplier> findByPhone(String phoneNumber) {
-        PhoneNumber phoneNumberObj;
         try {
-            phoneNumberObj = new PhoneNumber(phoneNumber);
+            return supplierRepository.findByPhone(new PhoneNumber(phoneNumber));
         } catch (DomainException e) {
             return Optional.empty();
         }
-
-        return supplierRepository.findByPhone(phoneNumberObj);
     }
 }
