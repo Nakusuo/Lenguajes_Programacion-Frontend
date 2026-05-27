@@ -6,6 +6,7 @@ import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.entities.supplier.RUC;
 import com.minerva.domain.entities.supplier.Supplier;
 import com.minerva.domain.entities.supplier.SupplierId;
+import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.SupplierRepository;
 
 import java.util.List;
@@ -22,11 +23,12 @@ public class SupplierService implements SupplierUseCase {
 
     @Override
     public Result<Void> register(String supplierName, String ruc, String phoneNumber) {
-
-        Result<Supplier> supplierResult = Supplier.create(supplierName, ruc, phoneNumber);
-        if (supplierResult.isFail()) return Result.fail(supplierResult.getMessage());
-
-        Supplier supplierCreated = supplierResult.getData();
+        Supplier supplierCreated;
+        try {
+            supplierCreated = new Supplier(supplierName, ruc, phoneNumber);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
 
         if (supplierRepository.existsById(supplierCreated.getSupplierNameId()))
             return Result.fail("Ya existe un proveedor con el mismo nombre.");
@@ -53,7 +55,7 @@ public class SupplierService implements SupplierUseCase {
         Result<Void> updateResult = supplier.updatePhoneNumber(phoneNumber);
         if (updateResult.isFail()) return updateResult;
 
-        if (supplierRepository.existsByPhoneNumber(supplier.getPhoneNumber().get()))
+        if ( supplier.getPhoneNumber().isPresent() && supplierRepository.existsByPhoneNumber(supplier.getPhoneNumber().get()))
             return Result.fail("Ya existe un proveedor con el mismo número de teléfono.");
 
         supplierRepository.save(supplier);
@@ -72,7 +74,7 @@ public class SupplierService implements SupplierUseCase {
         Result<Void> updateResult = supplier.updateRuc(ruc);
         if (updateResult.isFail()) return updateResult;
 
-        if (supplierRepository.existsByRuc(supplier.getRuc().get()))
+        if (supplier.getRuc().isPresent() && supplierRepository.existsByRuc(supplier.getRuc().get()))
             return Result.fail("Ya existe un proveedor con el mismo RUC.");
 
         supplierRepository.save(supplier);
@@ -88,22 +90,37 @@ public class SupplierService implements SupplierUseCase {
 
     @Override
     public Optional<Supplier> findById(String supplierName) {
-        Result<SupplierId> supplierIdResult = SupplierId.of(supplierName);
-        if (supplierIdResult.isFail()) return Optional.empty();
-        return supplierRepository.findById(supplierIdResult.getData());
+        SupplierId supplierId;
+        try {
+            supplierId = new SupplierId(supplierName);
+        } catch (DomainException e) {
+            return Optional.empty();
+        }
+        
+        return supplierRepository.findById(supplierId);
     }
 
     @Override
     public Optional<Supplier> findByRuc(String ruc) {
-        Result<RUC> rucResult = RUC.of(ruc);
-        if (rucResult.isFail()) return Optional.empty();
-        return supplierRepository.findByRuc(rucResult.getData());
+        RUC rucObj;
+        try {
+            rucObj = new RUC(ruc);
+        } catch (DomainException e) {
+            return Optional.empty();
+        }
+
+        return supplierRepository.findByRuc(rucObj);
     }
 
     @Override
-    public Optional<Supplier> findByPhone(String phone) {
-        Result<PhoneNumber> phoneResult = PhoneNumber.of(phone);
-        if (phoneResult.isFail()) return Optional.empty();
-        return supplierRepository.findByPhone(phoneResult.getData());
+    public Optional<Supplier> findByPhone(String phoneNumber) {
+        PhoneNumber phoneNumberObj;
+        try {
+            phoneNumberObj = new PhoneNumber(phoneNumber);
+        } catch (DomainException e) {
+            return Optional.empty();
+        }
+
+        return supplierRepository.findByPhone(phoneNumberObj);
     }
 }
