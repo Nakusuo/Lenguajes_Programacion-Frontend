@@ -6,9 +6,10 @@ import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.entities.shared.Money;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
-public class SaleDetail {
+class SaleDetail {
     private final UUID id;
     private final ProductId productNameId;
     private final ProductQuantity quantity;
@@ -24,6 +25,17 @@ public class SaleDetail {
         this.productNameId = productNameId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+
+    public SaleDetail(String id, String productNameId, BigDecimal quantity, BigDecimal unitPrice) {
+        try {
+            this.id = UUID.fromString(id);
+            this.productNameId = new ProductId(productNameId);
+            this.quantity = new ProductQuantity(quantity);
+            this.unitPrice = new Money(unitPrice);
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al crear el detalle de venta: " + e.getMessage(), e);
+        }
     }
 
     // REVISAR ESTO QUE YA ME GANO EL SUEÑO, si este mensaje sigue aqui es porque no lo revisé.
