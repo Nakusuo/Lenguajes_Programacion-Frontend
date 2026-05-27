@@ -9,6 +9,7 @@ import com.minerva.domain.exceptions.DomainException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class StockEntry {
@@ -18,7 +19,9 @@ public class StockEntry {
     private final SupplierId supplierNameId;
     private final Money unitPrice;
     private final ProductQuantity quantity;
+    // PUedes ser null
     private final LocalDateTime expirationDate;
+    // --------------------
     private final LocalDateTime registrationDate;
 
     public StockEntry(
@@ -62,8 +65,9 @@ public class StockEntry {
         return unitPrice;
     }
 
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
+    public Optional<LocalDateTime> getExpirationDate() {
+        if (expirationDate == null) return Optional.empty();
+        return Optional.of(expirationDate);
     }
 
     public ProductQuantity getQuantity() {
