@@ -24,7 +24,7 @@ public class Supplier {
         this.registrationDate = LocalDateTime.now();
     }
 
-    public Supplier(String supplierNameId, LocalDateTime registrationDate, String ruc, String phoneNumber) {
+    public Supplier(String supplierNameId, String ruc, String phoneNumber, LocalDateTime registrationDate) {
         try {
             this.supplierNameId = new SupplierId(supplierNameId);
             this.registrationDate = registrationDate;
