@@ -79,6 +79,14 @@ public class ProductQuantity {
         }
     }
 
+    public boolean isDecimal() {
+        return value.scale() > 0;
+    }
+
+    public boolean isInteger() {
+        return value.scale() == 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
