@@ -24,4 +24,8 @@ public class Math {
         return number != null && number.compareTo(BigDecimal.ZERO) <= 0;
     }
 
+    public static boolean isZero(BigDecimal number) {
+        return number != null && number.compareTo(BigDecimal.ZERO) == 0;
+    }
+
 }

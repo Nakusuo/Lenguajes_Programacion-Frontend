@@ -79,7 +79,7 @@ public class Sale {
         }
     }
 
-    public Result<Void> addPayment(BigDecimal amount, PaymentMethod paymentMethod) {
+    private Result<Void> addPayment(BigDecimal amount, PaymentMethod paymentMethod) {
         if (isDueCanceled()) return Result.fail("La VENTA ya esta CANCELADA");
 
         Pay payCreated;
@@ -95,6 +95,22 @@ public class Sale {
         pays.add(payCreated);
         return Result.success(null);
     }
+
+    public Result<Void> addPays(List<PayData> payData) {
+        if (payData == null || payData.isEmpty())
+            return Result.fail("La lista de pagos no puede estar vacía.");
+
+        if (payData.size() != PaymentMethod.values().length)
+            return Result.fail("Número de pagos no coincide con el número de métodos de pago.");
+
+        for (PayData data : payData) {
+            Result<Void> addPaymentResult = addPayment(data.amount, data.paymentMethod);
+            if (addPaymentResult.isFail()) return addPaymentResult;
+        }
+        return Result.success(null);
+    }
+    
+    public record PayData(BigDecimal amount, PaymentMethod paymentMethod) {}
 
     public Money calculateTotal() {
         return saleDetails.stream()
