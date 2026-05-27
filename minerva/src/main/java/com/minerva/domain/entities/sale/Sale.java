@@ -24,32 +24,69 @@ public class Sale {
     private final List<Pay>  pays =  new LinkedList<>();
     private final List<SaleDetail> saleDetails = new LinkedList<SaleDetail>();
 
-    private Sale(String customerNameId, String productId, BigDecimal unitPrice, BigDecimal quantity) throws DomainException {
+    public Sale(String customerNameId, List<SaleItem> items) throws DomainException {
         this.customerId = new CustomerId(customerNameId);
-   
-        // Valores por defecto
-        this.saleId = UUID.randomUUID();
-        this.registrationDate =  LocalDateTime.now();
-
-        this.addDetail(productId, unitPrice, quantity);
-    }
-
-    public static Sale create(String customerNameId, List<SaleItem> items) throws DomainException {
-        Sale saleCreated = new Sale(customerNameId, items.get(0).productId, items.get(0).unitPrice, items.get(0).quantity);
-
-        for (int i = 1; i < items.size(); i++) {
-            SaleItem item = items.get(i);
-            Result<Void> addDetailResult = saleCreated.addDetail(item.productId, item.unitPrice, item.quantity);
-            
-            if (addDetailResult.isFail()) 
-                throw new DomainException(addDetailResult.getMessage());
-            
+        
+        if (items == null || items.isEmpty()) {
+            throw new DomainException("La venta debe tener al menos un item");
         }
 
-        return saleCreated;
+        for (SaleItem item : items) {
+            Result<Void> addDetailResult = this.addDetail(
+                item.productId,
+                item.unitPrice,
+                item.quantity
+            );
+
+            if (addDetailResult.isFail()) {
+                throw new DomainException(addDetailResult.getMessage());
+            }
+        }
+
+        // Valores por defecto
+        this.saleId = UUID.randomUUID();
+        this.registrationDate = LocalDateTime.now();
+    }
+
+    public Sale(String saleId, String customerNameId, LocalDateTime registrationDate, List<SaleDetailDTO> saleDetails, List<PayDTO> pays) {
+        try {
+            this.saleId = UUID.fromString(saleId);
+            this.customerId = new CustomerId(customerNameId);
+            this.registrationDate = registrationDate;
+            
+            if (saleDetails != null && !saleDetails.isEmpty()) {
+                for (SaleDetailDTO detailDTO : saleDetails) {
+                    this.saleDetails.add(new SaleDetail(
+                        detailDTO.saleDetailId,
+                        detailDTO.productId,
+                        detailDTO.quantity,
+                        detailDTO.unitPrice
+                    ));
+                }
+            } else {
+                throw new DomainException("La venta debe tener al menos un detalle");
+            }
+
+            if (pays != null) {
+                for (PayDTO payDTO : pays) {
+                    this.pays.add(new Pay(
+                        payDTO.payId,
+                        payDTO.amount,
+                        payDTO.paymentMethod,
+                        payDTO.registrationDate
+                    ));
+                }
+            }
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al crear la venta: " + e.getMessage(), e);
+        }
     }
 
     public record SaleItem(String productId, BigDecimal quantity, BigDecimal unitPrice) {}
+
+    public record SaleDetailDTO(String saleDetailId, String productId, BigDecimal quantity, BigDecimal unitPrice) {}
+
+    public record PayDTO(String payId, BigDecimal amount, PaymentMethod paymentMethod, LocalDateTime registrationDate) {}
 
     public Result<Void> addDetail(String productIdStr, BigDecimal unitPrice, BigDecimal quantityBigDecimal) {
         try {

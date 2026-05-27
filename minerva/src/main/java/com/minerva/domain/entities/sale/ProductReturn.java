@@ -7,7 +7,7 @@ import com.minerva.domain.exceptions.DomainException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class ProductReturn {
+class ProductReturn {
     private final UUID productReturnId;
     private final ProductQuantity quantity;
     private final ReasonProductReturn reason;
