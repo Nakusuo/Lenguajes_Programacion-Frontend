@@ -5,6 +5,7 @@ import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.supplier.SupplierId;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -47,6 +48,28 @@ public class StockEntry {
 
         this.stockEntryId = UUID.randomUUID();
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public StockEntry(
+            UUID stockEntryId,
+            String productNameId,
+            String supplierNameId,
+            BigDecimal unitPrice,
+            BigDecimal quantity,
+            LocalDateTime expirationDate,
+            LocalDateTime registrationDate
+    ) {
+        try {
+            this.stockEntryId = stockEntryId;
+            this.productNameId = new ProductId(productNameId);
+            this.supplierNameId = new SupplierId(supplierNameId);
+            this.unitPrice = new Money(unitPrice);
+            this.quantity = new ProductQuantity(quantity);
+            this.expirationDate = expirationDate;
+            this.registrationDate = registrationDate;
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al crear la entrada de stock: " + e.getMessage(), e);
+        }
     }
 
     public UUID getStockEntryId() {
