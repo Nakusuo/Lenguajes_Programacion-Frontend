@@ -25,3 +25,20 @@ String customerId
 -- invertir esta logica             this.phoneNumber = (newPhoneNumber != null)
                 ? new PhoneNumber(newPhoneNumber)
                 : null;
+
+-- ⚠️ Otra mejora
+
+Aquí:
+
+@Column(name = "ruc", columnDefinition = "CHAR(11)", unique = true)
+
+columnDefinition te acopla al SQL del motor.
+
+Más portable:
+
+@Column(name = "ruc", length = 11, unique = true)
+
+igual para:
+
+phoneNumber
+barCode
