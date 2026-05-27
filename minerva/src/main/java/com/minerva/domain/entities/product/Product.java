@@ -5,7 +5,6 @@ import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
-import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.services.PriceCalculator;
 
@@ -39,20 +38,16 @@ public class Product {
             BigDecimal reorderLevel,
             String barCode,
             SaleType saleType,
+            BigDecimal initialStock,
             Category category,
-            StockEntry stockEntry,
-            String borrarEsto
+            BigDecimal purchasePrice
     ) throws DomainException {
         this.productNameId = new ProductId(productName);
-        this.stock = stockEntry.getQuantity();
+        this.stock = new ProductQuantity(initialStock);
         this.gainAmount = new Money(gainAmount);
         this.gainStrategy = gainStrategy;
         this.saleType = saleType;
         this.category = category;
-
-        if  (!stockEntry.getProductNameId().equals(this.productNameId))
-            throw new DomainException("El producto del stock entry no coincide con el producto que se está creando.");
-
 
         if (gainStrategy == null) throw new DomainException("Seleccione una estrategia de ganancia.");
         if (saleType == null) throw new DomainException("Seleccione el tipo de venta.");
@@ -77,7 +72,7 @@ public class Product {
             this.barCode = new BarCode(barCode);
         }
 
-        Result<Money> priceResult = PriceCalculator.calculate(stockEntry, this);
+        Result<Money> priceResult = PriceCalculator.calculate(new Money(purchasePrice), gainStrategy, this.gainAmount);
         if (priceResult.isFail()) throw new DomainException(priceResult.getMessage());
 
         this.price = priceResult.getData();
