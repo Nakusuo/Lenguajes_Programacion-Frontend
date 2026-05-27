@@ -68,12 +68,15 @@ public class ProductService implements ProductUseCase {
         StockEntry stockEntryCreated;
         try {
             stockEntryCreated = new StockEntry(productId, supplierNameId, unitPrice, quantity, expirationDate);
-            
-            if  (!productRepository.existsById(stockEntryCreated.getProductNameId()))
-                return Result.fail("El producto no esta registrado.");
         } catch (DomainException e) {
             return Result.fail(e.getMessage());
         }
+
+        if  (!productRepository.existsById(stockEntryCreated.getProductNameId()))
+                return Result.fail("El producto no esta registrado.");
+
+        if (!supplierRepository.existsById(stockEntryCreated.getSupplierNameId()))
+            return Result.fail("El proveedor no esta registrado.");
 
         productRepository.save(stockEntryCreated);
 
