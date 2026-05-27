@@ -40,8 +40,10 @@ public class ProductService implements ProductUseCase {
                                         ) {
 
         Product productCreated;
+        StockEntry stockEntryCreated;
         try {
             productCreated = new Product(productName, gainStrategy, gainAmount, reorderLevel, barCode, saleType, purchaseQuantity, category, purchaseUnitPrice);
+            stockEntryCreated = new StockEntry(productName, purchasedFromSupplierId, purchaseUnitPrice, purchaseQuantity, purchaseExpirationDate);
         } catch (DomainException e) {
             return Result.fail(e.getMessage());
         }
@@ -53,11 +55,12 @@ public class ProductService implements ProductUseCase {
         if (productCreated.getBarCode().isPresent() && productRepository.existByBarCode(productCreated.getBarCode().get()))
             return Result.fail("Ya existe un producto con el mismo código de barras.");
 
-        // Esto debe tratarsse como una operación atómica, por lo que si falla el registro de la entrada de stock, se debería eliminar el producto registrado para mantener la consistencia. Esto se puede
-        productRepository.save(productCreated);
-        Result<Void> stockEntryResult = registerStockEntry(productName, purchasedFromSupplierId, purchaseUnitPrice, purchaseQuantity, purchaseExpirationDate);
 
-        if (stockEntryResult.isFail()) return Result.fail(stockEntryResult.getMessage());
+        if (!supplierRepository.existsById(stockEntryCreated.getSupplierNameId()))
+            return Result.fail("El proveedor no esta registrado.");
+
+        // Esto debe tratarsse como una operación atómica, por lo que si falla el registro de la entrada de stock, se debería eliminar el producto registrado para mantener la consistencia. Esto se puede
+        productRepository.registerProduct(productCreated, stockEntryCreated);
         // -------------------
 
         return Result.success(null);
@@ -73,7 +76,7 @@ public class ProductService implements ProductUseCase {
         }
 
         if  (!productRepository.existsById(stockEntryCreated.getProductNameId()))
-                return Result.fail("El producto no esta registrado.");
+            return Result.fail("El producto no esta registrado.");
 
         if (!supplierRepository.existsById(stockEntryCreated.getSupplierNameId()))
             return Result.fail("El proveedor no esta registrado.");
