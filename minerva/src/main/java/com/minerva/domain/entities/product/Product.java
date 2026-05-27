@@ -7,6 +7,7 @@ import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.services.PriceCalculator;
 
 import java.math.BigDecimal;
@@ -79,6 +80,35 @@ public class Product {
 
         this.price = priceResult.getData();
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public Product(
+            String productName,
+            GainStrategy gainStrategy,
+            BigDecimal gainAmount,
+            BigDecimal reorderLevel,
+            String barCode,
+            SaleType saleType,
+            BigDecimal stock,
+            Category category,
+            BigDecimal price,
+            LocalDateTime registrationDate
+    ) {
+        try {
+            this.productNameId = new ProductId(productName);
+            this.stock = new ProductQuantity(stock);
+            this.gainAmount = new Money(gainAmount);
+            this.gainStrategy = gainStrategy;
+            this.saleType = saleType;
+            this.category = category;
+            this.reorderLevel = reorderLevel == null ? null : new ProductQuantity(reorderLevel);
+            this.barCode = barCode == null ? null : new BarCode(barCode);
+            this.price = new Money(price);
+            this.registrationDate = registrationDate;
+
+            } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al crear el producto: " + e.getMessage(), e);
+        } 
     }
 
     //----------------------------------
