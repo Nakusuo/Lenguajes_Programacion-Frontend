@@ -15,17 +15,16 @@ import java.math.RoundingMode;
 // Recordatorio: Comenzar a usar los metodos de la clase Money para hacer las operaciones con dinero, en lugar de usar BigDecimal directamente. Esto ayudará a mantener la consistencia y a evitar errores relacionados con el manejo de dinero.
 public class PriceCalculator {
 
-    public static Result<Money> calculate(StockEntry stockEntry, GainStrategy gainStrategy, Money gainAmount) {
-        if (stockEntry == null) return Result.fail("Se necesita una entrada de stock para calcular el precio.");
+    public static Result<Money> calculate(Money purchasePrice, GainStrategy gainStrategy, Money gainAmount) {
+        if (purchasePrice == null) return Result.fail("Se necesita un precio de compra para calcular el precio.");
         if (gainStrategy == null) return Result.fail("Se necesita una estrategia de ganancia para calcular el precio.");
         if (gainAmount == null) return Result.fail("Se necesita un monto de ganancia para calcular el precio.");
 
-        BigDecimal basePrice = stockEntry.getUnitPrice().value;
         BigDecimal finalPrice =
 
         switch (gainStrategy) {
-            case INCREMENTAL -> basePrice.add(gainAmount.value);
-            case PORCENTAJE -> basePrice.multiply(
+            case INCREMENTAL -> purchasePrice.value.add(gainAmount.value);
+            case PORCENTAJE -> purchasePrice.value.multiply(
                     BigDecimal.ONE.add(
                             gainAmount.value.divide(BigDecimal.valueOf(100), Money.MAX_DECIMALS, RoundingMode.HALF_UP)
                     )
@@ -37,9 +36,5 @@ public class PriceCalculator {
         } catch (DomainException domainException) {
             return Result.fail(domainException.getMessage());
         }
-    }
-
-    public static Result<Money> calculate(StockEntry stockEntry, Product product) {
-        return calculate(stockEntry, product.getGainStrategy(), product.getGainAmount());
     }
 }
