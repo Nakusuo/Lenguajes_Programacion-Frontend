@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ProductRepositoryAdapter implements ProductRepository {
     @PersistenceContext
@@ -147,7 +148,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
                 entityManager.getReference(SupplierEntity.class, stockEntry.getSupplierNameId().value);
 
         return new StockEntryEntity(
-                stockEntry.getStockEntryId(),
+                stockEntry.getStockEntryId().toString(),
                 productEntity,
                 supplierEntity,
                 stockEntry.getUnitPrice().value,
@@ -159,7 +160,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     private StockEntry toDomain(StockEntryEntity entity) {
         return new StockEntry(
-                entity.getStockEntryId(),
+                UUID.fromString(entity.getStockEntryId()),
                 entity.getProductEntity().getProductNameId(),
                 entity.getSupplierEntity().getSupplierNameId(),
                 entity.getUnitPrice(),
