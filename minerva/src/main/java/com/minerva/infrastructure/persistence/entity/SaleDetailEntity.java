@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class SaleDetailEntity {
 
     @Id
     @Column(name = "saleDetailId")
-    private UUID saleDetailId;
+    private String saleDetailId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "saleId", nullable = false)

@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class InventoryLossEntity {
 
     @Id
     @Column(name = "inventoryLossId")
-    private UUID inventoryLossId;
+    private String inventoryLossId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "productNameId", nullable = false)
