@@ -6,9 +6,10 @@ import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.product.*;
 import com.minerva.domain.entities.shared.Result;
-import com.minerva.domain.entities.stockEntry.StockEntry;
+import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.domain.repositories.SupplierRepository;
+import com.minerva.domain.entities.stockEntry.StockEntry;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,12 +32,19 @@ public class ProductService implements ProductUseCase {
                                         BigDecimal reorderLevel,
                                         String barCode,
                                         SaleType saleType,
-                                        Category category) {
+                                        Category category,
+                                        String purchasedFromSupplierId,
+                                        BigDecimal purchaseUnitPrice,
+                                        BigDecimal purchaseQuantity,
+                                        LocalDateTime purchaseExpirationDate
+                                        ) {
 
-        Result<Product> productResult = Product.create(productName, gainStrategy, gainAmount, reorderLevel, barCode, saleType, category);
-        if (productResult.isFail()) return Result.fail(productResult.getMessage());
-
-        Product productCreated = productResult.getData();
+        Product productCreated;
+        try {
+            productCreated = new Product(productName, gainStrategy, gainAmount, reorderLevel, barCode, saleType, purchaseQuantity, category, purchaseUnitPrice);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
 
         if (productRepository.existsById(productCreated.getNameId()))
             return Result.fail("Ya existe un producto con el mismo nombre.");
@@ -45,24 +53,29 @@ public class ProductService implements ProductUseCase {
         if (productCreated.getBarCode().isPresent() && productRepository.existByBarCode(productCreated.getBarCode().get()))
             return Result.fail("Ya existe un producto con el mismo código de barras.");
 
+        // Esto debe tratarsse como una operación atómica, por lo que si falla el registro de la entrada de stock, se debería eliminar el producto registrado para mantener la consistencia. Esto se puede
         productRepository.save(productCreated);
+        Result<Void> stockEntryResult = registerStockEntry(productName, purchasedFromSupplierId, purchaseUnitPrice, purchaseQuantity, purchaseExpirationDate);
+
+        if (stockEntryResult.isFail()) return Result.fail(stockEntryResult.getMessage());
+        // -------------------
 
         return Result.success(null);
     }
 
     @Override
     public Result<Void> registerStockEntry(String productId, String supplierNameId, BigDecimal unitPrice, BigDecimal quantity, LocalDateTime expirationDate) {
+        StockEntry stockEntryCreated;
+        try {
+            stockEntryCreated = new StockEntry(productId, supplierNameId, unitPrice, quantity, expirationDate);
+            
+            if  (!productRepository.existsById(stockEntryCreated.getProductNameId()))
+                return Result.fail("El producto no esta registrado.");
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
 
-        Optional<Product> optional = findProductById(productId);
-        if (optional.isEmpty()) return Result.fail("El producto no esta registrado.");
-
-
-        Product product = optional.get();
-
-        Result<StockEntry> stockEntryResult = product.generateStockEntry(supplierNameId, unitPrice, quantity, expirationDate);
-        if (stockEntryResult.isFail()) return Result.fail(stockEntryResult.getMessage());
-
-        productRepository.save(stockEntryResult.getData());
+        productRepository.save(stockEntryCreated);
 
         return Result.success(null);
     }
@@ -78,10 +91,12 @@ public class ProductService implements ProductUseCase {
         Product unitProduct = unitProductOptional.get();
         Product bulkProduct = bulkProductOptional.get();
 
-        Result<ProductQuantity> quantityResult = ProductQuantity.of(quantity);
-        if (quantityResult.isFail()) return Result.fail(quantityResult.getMessage());
-
-        ProductQuantity productQuantity = quantityResult.getData();
+        ProductQuantity productQuantity;
+        try {
+            productQuantity = new ProductQuantity(quantity);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
 
         Result<Void> validationResult = unitProduct.validateBulkAssociation(bulkProduct, productQuantity);
         if (validationResult.isFail()) return validationResult;
@@ -91,20 +106,28 @@ public class ProductService implements ProductUseCase {
         return Result.success(null);
     }
 
+    // --------------------- READ ---------------------
     @Override
-    public Optional<Product> findProductById(String productId) {
-        Result<ProductId> productIdResult = ProductId.of(productId);
-        if (productIdResult.isFail()) return Optional.empty();
-        
-        return productRepository.findById(productIdResult.getData());
+    public Optional<Product> findProductById(String productId) {     
+        ProductId productIdObj;
+        try {
+            productIdObj = new ProductId(productId);
+        } catch (DomainException e) {
+            return Optional.empty();
+        }  
+        return productRepository.findById(productIdObj);
     }
 
     @Override
     public Optional<Product> findProductByBarCode(String barCode) {
-        Result<BarCode> barCodeResult = BarCode.of(barCode);
-        if (barCodeResult.isFail()) return Optional.empty();
-
-        return productRepository.findByBarCode(barCodeResult.getData());
+        BarCode barCodeObj;
+        try {
+            barCodeObj = new BarCode(barCode);
+        } catch (DomainException e) {
+            return Optional.empty();
+        }
+   
+        return productRepository.findByBarCode(barCodeObj);
     }
 
     @Override
