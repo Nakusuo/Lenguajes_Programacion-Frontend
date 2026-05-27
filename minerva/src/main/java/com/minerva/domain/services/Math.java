@@ -20,4 +20,8 @@ public class Math {
         return value != null && value.compareTo(BigDecimal.ZERO) < 0;
     }
 
+    public static boolean isZeroOrLess(BigDecimal number) {
+        return number != null && number.compareTo(BigDecimal.ZERO) <= 0;
+    }
+
 }

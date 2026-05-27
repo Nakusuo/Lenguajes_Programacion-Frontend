@@ -6,6 +6,7 @@ import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.services.PriceCalculator;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.minerva.domain.services.Math.isDecimal;
+import static com.minerva.domain.services.Math.isZeroOrLess;
 
 public class Product {
     private final ProductId productNameId;
@@ -82,37 +84,41 @@ public class Product {
     //----------------------------------
 
     private Result<Void> increaseStock(BigDecimal quantityToAdd) {
-        if (quantityToAdd == null)
-            return Result.fail("La cantidad a sumar no puede ser nula.");
-
-        BigDecimal newStockValue = this.getStock().value.add(quantityToAdd);
-
-        return updateStock(newStockValue);
+        try {
+            ProductQuantity newStockValue = this.stock.add(new ProductQuantity(quantityToAdd));
+            return updateStock(newStockValue);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
     }
 
     private Result<Void> decreaseStock(BigDecimal quantityToSubtract) {
-        if (quantityToSubtract == null)
-            return Result.fail("La cantidad a restar no puede ser nula.");
-
-        BigDecimal newStockValue = this.getStock().value.subtract(quantityToSubtract);
-
-        if (newStockValue.compareTo(BigDecimal.ZERO) < 0)
-            return Result.fail("No hay stock suficiente para realizar esta operación.");
-
-        return updateStock(newStockValue);
-    }
-
-    private Result<Void> updateStock(BigDecimal newStockValue) {
-
-        if (this.saleType == SaleType.UNIDAD && isDecimal(newStockValue))
-            return Result.fail("Este producto se maneja por unidades. Ingrese una cantidad entera.");
+        if (this.stock.isZero()) return Result.fail("No hay stock disponible para este producto.");
 
         try {
-            this.stock = new ProductQuantity(newStockValue);
+            ProductQuantity newStockValue = this.stock.subtract(new ProductQuantity(quantityToSubtract));
+
+            updateStock(newStockValue);
             return Result.success(null);
-        } catch (DomainException domainException) {
-            return Result.fail(domainException.getMessage());
+        } catch (MinimumAmountException e) {
+            if (isZeroOrLess(this.stock.value.subtract(quantityToSubtract)))
+                return Result.fail("No hay suficiente stock para completar esta operación. Stock disponible: " + this.stock.value);
+
+            return Result.fail(e.getMessage());
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
         }
+    }
+
+    private Result<Void> updateStock(ProductQuantity newStockValue) {
+        if (newStockValue == null)
+            return Result.fail("El nuevo valor de stock no puede ser nulo.");
+
+        if (this.saleType == SaleType.UNIDAD && newStockValue.isDecimal())
+            return Result.fail("Este producto se maneja por unidades. Ingrese una cantidad entera.");
+  
+        this.stock = newStockValue;
+        return Result.success(null);  
     }
 
     // -----------------------------------------------------

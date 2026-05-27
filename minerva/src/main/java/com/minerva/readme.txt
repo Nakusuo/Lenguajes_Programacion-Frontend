@@ -17,3 +17,7 @@ id
 Debe ser:
 
 String customerId
+
+-- cambiar todos los nombres que terminene en obj por el tipo de dato que son sus contraposiciones
+
+-- evitar esar esto en todo el proyecto .compareTo(BigDecimal.ZERO) < 0
