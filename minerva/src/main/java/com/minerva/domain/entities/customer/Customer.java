@@ -3,6 +3,7 @@ package com.minerva.domain.entities.customer;
 import com.minerva.domain.entities.shared.PhoneNumber;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -24,6 +25,16 @@ public class Customer {
 
         // VALORES POR DEFECTO
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public Customer(String customerNameId, LocalDateTime registrationDate, String phoneNumber) {
+        try {
+            this.customerNameId = new CustomerId(customerNameId);
+            this.registrationDate = registrationDate;
+            this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
+        } catch (Exception e) {
+            throw new UnexpectedDomainException("Error al crear el cliente: " + e.getMessage(), e);
+        }        
     }
 
     public CustomerId getCustomerNameId() {
