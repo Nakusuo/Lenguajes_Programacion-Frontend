@@ -2,6 +2,7 @@ package com.minerva.domain.entities.shared;
 
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -54,7 +55,7 @@ public final class Money {
             return new Money(this.value.add(other.value));
         } catch (DomainException e) {
             // Si esto truena, recenle al de arriba
-            throw new RuntimeException("Error al sumar montos: " + e.getMessage(), e);
+            throw new UnexpectedDomainException("Error al sumar montos: " + e.getMessage(), e);
         }
     }
 
@@ -65,7 +66,7 @@ public final class Money {
             throw e;
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
-            throw new RuntimeException("Error al restar montos: " + e.getMessage(), e);
+            throw new UnexpectedDomainException("Error al restar montos: " + e.getMessage(), e);
         }
     }
 
@@ -74,7 +75,7 @@ public final class Money {
             return new Money(BigDecimal.ZERO);
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
-            throw new RuntimeException("Error al crear el monto cero.", e);
+            throw new UnexpectedDomainException("Error al crear el monto cero.", e);
         }
     }
 
@@ -83,7 +84,7 @@ public final class Money {
             return new Money(new BigDecimal("0.10"));
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
-            throw new RuntimeException("Error al crear el monto mínimo.", e);
+            throw new UnexpectedDomainException("Error al crear el monto mínimo.", e);
         }
     }
 
