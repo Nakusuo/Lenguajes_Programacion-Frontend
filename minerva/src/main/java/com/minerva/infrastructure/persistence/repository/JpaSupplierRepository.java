@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaSupplierRepository extends JpaRepository<SupplierEntity, String> {
+    SupplierEntity findByRuc(String ruc);
+    SupplierEntity findByPhoneNumber(String phoneNumber);
+    boolean existsByRuc(String ruc);
+    boolean existsByPhoneNumber(String phoneNumber);
 }
