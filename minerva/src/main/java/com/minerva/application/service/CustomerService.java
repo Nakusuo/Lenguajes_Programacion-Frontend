@@ -57,7 +57,10 @@ public class CustomerService {
             if (customerOpt.isEmpty()) return Result.fail("Cliente no encontrado.");                
 
             Customer customer = customerOpt.get();
-            customer.updatePhoneNumber(newPhoneNumber);
+            
+            Result<Void> updatePhoneNumberResult = customer.updatePhoneNumber(newPhoneNumber);
+            if (updatePhoneNumberResult.isFail()) return updatePhoneNumberResult;
+
             customerRepository.save(customer);   
             return Result.success(null);         
         } catch (DomainException e) {

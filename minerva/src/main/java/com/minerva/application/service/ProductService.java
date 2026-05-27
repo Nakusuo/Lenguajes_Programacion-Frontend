@@ -112,25 +112,20 @@ public class ProductService implements ProductUseCase {
     // --------------------- READ ---------------------
     @Override
     public Optional<Product> findProductById(String productId) {     
-        ProductId productIdObj;
         try {
-            productIdObj = new ProductId(productId);
+            return productRepository.findById(new ProductId(productId));
         } catch (DomainException e) {
             return Optional.empty();
         }  
-        return productRepository.findById(productIdObj);
     }
 
     @Override
     public Optional<Product> findProductByBarCode(String barCode) {
-        BarCode barCodeObj;
         try {
-            barCodeObj = new BarCode(barCode);
+            return productRepository.findByBarCode(new BarCode(barCode));
         } catch (DomainException e) {
             return Optional.empty();
-        }
-   
-        return productRepository.findByBarCode(barCodeObj);
+        }        
     }
 
     @Override
