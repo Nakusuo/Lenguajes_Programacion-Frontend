@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class SaleEntity {
 
     @Id
     @Column(name = "saleId")
-    private UUID saleId;
+    private String saleId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customerNameId", nullable = false)

@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class PayEntity {
     // columnDefinition = "CHAR(36)"
     @Id
     @Column(name = "payId")
-    private UUID payId;
+    private String payId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "saleId", nullable = false)

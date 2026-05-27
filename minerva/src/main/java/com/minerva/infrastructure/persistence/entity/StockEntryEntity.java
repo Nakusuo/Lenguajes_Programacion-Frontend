@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,7 +19,7 @@ public class StockEntryEntity {
 
     @Id
     @Column(name = "stockEntryId")
-    private UUID stockEntryId;
+    private String stockEntryId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "productNameId", nullable = false)
@@ -36,12 +35,11 @@ public class StockEntryEntity {
     @Column(name = "quantity", precision = 10, scale = 3, nullable = false)
     private BigDecimal quantity;
 
-    @Column(name = "ExpirationDate", nullable = false)
+    @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
 
     @Column(
             name = "registrationDate",
-            nullable = false,
             columnDefinition = "TIMESTAMP"
     )
     private LocalDateTime registrationDate;
