@@ -51,7 +51,6 @@ public class ProductEntity {
     @Column(
             name = "registrationDate",
             nullable = false,
-            updatable = false,
             columnDefinition = "TIMESTAMP"
     )
     private LocalDateTime registrationDate;
