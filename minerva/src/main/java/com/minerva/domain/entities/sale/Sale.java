@@ -5,6 +5,7 @@ import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.shared.Money;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.constants.PaymentMethod;
 import com.minerva.domain.entities.customer.CustomerId;
 
@@ -128,7 +129,7 @@ public class Sale {
         try {
             return calculateTotal().subtract(calculateTotalPaid());
         } catch (DomainException e) {
-            throw new RuntimeException("Error al calcular el monto adeudado: " + e.getMessage(), e);
+            throw new UnexpectedDomainException("Error al calcular el monto adeudado: " + e.getMessage(), e);
         }
     }
 

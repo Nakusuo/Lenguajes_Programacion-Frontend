@@ -1,6 +1,7 @@
 package com.minerva.domain.entities.sale;
 
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.entities.shared.Money;
@@ -31,7 +32,7 @@ public class SaleDetail {
             return new Money(unitPrice.value.multiply(quantity.value));
         } catch (DomainException e) {
             // Si esto truena, recenle al de arriba
-            throw new RuntimeException("Error al calcular el subtotal del detalle de venta: " + e.getMessage());
+            throw new UnexpectedDomainException("Error al calcular el subtotal del detalle de venta: " + e.getMessage(), e);
         }
     }
 

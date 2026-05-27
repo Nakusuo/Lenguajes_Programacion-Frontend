@@ -2,6 +2,7 @@ package com.minerva.domain.entities.product;
 
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class ProductQuantity {
             return new ProductQuantity(BigDecimal.ZERO);
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
-            throw new RuntimeException("Error al crear la cantidad cero.", e);
+            throw new UnexpectedDomainException("Error al crear la cantidad cero.", e);
         }
     }
 
@@ -64,7 +65,7 @@ public class ProductQuantity {
             return new ProductQuantity(this.value.add(other.value));
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
-            throw new RuntimeException("Error al sumar cantidades de producto: " + e.getMessage(), e);
+            throw new UnexpectedDomainException("Error al sumar cantidades de producto: " + e.getMessage(), e);
         }
     }
 
@@ -75,7 +76,7 @@ public class ProductQuantity {
             throw e;
         } catch (DomainException e) {
             // Si esto truena, récenle al de arriba
-            throw new RuntimeException("Error al restar cantidades de producto: " + e.getMessage(), e);
+            throw new UnexpectedDomainException("Error al restar cantidades de producto: " + e.getMessage(), e);
         }
     }
 
