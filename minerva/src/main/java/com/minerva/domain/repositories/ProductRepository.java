@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.minerva.domain.entities.product.*;
-import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.entities.stockEntry.StockEntry;
 
 public interface ProductRepository {
+    void registerProduct(Product product, StockEntry stockEntry);
     void save(Product product);
     void save(StockEntry stockEntry);
     void saveUnitToBulk(ProductId unitProductId, ProductId bulkProductId, ProductQuantity quantity);
