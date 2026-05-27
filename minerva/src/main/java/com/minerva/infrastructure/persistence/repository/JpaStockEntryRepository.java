@@ -5,10 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface JpaStockEntryRepository extends JpaRepository<StockEntryEntity, UUID> {
+public interface JpaStockEntryRepository extends JpaRepository<StockEntryEntity, String> {
 
     List<StockEntryEntity> findByProduct_ProductNameId(String productNameId);
 

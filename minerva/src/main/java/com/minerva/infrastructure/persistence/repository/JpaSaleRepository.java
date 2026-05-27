@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface JpaSaleRepository extends JpaRepository<SaleEntity, String> {
 
     List<SaleEntity> findByCustomer_CustomerNameId(String customerNameId);
+    Optional<SaleEntity> findById(String id);
 }
