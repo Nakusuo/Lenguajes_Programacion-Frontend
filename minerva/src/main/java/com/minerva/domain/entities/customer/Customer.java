@@ -2,6 +2,7 @@ package com.minerva.domain.entities.customer;
 
 import com.minerva.domain.entities.shared.PhoneNumber;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.entities.shared.Result;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -32,6 +33,17 @@ public class Customer {
     public Optional<PhoneNumber> getPhoneNumber() {
         if (phoneNumber == null) return Optional.empty();
         return Optional.of(phoneNumber);
+    }
+
+    public Result<Void> updatePhoneNumber(String newPhoneNumber) {
+        try {
+            this.phoneNumber = (newPhoneNumber != null)
+                ? new PhoneNumber(newPhoneNumber)
+                : null;
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
+        return Result.success(null);
     }
 
     public LocalDateTime getRegistrationDate() {
