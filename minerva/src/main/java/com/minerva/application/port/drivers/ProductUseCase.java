@@ -19,7 +19,12 @@ public interface ProductUseCase {
                                  BigDecimal reorderLevel,
                                  String barCode,
                                  SaleType saleType,
-                                 Category category);
+                                 Category category,
+                                 String purchasedFromSupplierId,
+                                 BigDecimal purchaseUnitPrice,
+                                 BigDecimal purchaseQuantity,
+                                 LocalDateTime purchaseExpirationDate
+                                 );
 
     Result<Void> registerStockEntry(String productId, String supplierNameId, BigDecimal unitPrice, BigDecimal quantity, LocalDateTime expirationDate);
     Result<Void> registerUnitToBulk(String unitProductId, String bulkProductId, BigDecimal quantity);
