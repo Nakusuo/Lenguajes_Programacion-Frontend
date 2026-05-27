@@ -2,6 +2,7 @@ package com.minerva.domain.entities.supplier;
 
 import com.minerva.domain.entities.shared.PhoneNumber;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.entities.shared.Result;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -20,12 +21,22 @@ public class Supplier {
         this.registrationDate = LocalDateTime.now();
     }
 
-    public void updatePhoneNumber(String phoneNumber) throws DomainException {
-        this.phoneNumber = (phoneNumber == null) ? null : new PhoneNumber(phoneNumber);
+    public Result<Void> updatePhoneNumber(String phoneNumber) {
+        try {
+            this.phoneNumber = (phoneNumber == null) ? null : new PhoneNumber(phoneNumber);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
+        return Result.success(null);
     }
 
-    public void updateRuc(String ruc) throws DomainException {
-        this.ruc = (ruc == null) ? null : new RUC(ruc);
+    public Result<Void> updateRuc(String ruc) {
+        try {
+            this.ruc = (ruc == null) ? null : new RUC(ruc);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
+        return Result.success(null);
     }
 
     public SupplierId getSupplierNameId() {
