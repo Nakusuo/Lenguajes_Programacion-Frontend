@@ -31,6 +31,9 @@ public class ProductEntity {
     @Column(name = "gainAmount", precision = 10, scale = 2, nullable = false)
     private BigDecimal gainAmount;
 
+    @Column(name = "price", precision = 10, scale = 2, nullable = false)
+    private BigDecimal price;
+
     @Column(name = "stock", precision = 10, scale = 3, nullable = false)
     private BigDecimal stock;
 
@@ -41,7 +44,7 @@ public class ProductEntity {
     private String barCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "SaleType", nullable = false)
+    @Column(name = "saleType", nullable = false)
     private SaleType saleType;
 
     @Enumerated(EnumType.STRING)
