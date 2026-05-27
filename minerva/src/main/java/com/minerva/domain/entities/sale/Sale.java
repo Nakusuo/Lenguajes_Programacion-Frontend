@@ -23,7 +23,7 @@ public class Sale {
     private final List<Pay>  pays =  new LinkedList<>();
     private final List<SaleDetail> saleDetails = new LinkedList<SaleDetail>();
 
-    public Sale(String customerNameId, String productId, BigDecimal unitPrice, BigDecimal quantity) throws DomainException {
+    private Sale(String customerNameId, String productId, BigDecimal unitPrice, BigDecimal quantity) throws DomainException {
         this.customerId = new CustomerId(customerNameId);
    
         // Valores por defecto
@@ -32,6 +32,23 @@ public class Sale {
 
         this.addDetail(productId, unitPrice, quantity);
     }
+
+    public static Sale create(String customerNameId, List<SaleItem> items) throws DomainException {
+        Sale saleCreated = new Sale(customerNameId, items.get(0).productId, items.get(0).unitPrice, items.get(0).quantity);
+
+        for (int i = 1; i < items.size(); i++) {
+            SaleItem item = items.get(i);
+            Result<Void> addDetailResult = saleCreated.addDetail(item.productId, item.unitPrice, item.quantity);
+            
+            if (addDetailResult.isFail()) 
+                throw new DomainException(addDetailResult.getMessage());
+            
+        }
+
+        return saleCreated;
+    }
+
+    public record SaleItem(String productId, BigDecimal quantity, BigDecimal unitPrice) {}
 
     public Result<Void> addDetail(String productIdStr, BigDecimal unitPrice, BigDecimal quantityBigDecimal) {
         try {
