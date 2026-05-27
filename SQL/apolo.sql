@@ -25,7 +25,7 @@ CREATE TABLE product (
     stock DECIMAL(10,3) NOT NULL, --
     reorderLevel DECIMAL(10,3),
     barCode CHAR(13) UNIQUE,
-    SaleType ENUM('UNIDAD', 'GRANEL') NOT NULL,--
+    saleType ENUM('UNIDAD', 'GRANEL') NOT NULL,--
     category ENUM(
         'BEBIDAS',
         'ABARROTES_SECOS',
