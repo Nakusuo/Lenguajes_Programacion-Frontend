@@ -11,6 +11,7 @@ import com.minerva.domain.entities.customer.CustomerId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -186,11 +187,27 @@ public class Sale {
         return customerId;
     }
 
-    public List<Pay> getPays() {
-        return List.copyOf(pays);
+    public List<PayDTO> getPays() {
+        List<PayDTO> paysDTO = new ArrayList<>(pays.size());
+        for (Pay pay : pays) {
+            paysDTO.add(new PayDTO(
+                pay.getPayId().toString(), 
+                pay.getAmount().value, 
+                pay.getPaymentMethod(), 
+                pay.getRegistrationDate()));
+        }
+        return paysDTO;
     }
 
-    public List<SaleDetail> getSaleDetails() {
-        return List.copyOf(saleDetails);
+    public List<SaleDetailDTO> getSaleDetails() {
+        List<SaleDetailDTO> detailsDTO = new ArrayList<>(saleDetails.size());
+        for (SaleDetail detail : saleDetails) {
+            detailsDTO.add(new SaleDetailDTO(
+                detail.getId().toString(),
+                detail.getProductNameId().value,
+                detail.getQuantity().value,
+                detail.getUnitPrice().value));
+        }
+        return detailsDTO;
     }
 }
