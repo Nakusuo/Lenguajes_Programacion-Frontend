@@ -17,6 +17,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    // --------------------- WRITE ---------------------
     public Result<Void> registerCustomer(String customerName, String phoneNumber) {
         try {
             Customer customerCreated = new Customer(customerName, phoneNumber);
@@ -34,6 +35,28 @@ public class CustomerService {
         return Result.success(null);
     }
 
+    public Result<Void> updatePhoneNumber(String customerId, String newPhoneNumber) {
+        try {
+            Optional<Customer> customerOpt = customerRepository.findById(new CustomerId(customerId));
+
+            if (customerOpt.isEmpty()) return Result.fail("Cliente no encontrado.");                
+
+            Customer customer = customerOpt.get();
+            
+            Result<Void> updatePhoneNumberResult = customer.updatePhoneNumber(newPhoneNumber);
+            if (updatePhoneNumberResult.isFail()) return updatePhoneNumberResult;
+
+            if (customerRepository.existsByPhoneNumber(new PhoneNumber(newPhoneNumber)))
+                return Result.fail("Ya existe un cliente con el mismo número de teléfono.");
+
+            customerRepository.save(customer);   
+            return Result.success(null);         
+        } catch (DomainException e) {
+            return Result.fail("Cliente no encontrado.");
+        }
+    }
+
+    // --------------------- READ ---------------------
     public Optional<Customer> findCustomerById(String customerId) {
         try {
             return customerRepository.findById(new CustomerId(customerId));
@@ -47,24 +70,6 @@ public class CustomerService {
             return customerRepository.findByPhoneNumber(new PhoneNumber(phoneNumber));
         } catch (DomainException e) {
             return Optional.empty();
-        }
-    }
-
-    public Result<Void> updatePhoneNumber(String customerId, String newPhoneNumber) {
-        try {
-            Optional<Customer> customerOpt = customerRepository.findById(new CustomerId(customerId));
-
-            if (customerOpt.isEmpty()) return Result.fail("Cliente no encontrado.");                
-
-            Customer customer = customerOpt.get();
-            
-            Result<Void> updatePhoneNumberResult = customer.updatePhoneNumber(newPhoneNumber);
-            if (updatePhoneNumberResult.isFail()) return updatePhoneNumberResult;
-
-            customerRepository.save(customer);   
-            return Result.success(null);         
-        } catch (DomainException e) {
-            return Result.fail("Cliente no encontrado.");
         }
     }
 
