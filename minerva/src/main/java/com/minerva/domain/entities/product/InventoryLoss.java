@@ -5,11 +5,10 @@ import com.minerva.domain.exceptions.DomainException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 
 public class InventoryLoss {
 
-    private final UUID inventoryLossId;
+    private final InventoryLossId inventoryLossId;
     private final ProductId productNameId;
     private final ProductQuantity quantity;
     private ReasonProductLoss reason;
@@ -32,11 +31,11 @@ public class InventoryLoss {
         this.reason = reason;
         this.observation = observation;
         // VALORES POR DEFECTO
-        this.inventoryLossId = UUID.randomUUID();
+        this.inventoryLossId = InventoryLossId.generate();
         this.registrationDate = LocalDateTime.now();
     }
 
-    public UUID getInventoryLossId() {
+    public InventoryLossId getInventoryLossId() {
         return inventoryLossId;
     }
 
