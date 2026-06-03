@@ -20,7 +20,7 @@ public class ProductReturnId {
         try {
             UUID.fromString(value);
         } catch (IllegalArgumentException e) {
-            throw new DomainException("El ID de devolución de producto no tiene un formato válido: " + value, e);
+            throw new DomainException("El ID de devolución de producto no tiene un formato válido: " + value);
         } 
         return new ProductReturnId(value);
     }
