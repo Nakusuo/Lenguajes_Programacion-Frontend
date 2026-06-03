@@ -5,10 +5,9 @@ import com.minerva.domain.entities.product.ProductQuantity;
 import com.minerva.domain.exceptions.DomainException;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 class ProductReturn {
-    private final UUID productReturnId;
+    private final ProductReturnId productReturnId;
     private final ProductQuantity quantity;
     private final ReasonProductReturn reason;
     private final LocalDateTime registrationDate;
@@ -20,11 +19,11 @@ class ProductReturn {
         this.quantity = quantity;
         this.reason = reason;
         // DATOS INICIALES
-        this.productReturnId = UUID.randomUUID();
+        this.productReturnId = ProductReturnId.generate();
         this.registrationDate = LocalDateTime.now();
     }
 
-    public UUID getId() {
+    public ProductReturnId getId() {
         return productReturnId;
     }
 
