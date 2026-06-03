@@ -20,7 +20,7 @@ public class InventoryLossId {
         try {
             UUID.fromString(value);
         } catch (IllegalArgumentException e) {
-            throw new DomainException("El ID de pérdida de inventario no tiene un formato válido: " + value, e);
+            throw new DomainException("El ID de pérdida de inventario no tiene un formato válido: " + value);
         }
         return new InventoryLossId(value);
     }
