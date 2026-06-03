@@ -11,11 +11,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 public class StockEntry {
 
-    private final UUID stockEntryId;
+    private final StockEntryId stockEntryId;
     private final ProductId productNameId;
     private final SupplierId supplierNameId;
     private final Money unitPrice;
@@ -46,12 +45,12 @@ public class StockEntry {
 
         this.expirationDate = expirationDate;
 
-        this.stockEntryId = UUID.randomUUID();
+        this.stockEntryId = StockEntryId.generate();
         this.registrationDate = LocalDateTime.now();
     }
 
     public StockEntry(
-            UUID stockEntryId,
+            String stockEntryId,
             String productNameId,
             String supplierNameId,
             BigDecimal unitPrice,
@@ -60,7 +59,7 @@ public class StockEntry {
             LocalDateTime registrationDate
     ) {
         try {
-            this.stockEntryId = stockEntryId;
+            this.stockEntryId = StockEntryId.fromString(stockEntryId);
             this.productNameId = new ProductId(productNameId);
             this.supplierNameId = new SupplierId(supplierNameId);
             this.unitPrice = new Money(unitPrice);
@@ -72,7 +71,7 @@ public class StockEntry {
         }
     }
 
-    public UUID getStockEntryId() {
+    public StockEntryId getStockEntryId() {
         return stockEntryId;
     }
 
