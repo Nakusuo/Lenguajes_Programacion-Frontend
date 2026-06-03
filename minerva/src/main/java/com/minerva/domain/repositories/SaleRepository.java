@@ -12,4 +12,6 @@ public interface SaleRepository {
     Optional<Sale> findById(UUID id);
     List<Sale> findByCustomerId(CustomerId customerId);
     List<Sale> findAll();
+    List<Sale.SaleDetailDTO> findSaleDetailsById(UUID id);
+    List<Sale.PayDTO> findPaysById(UUID id);
 }
