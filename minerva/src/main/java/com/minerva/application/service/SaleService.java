@@ -21,9 +21,12 @@ public class SaleService {
         this.customerRepository = customerRepository;
     }
 
+    // --------------------- WRITE ---------------------
+
+
     public Result<Void> registerSale(String customerId, List<Sale.PayData> pays, List<SaleItem> items) {
         try {
-            Sale saleCreated = Sale.create(customerId, items);
+            Sale saleCreated = new Sale(customerId, items);
             if (customerRepository.findById(new CustomerId(customerId)).isEmpty())
                 return Result.fail("Cliente no encontrado.");
 
@@ -49,6 +52,9 @@ public class SaleService {
         saleRepository.save(sale);
         return Result.success(null);
     }
+
+    // --------------------- READ ---------------------
+
 
     public Optional<Sale> findSaleById(UUID id) {
         return saleRepository.findById(id);
