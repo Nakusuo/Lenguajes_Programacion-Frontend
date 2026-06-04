@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.minerva.domain.exceptions.DomainException;
 
-class SaleDetailId {
+public class SaleDetailId {
     public final String value;
 
     private SaleDetailId(String value) {
