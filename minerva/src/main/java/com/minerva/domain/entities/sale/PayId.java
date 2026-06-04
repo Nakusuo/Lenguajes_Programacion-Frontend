@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.minerva.domain.exceptions.DomainException;
 
-class PayId {
+public class PayId {
     public final String value;
 
     private PayId(String value) {
