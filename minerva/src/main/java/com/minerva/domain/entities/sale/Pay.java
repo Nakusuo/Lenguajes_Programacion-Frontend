@@ -7,10 +7,9 @@ import com.minerva.domain.exceptions.UnexpectedDomainException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 class Pay {
-    private final UUID payId;
+    private final PayId payId;
     private final Money amount;
     private final PaymentMethod paymentMethod;
     private final LocalDateTime registrationDate;
@@ -24,13 +23,13 @@ class Pay {
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         // Valores por defecto
-        this.payId = UUID.randomUUID();
+        this.payId = PayId.generate();
         this.registrationDate = LocalDateTime.now();
     }
 
     Pay(String payId, BigDecimal amount, PaymentMethod paymentMethod, LocalDateTime registrationDate) {
         try {
-            this.payId = UUID.fromString(payId);
+            this.payId = PayId.fromString(payId);
             this.amount = new Money(amount);
             this.paymentMethod = paymentMethod;
             this.registrationDate = registrationDate;
@@ -39,16 +38,12 @@ class Pay {
         }
     }
 
-    public UUID getPayId() {
+    public PayId getPayId() {
         return payId;
     }    
         
     public Money getAmount() {
         return amount;
-    }
-
-    public UUID getId() {
-        return payId;
     }
 
     public PaymentMethod getPaymentMethod() {

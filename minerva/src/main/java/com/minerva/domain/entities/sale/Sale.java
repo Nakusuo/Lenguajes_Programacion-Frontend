@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class Sale {
-    private final UUID saleId;
+    private final SaleId saleId;
     private final CustomerId customerId;
     private final LocalDateTime registrationDate;
 
@@ -45,13 +44,13 @@ public class Sale {
         }
 
         // Valores por defecto
-        this.saleId = UUID.randomUUID();
+        this.saleId = SaleId.generate();
         this.registrationDate = LocalDateTime.now();
     }
 
     public Sale(String saleId, String customerNameId, LocalDateTime registrationDate, List<SaleDetailDTO> saleDetails, List<PayDTO> pays) {
         try {
-            this.saleId = UUID.fromString(saleId);
+            this.saleId = SaleId.fromString(saleId);
             this.customerId = new CustomerId(customerNameId);
             this.registrationDate = registrationDate;
             
@@ -175,7 +174,7 @@ public class Sale {
         return calculateAmountDue().isZero();
     }
 
-    public UUID getId() {
+    public SaleId getId() {
         return saleId;
     }
 
