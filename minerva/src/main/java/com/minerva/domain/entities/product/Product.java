@@ -113,7 +113,7 @@ public class Product {
 
     // --------------------------------
 
-    public Result<Void> receiveSupplierDelivery(BigDecimal quantity) {
+    public Result<Void> processDeliveryFromSupplier(BigDecimal quantity) {
         return increaseStock(quantity);
     }
 
