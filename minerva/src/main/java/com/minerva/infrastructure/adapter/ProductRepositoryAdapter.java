@@ -2,7 +2,6 @@ package com.minerva.infrastructure.adapter;
 
 import com.minerva.domain.entities.product.*;
 import com.minerva.domain.entities.stockEntry.StockEntry;
-import com.minerva.domain.entities.stockEntry.StockEntryId;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.infrastructure.persistence.entity.ProductEntity;
 import com.minerva.infrastructure.persistence.entity.StockEntryEntity;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class ProductRepositoryAdapter implements ProductRepository {
     @PersistenceContext
@@ -38,8 +36,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Transactional
     @Override
     public void registerProduct(Product product, StockEntry stockEntry) {
-        save(product);
-        save(stockEntry);
+        jpaProductRepository.save(toEntity(product));
+        jpaStockEntryRepository.save(toEntity(stockEntry));
     }
 
     @Override
@@ -47,9 +45,11 @@ public class ProductRepositoryAdapter implements ProductRepository {
         jpaProductRepository.save(toEntity(product));
     }
 
+    @Transactional
     @Override
-    public void save(StockEntry stockEntry) {
+    public void saveStockEntry(StockEntry stockEntry, Product product) {
         jpaStockEntryRepository.save(toEntity(stockEntry));
+        jpaProductRepository.save(toEntity(product));
     }
 
     @Override
