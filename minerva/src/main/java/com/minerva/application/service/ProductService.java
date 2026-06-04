@@ -25,6 +25,7 @@ public class ProductService implements ProductUseCase {
         this.supplierRepository = supplierRepository;
     }
 
+    // --------------------- WRITE ---------------------
     @Override
     public Result<Void> registerProduct(String productName,
                                         GainStrategy gainStrategy,
@@ -66,6 +67,7 @@ public class ProductService implements ProductUseCase {
         return Result.success(null);
     }
 
+    // OJAZOOOOOOO se puede mejorar el control de expeciones a la ora de crear los id
     @Override
     public Result<Void> registerStockEntry(String productId, String supplierNameId, BigDecimal unitPrice, BigDecimal quantity, LocalDateTime expirationDate) {
         StockEntry stockEntryCreated;
@@ -75,13 +77,26 @@ public class ProductService implements ProductUseCase {
             return Result.fail(e.getMessage());
         }
 
-        if  (!productRepository.existsById(stockEntryCreated.getProductNameId()))
+
+        Optional<Product> product;
+
+        try {
+            product = productRepository.findById(new ProductId(productId));
+        } catch (DomainException e) {
             return Result.fail("El producto no esta registrado.");
+        }
+
+        if (product.isEmpty())
+            return Result.fail("El producto no esta registrado.");
+
+        Product productToUpdate = product.get();
+
+        productToUpdate.processDeliveryFromSupplier(stockEntryCreated.getQuantity().value);
 
         if (!supplierRepository.existsById(stockEntryCreated.getSupplierNameId()))
             return Result.fail("El proveedor no esta registrado.");
 
-        productRepository.save(stockEntryCreated);
+        productRepository.saveStockEntry(stockEntryCreated, productToUpdate);
 
         return Result.success(null);
     }

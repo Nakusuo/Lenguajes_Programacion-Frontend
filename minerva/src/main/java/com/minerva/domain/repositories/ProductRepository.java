@@ -9,7 +9,7 @@ import com.minerva.domain.entities.stockEntry.StockEntry;
 public interface ProductRepository {
     void registerProduct(Product product, StockEntry stockEntry);
     void save(Product product);
-    void save(StockEntry stockEntry);
+    void saveStockEntry(StockEntry stockEntry, Product product);
     void saveUnitToBulk(ProductId unitProductId, ProductId bulkProductId, ProductQuantity quantity);
 
     boolean existsById(ProductId id);
