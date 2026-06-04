@@ -7,10 +7,9 @@ import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.entities.shared.Money;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 class SaleDetail {
-    private final UUID id;
+    private final SaleDetailId id;
     private final ProductId productNameId;
     private final ProductQuantity quantity;
     private final Money unitPrice;
@@ -21,7 +20,7 @@ class SaleDetail {
         if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La CANTIDAD DE PRODUCTO debe ser mayor a 0.");
         if (unitPrice != null && unitPrice.isZeroOrLess()) throw new DomainException("El PRECIO UNITARIO debe ser mayor a 0.");
 
-        this.id = UUID.randomUUID();
+        this.id = SaleDetailId.generate();
         this.productNameId = productNameId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
@@ -29,7 +28,7 @@ class SaleDetail {
 
     public SaleDetail(String id, String productNameId, BigDecimal quantity, BigDecimal unitPrice) {
         try {
-            this.id = UUID.fromString(id);
+            this.id = SaleDetailId.fromString(id);
             this.productNameId = new ProductId(productNameId);
             this.quantity = new ProductQuantity(quantity);
             this.unitPrice = new Money(unitPrice);
@@ -48,7 +47,7 @@ class SaleDetail {
         }
     }
 
-    public UUID getId() {
+    public SaleDetailId getId() {
         return id;
     }
 
