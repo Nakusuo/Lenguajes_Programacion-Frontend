@@ -111,6 +111,16 @@ public class Product {
         } 
     }
 
+    // --------------------------------
+
+    public Result<Void> receiveSupplierDelivery(BigDecimal quantity) {
+        return increaseStock(quantity);
+    }
+
+    public Result<Void> processSale(BigDecimal quantity) {
+        return decreaseStock(quantity);
+    }
+
     //----------------------------------
 
     private Result<Void> increaseStock(BigDecimal quantityToAdd) {
