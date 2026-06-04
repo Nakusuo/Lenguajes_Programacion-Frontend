@@ -2,6 +2,7 @@ package com.minerva.infrastructure.adapter;
 
 import com.minerva.domain.entities.product.*;
 import com.minerva.domain.entities.stockEntry.StockEntry;
+import com.minerva.domain.entities.stockEntry.StockEntryId;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.infrastructure.persistence.entity.ProductEntity;
 import com.minerva.infrastructure.persistence.entity.StockEntryEntity;
@@ -160,7 +161,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     private StockEntry toDomain(StockEntryEntity entity) {
         return new StockEntry(
-                UUID.fromString(entity.getStockEntryId()),
+                entity.getStockEntryId(),
                 entity.getProductEntity().getProductNameId(),
                 entity.getSupplierEntity().getSupplierNameId(),
                 entity.getUnitPrice(),
