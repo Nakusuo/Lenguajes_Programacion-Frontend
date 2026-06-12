@@ -42,3 +42,8 @@ igual para:
 
 phoneNumber
 barCode
+
+
+
+
+-- en los dto recibidos falta agregar logica de validacion, pero por factor tiempo se dejo asi nomas
