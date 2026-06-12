@@ -1,64 +1,38 @@
 package com.minerva.infrastructure.rest.exception;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- *
- * @author L
- */
-@ControllerAdvice
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-/*
-    @Autowired
-    private ExceptionLogService exceptionLogService;
 
+    // Manejo genérico de excepciones
     @ExceptionHandler(Exception.class)
-    public String handleGlobalException(Exception ex, Model model) {
-        logException(ex);
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
 
-        model.addAttribute("error", "Error inesperado");
-        model.addAttribute("message", ex.getMessage());
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-        return "error";
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MessageDto> handleValidationErrors(MethodArgumentNotValidException ex) {
-        logException(ex);
+    // Manejo de errores de validación (opcional)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleBadRequest(IllegalArgumentException ex) {
 
-        String errorMessage = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                .findFirst()
-                .orElse("Datos inválidos");
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
 
-        return ResponseEntity
-                .badRequest()
-                .body(new MessageDto(errorMessage));
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
-
-    // Registra la exepcion
-    private void logException(Exception ex) {
-        exceptionLogService.create(
-                ex.getClass().getName(),
-                ex.getMessage(),
-                getStackTraceAsString(ex),
-                ex.getCause() != null ? ex.getCause().toString() : null
-        );
-    }
-
-    // Convierte el stack trace a String
-    private String getStackTraceAsString(Exception ex) {
-        StringBuilder sb = new StringBuilder();
-        for (StackTraceElement element : ex.getStackTrace()) {
-            sb.append(element.toString()).append("\n");
-        }
-        return sb.toString();
-    }*/
 }
