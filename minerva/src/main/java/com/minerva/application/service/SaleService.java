@@ -40,7 +40,13 @@ public class SaleService {
         }
     }
 
-    public Result<Void> addPaymentToSale(SaleId saleId, List<Sale.PayData> pays) {
+    public Result<Void> addPaymentToSale(String saleIdStr, List<Sale.PayData> pays) {
+        SaleId saleId;
+        try {
+            saleId = SaleId.fromString(saleIdStr);
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
         Optional<Sale> saleOpt = saleRepository.findById(saleId);
         if (saleOpt.isEmpty()) return Result.fail("Venta no encontrada.");
 
@@ -56,8 +62,12 @@ public class SaleService {
     // --------------------- READ ---------------------
 
 
-    public Optional<Sale> findSaleById(SaleId saleId) {
-        return saleRepository.findById(saleId);
+    public Optional<Sale> findSaleById(String saleId) {
+        try {
+            return saleRepository.findById(SaleId.fromString(saleId));
+        } catch (DomainException e) {
+            return Optional.empty();
+        }
     }
 
     public List<Sale> findSalesByCustomerId(String customerId) {
