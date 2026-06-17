@@ -105,7 +105,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public List<StockEntry> findAllEntriesByProductId(ProductId id) {
-        return jpaStockEntryRepository.findByProduct_ProductNameId(id.value)
+        return jpaStockEntryRepository.findByProductEntity_ProductNameId(id.value)
                 .stream()
                 .map(this::toDomain)
                 .toList();

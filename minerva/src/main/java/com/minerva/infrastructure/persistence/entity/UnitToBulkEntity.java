@@ -1,10 +1,7 @@
 package com.minerva.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -46,6 +43,7 @@ public class UnitToBulkEntity {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    @EqualsAndHashCode
     @Embeddable
     public static class UnitToBulkId implements Serializable {
 
