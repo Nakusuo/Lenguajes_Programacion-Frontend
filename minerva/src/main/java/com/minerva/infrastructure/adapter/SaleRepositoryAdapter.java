@@ -75,14 +75,14 @@ public class SaleRepositoryAdapter implements SaleRepository {
     }
 
     public List<SaleDetailDTO> findSaleDetailBySaleId(SaleId saleId) {
-        return saleDetailRepository.findBySale_SaleId(saleId.value)
+        return saleDetailRepository.findBySaleEntity_SaleId(saleId.value)
                 .stream()
                 .map(this::toSaleDetailDTO)
                 .toList();
     }
 
     public List<PayDTO> findPayBySaleId(SaleId saleId) {
-        return payRepository.findBySale_SaleId(saleId.value)
+        return payRepository.findBySaleEntity_SaleId(saleId.value)
                 .stream()
                 .map(this::toPayDTO)
                 .toList();
@@ -101,7 +101,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Override
     public List<Sale> findByCustomerId(CustomerId customerId) {
-        List<SaleEntity> saleEntities = saleRepository.findByCustomer_CustomerNameId(customerId.value);
+        List<SaleEntity> saleEntities = saleRepository.findByCustomerEntity_CustomerNameId(customerId.value);
 
         return saleEntities.stream()
         .map(saleEntity -> {
