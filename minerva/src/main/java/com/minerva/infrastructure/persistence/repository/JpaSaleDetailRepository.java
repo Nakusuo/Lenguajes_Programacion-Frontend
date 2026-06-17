@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface JpaSaleDetailRepository extends JpaRepository<SaleDetailEntity, String> {
 
-    List<SaleDetailEntity> findBySale_SaleId(String saleId);
+    List<SaleDetailEntity> findBySaleEntity_SaleId(String saleId);
 
-    List<SaleDetailEntity> findByProduct_ProductNameId(String productNameId);
+    List<SaleDetailEntity> findByProductEntity_ProductNameId(String productNameId);
 }

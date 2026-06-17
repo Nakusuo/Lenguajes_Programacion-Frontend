@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface JpaStockEntryRepository extends JpaRepository<StockEntryEntity, String> {
 
-    List<StockEntryEntity> findByProduct_ProductNameId(String productNameId);
+    List<StockEntryEntity> findByProductEntity_ProductNameId(String productNameId);
 
-    List<StockEntryEntity> findBySupplier_SupplierNameId(String supplierNameId);
+    List<StockEntryEntity> findBySupplierEntity_SupplierNameId(String supplierNameId);
 }

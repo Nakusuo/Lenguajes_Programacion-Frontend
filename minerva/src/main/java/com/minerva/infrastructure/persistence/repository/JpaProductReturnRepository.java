@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface JpaProductReturnRepository extends JpaRepository<ProductReturnEntity, String> {
 
-    List<ProductReturnEntity> findBySaleDetail_SaleDetailId(String saleDetailId);
+    List<ProductReturnEntity> findBySaleDetailEntity_SaleDetailId(String saleDetailId);
 }
 

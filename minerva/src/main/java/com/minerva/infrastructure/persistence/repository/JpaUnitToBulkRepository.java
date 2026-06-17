@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface JpaUnitToBulkRepository extends JpaRepository<UnitToBulkEntity, UnitToBulkEntity.UnitToBulkId> {
 
-    Optional<UnitToBulkEntity> findByBulkProduct_ProductNameId(String bulkProductNameId);
+    Optional<UnitToBulkEntity> findByBulkProductEntity_ProductNameId(String bulkProductNameId);
 
-    List<UnitToBulkEntity> findByUnitProduct_ProductNameId(String unitProductNameId);
+    List<UnitToBulkEntity> findByUnitProductEntity_ProductNameId(String unitProductNameId);
 }

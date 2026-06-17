@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface JpaPayRepository extends JpaRepository<PayEntity, String> {
 
-    List<PayEntity> findBySale_SaleId(String saleId);
+    List<PayEntity> findBySaleEntity_SaleId(String saleId);
 
     List<PayEntity> findByPaymentMethod(PaymentMethod paymentMethod);
 }
