@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface JpaInventoryLossRepository extends JpaRepository<InventoryLossEntity, String> {
 
-    List<InventoryLossEntity> findByProduct_ProductNameId(String productNameId);
+    List<InventoryLossEntity> findByProductEntity_ProductNameId(String productNameId);
 
     List<InventoryLossEntity> findByReason(ReasonProductLoss reason);
 }

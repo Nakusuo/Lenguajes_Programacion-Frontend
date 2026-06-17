@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface JpaSaleRepository extends JpaRepository<SaleEntity, String> {
 
-    List<SaleEntity> findByCustomer_CustomerNameId(String customerNameId);
+    List<SaleEntity> findByCustomerEntity_CustomerNameId(String customerNameId);
     Optional<SaleEntity> findById(String id);
 }
