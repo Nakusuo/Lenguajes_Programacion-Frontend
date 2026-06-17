@@ -7,6 +7,7 @@ spring:
     username: root  # Usuario de la base de datos
     password: "Drakotako147258369#"   # Contraseña de la base de datos
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none  # 🔧 Controla cómo se crea o actualiza el esquema de DB
         # - update: actualiza el esquema automáticamente (útil en desarrollo)
