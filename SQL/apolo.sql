@@ -1,6 +1,76 @@
 CREATE DATABASE apolo;
 USE apolo;
 
+
+CREATE TABLE role (
+    roleNameId VARCHAR(50) PRIMARY KEY,
+
+    registrationDate TIMESTAMP NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE permission (
+    permissionName VARCHAR(50) PRIMARY KEY,
+
+    registrationDate TIMESTAMP NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE user (
+    DNI CHAR(8) PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    roleNameId VARCHAR(50) NOT NULL,
+
+    registrationDate TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_user_role FOREIGN KEY (roleNameId)
+        REFERENCES role(roleNameId)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE rolePermission (
+    roleNameId VARCHAR(50) NOT NULL,
+    permissionName VARCHAR(50) NOT NULL,
+
+    PRIMARY KEY (roleNameId, permissionName),
+
+    CONSTRAINT fk_rolePermission_role FOREIGN KEY (roleNameId)
+        REFERENCES role(roleNameId)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_rolePermission_permission FOREIGN KEY (permissionName)
+        REFERENCES permission(permissionName)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE userAction (
+    actionId CHAR(36) PRIMARY KEY,
+
+    userDNI CHAR(8) NOT NULL,
+    permissionName VARCHAR(50) NOT NULL,
+
+    entityId VARCHAR(100) NOT NULL,
+
+    actionDate TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_userAction_user
+        FOREIGN KEY (userDNI)
+        REFERENCES user(DNI)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_userAction_permission
+        FOREIGN KEY (permissionName)
+        REFERENCES permission(permissionName)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE supplier (
     supplierNameId VARCHAR(100) PRIMARY KEY,
     ruc CHAR(11) unique,
@@ -161,6 +231,10 @@ CREATE TABLE productReturn (
 -- Datos iniciales
 INSERT INTO supplier (supplierNameId, registrationDate) VALUES ('anonimo', NOW());
 INSERT INTO customer (customerNameId, registrationDate) VALUES ('anonimo', NOW());
+
+INSERT INTO role (roleNameId, registrationDate) VALUES ('ADMIN', NOW());
+INSERT INTO role (roleNameId, registrationDate) VALUES ('VENDEDOR', NOW());
+INSERT INTO role (roleNameId, registrationDate) VALUES ('JEFE DE ALMACEN', NOW());
 
 -- TRIGGERS
 -- SHOW TRIGGERS
