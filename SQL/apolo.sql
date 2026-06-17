@@ -234,7 +234,7 @@ INSERT INTO customer (customerNameId, registrationDate) VALUES ('anonimo', NOW()
 
 INSERT INTO role (roleNameId, registrationDate) VALUES ('ADMIN', NOW());
 INSERT INTO role (roleNameId, registrationDate) VALUES ('VENDEDOR', NOW());
-INSERT INTO role (roleNameId, registrationDate) VALUES ('JEFE DE ALMACEN', NOW());
+INSERT INTO role (roleNameId, registrationDate) VALUES ('ALMACENISTA', NOW());
 
 -- TRIGGERS
 -- SHOW TRIGGERS
