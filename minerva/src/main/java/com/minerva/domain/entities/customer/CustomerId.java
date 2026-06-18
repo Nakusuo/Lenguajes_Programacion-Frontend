@@ -1,12 +1,13 @@
 package com.minerva.domain.entities.customer;
 
+import com.minerva.domain.entities.shared.Id;
 import com.minerva.domain.exceptions.DomainException;
 
 import java.util.Objects;
 
-public class CustomerId {
+public class CustomerId implements Id {
     private static final Integer MIN_LENGTH = 3;
-    private static final Integer MAX_LENGTH = 100;
+    private static final Integer MAX_LENGTH = 50;
 
     public final String value;
 
@@ -31,5 +32,10 @@ public class CustomerId {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String value() {
+        return value;
     }
 }
