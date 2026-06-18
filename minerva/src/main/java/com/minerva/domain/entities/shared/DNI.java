@@ -1,4 +1,4 @@
-package com.minerva.domain.entities.user;
+package com.minerva.domain.entities.shared;
 
 import com.minerva.domain.exceptions.DomainException;
 
