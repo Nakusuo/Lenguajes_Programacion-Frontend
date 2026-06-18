@@ -12,17 +12,10 @@ public class DNI {
 
     public DNI(String value) throws DomainException {
 
-        if (value == null)
-            throw new DomainException("Ingrese el DNI.");
-
-        if (value.isBlank())
-            throw new DomainException("El DNI no puede estar vacío.");
-
-        if (!value.matches("^\\d+$"))
-            throw new DomainException("El DNI solo puede contener números.");
-
-        if (value.length() != LENGTH)
-            throw new DomainException("El DNI debe tener exactamente " + LENGTH + " dígitos.");
+        if (value == null) throw new DomainException("Ingrese el DNI.");
+        if (value.isBlank()) throw new DomainException("El DNI no puede estar vacío.");
+        if (!value.matches("^\\d+$")) throw new DomainException("El DNI solo puede contener números.");
+        if (value.length() != LENGTH) throw new DomainException("El DNI debe tener exactamente " + LENGTH + " dígitos.");
 
         this.value = value;
     }
