@@ -51,3 +51,7 @@ barCode
 -- deberia agregar un pepper a la incrptacion
 
 -- debria agregar un palabra caracteristirca a cada entidad para su id a la hora de registrarse
+
+-- recordar: desaparecer la carpeta id al final, simplemente es para no marearme xd
+
+-- revisar que no se este usando expetion en todo el proyecto, solo se debe usar domain exepction
