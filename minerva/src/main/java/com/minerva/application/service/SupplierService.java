@@ -1,11 +1,11 @@
 package com.minerva.application.service;
 
 import com.minerva.application.port.drivers.SupplierUseCase;
-import com.minerva.domain.entities.shared.PhoneNumber;
+import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.shared.Result;
-import com.minerva.domain.entities.supplier.RUC;
+import com.minerva.domain.valueObject.RUC;
 import com.minerva.domain.entities.supplier.Supplier;
-import com.minerva.domain.entities.supplier.SupplierId;
+import com.minerva.domain.valueObject.id.SupplierId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.SupplierRepository;
 
