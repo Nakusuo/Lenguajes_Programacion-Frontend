@@ -2,8 +2,8 @@ package com.minerva.domain.repositories;
 
 
 import com.minerva.domain.entities.customer.Customer;
-import com.minerva.domain.entities.customer.CustomerId;
-import com.minerva.domain.entities.shared.PhoneNumber;
+import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.PhoneNumber;
 
 import java.util.List;
 import java.util.Optional;
