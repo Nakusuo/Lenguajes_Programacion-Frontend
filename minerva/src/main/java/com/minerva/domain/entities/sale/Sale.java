@@ -1,13 +1,15 @@
 package com.minerva.domain.entities.sale;
 
-import com.minerva.domain.entities.product.ProductId;
-import com.minerva.domain.entities.product.ProductQuantity;
-import com.minerva.domain.entities.shared.Money;
+import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.ProductQuantity;
+import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.constants.PaymentMethod;
-import com.minerva.domain.entities.customer.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.SaleId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class Sale {
+public class Sale extends Entity {
     private final SaleId saleId;
     private final CustomerId customerId;
     private final LocalDateTime registrationDate;
@@ -24,9 +26,10 @@ public class Sale {
     private final List<Pay>  pays =  new LinkedList<>();
     private final List<SaleDetail> saleDetails = new LinkedList<SaleDetail>();
 
-    public Sale(String customerNameId, List<SaleItem> items) throws DomainException {
+    public Sale(String customerNameId, List<SaleItem> items) throws DomainException {    
+        SaleId tempId = SaleId.generate();
+        super(tempId);
         this.customerId = new CustomerId(customerNameId);
-        
         if (items == null || items.isEmpty()) {
             throw new DomainException("La venta debe tener al menos un item");
         }
@@ -44,16 +47,23 @@ public class Sale {
         }
 
         // Valores por defecto
-        this.saleId = SaleId.generate();
+        this.saleId = tempId;
         this.registrationDate = LocalDateTime.now();
     }
 
     public Sale(String saleId, String customerNameId, LocalDateTime registrationDate, List<SaleDetailDTO> saleDetails, List<PayDTO> pays) {
+        SaleId tempId;
         try {
-            this.saleId = SaleId.fromString(saleId);
+            tempId = SaleId.fromString(saleId);
+            this.saleId = tempId;
             this.customerId = new CustomerId(customerNameId);
-            this.registrationDate = registrationDate;
-            
+            this.registrationDate = registrationDate;             
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al crear la venta: " + e.getMessage(), e);
+        }
+        super(tempId);
+
+        try {
             if (saleDetails != null && !saleDetails.isEmpty()) {
                 for (SaleDetailDTO detailDTO : saleDetails) {
                     this.saleDetails.add(new SaleDetail(
@@ -66,19 +76,19 @@ public class Sale {
             } else {
                 throw new DomainException("La venta debe tener al menos un detalle");
             }
-
-            if (pays != null) {
-                for (PayDTO payDTO : pays) {
-                    this.pays.add(new Pay(
-                        payDTO.payId,
-                        payDTO.amount,
-                        payDTO.paymentMethod,
-                        payDTO.registrationDate
-                    ));
-                }
-            }
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear la venta: " + e.getMessage(), e);
+        }
+
+        if (pays != null) {
+            for (PayDTO payDTO : pays) {
+                this.pays.add(new Pay(
+                    payDTO.payId,
+                    payDTO.amount,
+                    payDTO.paymentMethod,
+                    payDTO.registrationDate
+                ));
+            }
         }
     }
 

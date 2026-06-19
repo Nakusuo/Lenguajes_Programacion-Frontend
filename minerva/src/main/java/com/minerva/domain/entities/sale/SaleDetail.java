@@ -2,13 +2,15 @@ package com.minerva.domain.entities.sale;
 
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.entities.product.ProductQuantity;
-import com.minerva.domain.entities.product.ProductId;
-import com.minerva.domain.entities.shared.Money;
+import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.valueObject.ProductQuantity;
+import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.Money;
+import com.minerva.domain.valueObject.id.SaleDetailId;
 
 import java.math.BigDecimal;
 
-class SaleDetail {
+class SaleDetail extends Entity {
     private final SaleDetailId id;
     private final ProductId productNameId;
     private final ProductQuantity quantity;
@@ -20,21 +22,29 @@ class SaleDetail {
         if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La CANTIDAD DE PRODUCTO debe ser mayor a 0.");
         if (unitPrice != null && unitPrice.isZeroOrLess()) throw new DomainException("El PRECIO UNITARIO debe ser mayor a 0.");
 
-        this.id = SaleDetailId.generate();
+        SaleDetailId tempId = SaleDetailId.generate();
+        super(tempId);
+
+        this.id = tempId;
         this.productNameId = productNameId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
     public SaleDetail(String id, String productNameId, BigDecimal quantity, BigDecimal unitPrice) {
+        SaleDetailId tempId;
         try {
-            this.id = SaleDetailId.fromString(id);
+            tempId = SaleDetailId.fromString(id);
+            
+            this.id = tempId;
             this.productNameId = new ProductId(productNameId);
             this.quantity = new ProductQuantity(quantity);
             this.unitPrice = new Money(unitPrice);
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear el detalle de venta: " + e.getMessage(), e);
         }
+        
+        super(tempId);
     }
 
     // REVISAR ESTO QUE YA ME GANO EL SUEÑO, si este mensaje sigue aqui es porque no lo revisé.

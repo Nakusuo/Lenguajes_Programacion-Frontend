@@ -3,12 +3,16 @@ package com.minerva.domain.entities.product;
 import com.minerva.domain.constants.Category;
 import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
-import com.minerva.domain.entities.shared.Money;
+import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.valueObject.BarCode;
+import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.services.PriceCalculator;
+import com.minerva.domain.valueObject.ProductQuantity;
+import com.minerva.domain.valueObject.id.ProductId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,7 +22,7 @@ import java.util.Optional;
 import static com.minerva.domain.services.Math.isDecimal;
 import static com.minerva.domain.services.Math.isZeroOrLess;
 
-public class Product {
+public class Product extends Entity {
     private final ProductId productNameId;
     private ProductQuantity stock;
     private GainStrategy gainStrategy;
@@ -45,7 +49,9 @@ public class Product {
             Category category,
             BigDecimal purchasePrice
     ) throws DomainException {
-        this.productNameId = new ProductId(productName);
+        ProductId tempId = new ProductId(productName);
+        super(tempId);
+        this.productNameId = tempId;
         this.stock = new ProductQuantity(initialStock);
         this.gainAmount = new Money(gainAmount);
         this.gainStrategy = gainStrategy;
@@ -94,8 +100,10 @@ public class Product {
             BigDecimal price,
             LocalDateTime registrationDate
     ) {
+        ProductId tempId;
         try {
-            this.productNameId = new ProductId(productName);
+            tempId = new ProductId(productName);
+            this.productNameId = tempId;
             this.stock = new ProductQuantity(stock);
             this.gainAmount = new Money(gainAmount);
             this.gainStrategy = gainStrategy;
@@ -106,9 +114,10 @@ public class Product {
             this.price = new Money(price);
             this.registrationDate = registrationDate;
 
-            } catch (DomainException e) {
+        } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear el producto: " + e.getMessage(), e);
         } 
+        super(tempId);
     }
 
     // --------------------------------

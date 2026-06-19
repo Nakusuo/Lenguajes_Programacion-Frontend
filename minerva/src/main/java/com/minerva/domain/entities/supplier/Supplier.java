@@ -1,14 +1,17 @@
 package com.minerva.domain.entities.supplier;
 
-import com.minerva.domain.entities.shared.PhoneNumber;
+import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.valueObject.RUC;
+import com.minerva.domain.valueObject.id.SupplierId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class Supplier {
+public class Supplier extends Entity {
     private final SupplierId supplierNameId;
     // Puede ser null
     private RUC ruc;
@@ -17,7 +20,9 @@ public class Supplier {
     private final LocalDateTime registrationDate;
 
     public Supplier(String supplierName, String ruc, String phoneNumber) throws DomainException {
-        this.supplierNameId = new SupplierId(supplierName);
+        SupplierId tempId = new SupplierId(supplierName);
+        super(tempId);
+        this.supplierNameId = tempId;
         this.ruc = (ruc == null) ? null : new RUC(ruc);
         this.phoneNumber = (phoneNumber == null) ? null : new PhoneNumber(phoneNumber);
         // VALORES POR DEFECTO
@@ -25,14 +30,18 @@ public class Supplier {
     }
 
     public Supplier(String supplierNameId, String ruc, String phoneNumber, LocalDateTime registrationDate) {
+        SupplierId tempId;
         try {
-            this.supplierNameId = new SupplierId(supplierNameId);
+            tempId = new SupplierId(supplierNameId);
+            
+            this.supplierNameId = tempId;
             this.registrationDate = registrationDate;
             this.ruc = ruc != null ? new RUC(ruc) : null;
             this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear el proveedor: " + e.getMessage(), e);
         }        
+        super(tempId);
     }
 
     public Result<Void> updatePhoneNumber(String phoneNumber) {

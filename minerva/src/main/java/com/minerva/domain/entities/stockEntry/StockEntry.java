@@ -1,18 +1,20 @@
 package com.minerva.domain.entities.stockEntry;
 
-import com.minerva.domain.entities.product.ProductId;
-import com.minerva.domain.entities.product.ProductQuantity;
-import com.minerva.domain.entities.shared.Money;
-import com.minerva.domain.entities.supplier.SupplierId;
+import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.ProductQuantity;
+import com.minerva.domain.valueObject.Money;
+import com.minerva.domain.valueObject.id.SupplierId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.valueObject.id.StockEntryId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-public class StockEntry {
+public class StockEntry extends Entity {
 
     private final StockEntryId stockEntryId;
     private final ProductId productNameId;
@@ -30,12 +32,15 @@ public class StockEntry {
             BigDecimal unitPrice,
             BigDecimal quantity,
             LocalDateTime expirationDate
-    ) throws DomainException {
+    ) throws DomainException {        
 
         this.productNameId = new ProductId(productNameId);
         this.supplierNameId = new SupplierId(supplierNameId);
         this.unitPrice = new Money(unitPrice);
         this.quantity = new ProductQuantity(quantity);
+
+        StockEntryId tempId = StockEntryId.generate();
+        super(tempId);
 
         if (this.unitPrice.isZeroOrLess()) throw new DomainException("El precio del producto debe ser mayor a 0.");
         if (this.quantity.isZeroOrLess()) throw new DomainException("La cantidad del producto debe ser mayor a 0.");
@@ -45,7 +50,7 @@ public class StockEntry {
 
         this.expirationDate = expirationDate;
 
-        this.stockEntryId = StockEntryId.generate();
+        this.stockEntryId = tempId;
         this.registrationDate = LocalDateTime.now();
     }
 
@@ -58,8 +63,10 @@ public class StockEntry {
             LocalDateTime expirationDate,
             LocalDateTime registrationDate
     ) {
+        StockEntryId tempId;
         try {
-            this.stockEntryId = StockEntryId.fromString(stockEntryId);
+            tempId = StockEntryId.fromString(stockEntryId);
+            this.stockEntryId = tempId;
             this.productNameId = new ProductId(productNameId);
             this.supplierNameId = new SupplierId(supplierNameId);
             this.unitPrice = new Money(unitPrice);
@@ -69,6 +76,7 @@ public class StockEntry {
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear la entrada de stock: " + e.getMessage(), e);
         }
+        super(tempId);
     }
 
     public StockEntryId getStockEntryId() {
