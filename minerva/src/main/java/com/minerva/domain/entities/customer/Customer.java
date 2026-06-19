@@ -1,15 +1,17 @@
 package com.minerva.domain.entities.customer;
 
-import com.minerva.domain.entities.shared.PhoneNumber;
+import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.valueObject.id.CustomerId;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-public class Customer {
+public class Customer extends Entity {
     private final CustomerId customerNameId;
     // Puede ser null
     private PhoneNumber phoneNumber;
@@ -17,8 +19,9 @@ public class Customer {
     private final LocalDateTime registrationDate;
 
     public Customer(String name, String phoneNumber) throws DomainException {
-
-        this.customerNameId = new CustomerId(name);
+        CustomerId tempId = new CustomerId(name);
+        super(tempId);
+        this.customerNameId = tempId;
         this.phoneNumber = (phoneNumber != null)
                 ? new PhoneNumber(phoneNumber)
                 : null;
@@ -28,13 +31,16 @@ public class Customer {
     }
 
     public Customer(String customerNameId, LocalDateTime registrationDate, String phoneNumber) {
+        CustomerId tempId;
         try {
-            this.customerNameId = new CustomerId(customerNameId);
+            tempId = new CustomerId(customerNameId);
+            this.customerNameId = tempId;
             this.registrationDate = registrationDate;
             this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
-        } catch (Exception e) {
+        } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear el cliente: " + e.getMessage(), e);
-        }        
+        }
+        super(tempId);
     }
 
     public CustomerId getCustomerNameId() {

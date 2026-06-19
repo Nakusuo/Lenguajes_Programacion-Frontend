@@ -2,11 +2,15 @@ package com.minerva.domain.entities.product;
 
 import com.minerva.domain.constants.ReasonProductLoss;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.valueObject.ProductQuantity;
+import com.minerva.domain.valueObject.id.InventoryLossId;
+import com.minerva.domain.valueObject.id.ProductId;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class InventoryLoss {
+public class InventoryLoss extends Entity {
 
     private final InventoryLossId inventoryLossId;
     private final ProductId productNameId;
@@ -26,12 +30,15 @@ public class InventoryLoss {
         if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La cantidad debe ser mayor a cero.");
         if (reason == null) throw new DomainException("Debe especificar la razón de la pérdida.");
 
+        InventoryLossId inventoryLossId = InventoryLossId.generate();
+        super(inventoryLossId);
+
         this.productNameId = productNameId;
         this.quantity = quantity;
         this.reason = reason;
         this.observation = observation;
         // VALORES POR DEFECTO
-        this.inventoryLossId = InventoryLossId.generate();
+        this.inventoryLossId = inventoryLossId;
         this.registrationDate = LocalDateTime.now();
     }
 
