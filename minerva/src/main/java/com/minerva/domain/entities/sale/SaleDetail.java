@@ -4,7 +4,7 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.valueObject.id.SaleDetailId;
 
@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 
 class SaleDetail extends Entity {
     private final SaleDetailId id;
-    private final ProductId productNameId;
+    private final ProductName productName;
     private final ProductQuantity quantity;
     private final Money unitPrice;
 
-    public SaleDetail(ProductId productNameId, ProductQuantity quantity, Money unitPrice) throws DomainException {
+    public SaleDetail(ProductName productName, ProductQuantity quantity, Money unitPrice) throws DomainException {
 
-        if (productNameId == null) throw new DomainException("El PRODUCTO es requerido.");
+        if (productName == null) throw new DomainException("El PRODUCTO es requerido.");
         if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La CANTIDAD DE PRODUCTO debe ser mayor a 0.");
         if (unitPrice != null && unitPrice.isZeroOrLess()) throw new DomainException("El PRECIO UNITARIO debe ser mayor a 0.");
 
@@ -26,18 +26,18 @@ class SaleDetail extends Entity {
         super(tempId);
 
         this.id = tempId;
-        this.productNameId = productNameId;
+        this.productName = productName;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    public SaleDetail(String id, String productNameId, BigDecimal quantity, BigDecimal unitPrice) {
+    public SaleDetail(String id, String productName, BigDecimal quantity, BigDecimal unitPrice) {
         SaleDetailId tempId;
         try {
             tempId = SaleDetailId.fromString(id);
             
             this.id = tempId;
-            this.productNameId = new ProductId(productNameId);
+            this.productName = new ProductName(productName);
             this.quantity = new ProductQuantity(quantity);
             this.unitPrice = new Money(unitPrice);
         } catch (DomainException e) {
@@ -61,8 +61,8 @@ class SaleDetail extends Entity {
         return id;
     }
 
-    public ProductId getProductNameId() {
-        return productNameId;
+    public ProductName getProductName() {
+        return productName;
     }
 
     public ProductQuantity getQuantity() {

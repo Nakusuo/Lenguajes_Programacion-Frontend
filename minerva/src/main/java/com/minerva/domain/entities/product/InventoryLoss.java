@@ -5,7 +5,7 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.id.InventoryLossId;
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,14 +13,14 @@ import java.util.Objects;
 public class InventoryLoss extends Entity {
 
     private final InventoryLossId inventoryLossId;
-    private final ProductId productNameId;
+    private final ProductName productName;
     private final ProductQuantity quantity;
     private ReasonProductLoss reason;
     private String observation;
     private final LocalDateTime registrationDate;
 
     public InventoryLoss(
-            ProductId productNameId,
+            ProductName productNameId,
             ProductQuantity quantity,
             ReasonProductLoss reason,
             String observation
@@ -33,7 +33,7 @@ public class InventoryLoss extends Entity {
         InventoryLossId inventoryLossId = InventoryLossId.generate();
         super(inventoryLossId);
 
-        this.productNameId = productNameId;
+        this.productName = productNameId;
         this.quantity = quantity;
         this.reason = reason;
         this.observation = observation;
@@ -46,8 +46,8 @@ public class InventoryLoss extends Entity {
         return inventoryLossId;
     }
 
-    public ProductId getProductNameId() {
-        return productNameId;
+    public ProductName getProductName() {
+        return productName;
     }
 
     public ProductQuantity getQuantity() {

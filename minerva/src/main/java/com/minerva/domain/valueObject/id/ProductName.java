@@ -5,13 +5,13 @@ import com.minerva.domain.exceptions.DomainException;
 
 import java.util.Objects;
 
-public class ProductId implements Id {
+public class ProductName implements Id {
     private static final int MIN_LENGTH = 3;
     private static final int MAX_LENGTH = 100;
 
     public final String value;
 
-    public ProductId(String value) throws DomainException {
+    public ProductName(String value) throws DomainException {
 
         if (value == null) throw new DomainException("Ingrese el nombre del producto.");
         if (value.isBlank()) throw new DomainException("El nombre del producto no puede estar vacío.");
@@ -25,8 +25,8 @@ public class ProductId implements Id {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ProductId productId = (ProductId) o;
-        return Objects.equals(value, productId.value);
+        ProductName productName = (ProductName) o;
+        return Objects.equals(value, productName.value);
     }
 
     @Override

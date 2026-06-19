@@ -12,7 +12,7 @@ import com.minerva.domain.repositories.SupplierRepository;
 import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.valueObject.BarCode;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -84,7 +84,7 @@ public class ProductService implements ProductUseCase {
         Optional<Product> product;
 
         try {
-            product = productRepository.findById(new ProductId(productId));
+            product = productRepository.findById(new ProductName(productId));
         } catch (DomainException e) {
             return Result.fail("El producto no esta registrado.");
         }
@@ -134,7 +134,7 @@ public class ProductService implements ProductUseCase {
     @Override
     public Optional<Product> findProductById(String productId) {     
         try {
-            return productRepository.findById(new ProductId(productId));
+            return productRepository.findById(new ProductName(productId));
         } catch (DomainException e) {
             return Optional.empty();
         }  

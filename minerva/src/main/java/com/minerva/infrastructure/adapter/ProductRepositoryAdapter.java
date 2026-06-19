@@ -5,7 +5,7 @@ import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.domain.valueObject.BarCode;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 import com.minerva.infrastructure.persistence.entity.ProductEntity;
 import com.minerva.infrastructure.persistence.entity.StockEntryEntity;
 import com.minerva.infrastructure.persistence.entity.SupplierEntity;
@@ -56,12 +56,12 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public void saveUnitToBulk(ProductId unitProductId, ProductId bulkProductId, ProductQuantity quantity) {
-        ProductEntity unitProductEntity = entityManager.getReference(ProductEntity.class, unitProductId.value);
-        ProductEntity bulkProductEntity = entityManager.getReference(ProductEntity.class, bulkProductId.value);
+    public void saveUnitToBulk(ProductName unitProductName, ProductName bulkProductName, ProductQuantity quantity) {
+        ProductEntity unitProductEntity = entityManager.getReference(ProductEntity.class, unitProductName.value);
+        ProductEntity bulkProductEntity = entityManager.getReference(ProductEntity.class, bulkProductName.value);
 
         jpaUnitToBulkRepository.save(new UnitToBulkEntity(
-                new UnitToBulkEntity.UnitToBulkId(unitProductId.value, bulkProductId.value),
+                new UnitToBulkEntity.UnitToBulkId(unitProductName.value, bulkProductName.value),
                 unitProductEntity,
                 bulkProductEntity,
                 quantity.value,
@@ -70,7 +70,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public boolean existsById(ProductId id) {
+    public boolean existsById(ProductName id) {
         return jpaProductRepository.existsById(id.value);
     }
 
@@ -80,7 +80,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findById(ProductId id) {
+    public Optional<Product> findById(ProductName id) {
         return jpaProductRepository.findById(id.value)
                 .map(this::toDomain);
     }
@@ -94,7 +94,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
     // OJAZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     // ESTO FALTA
     @Override
-    public Optional<StockEntry> findLatestEntryBeforeToday(ProductId id) {
+    public Optional<StockEntry> findLatestEntryBeforeToday(ProductName id) {
         return Optional.empty();
     }
 
@@ -107,7 +107,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public List<StockEntry> findAllEntriesByProductId(ProductId id) {
+    public List<StockEntry> findAllEntriesByProductId(ProductName id) {
         return jpaStockEntryRepository.findByProductEntity_ProductNameId(id.value)
                 .stream()
                 .map(this::toDomain)
@@ -146,7 +146,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     private StockEntryEntity toEntity(StockEntry stockEntry) {
         ProductEntity productEntity =
-                entityManager.getReference(ProductEntity.class, stockEntry.getProductNameId().value);
+                entityManager.getReference(ProductEntity.class, stockEntry.getProductName().value);
 
         SupplierEntity supplierEntity =
                 entityManager.getReference(SupplierEntity.class, stockEntry.getSupplierNameId().value);
