@@ -1,6 +1,6 @@
 package com.minerva.domain.entities.stockEntry;
 
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.valueObject.id.SupplierId;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class StockEntry extends Entity {
 
     private final StockEntryId stockEntryId;
-    private final ProductId productNameId;
+    private final ProductName productName;
     private final SupplierId supplierNameId;
     private final Money unitPrice;
     private final ProductQuantity quantity;
@@ -27,14 +27,14 @@ public class StockEntry extends Entity {
     private final LocalDateTime registrationDate;
 
     public StockEntry(
-            String productNameId,
+            String productName,
             String supplierNameId,
             BigDecimal unitPrice,
             BigDecimal quantity,
             LocalDateTime expirationDate
     ) throws DomainException {        
 
-        this.productNameId = new ProductId(productNameId);
+        this.productName = new ProductName(productName);
         this.supplierNameId = new SupplierId(supplierNameId);
         this.unitPrice = new Money(unitPrice);
         this.quantity = new ProductQuantity(quantity);
@@ -56,7 +56,7 @@ public class StockEntry extends Entity {
 
     public StockEntry(
             String stockEntryId,
-            String productNameId,
+            String productName,
             String supplierNameId,
             BigDecimal unitPrice,
             BigDecimal quantity,
@@ -67,7 +67,7 @@ public class StockEntry extends Entity {
         try {
             tempId = StockEntryId.fromString(stockEntryId);
             this.stockEntryId = tempId;
-            this.productNameId = new ProductId(productNameId);
+            this.productName = new ProductName(productName);
             this.supplierNameId = new SupplierId(supplierNameId);
             this.unitPrice = new Money(unitPrice);
             this.quantity = new ProductQuantity(quantity);
@@ -87,8 +87,8 @@ public class StockEntry extends Entity {
         return supplierNameId;
     }
 
-    public ProductId getProductNameId() {
-        return productNameId;
+    public ProductName getProductName() {
+        return productName;
     }
 
     public Money getUnitPrice() {

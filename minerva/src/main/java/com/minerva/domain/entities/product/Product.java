@@ -12,7 +12,7 @@ import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.services.PriceCalculator;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ import static com.minerva.domain.services.Math.isDecimal;
 import static com.minerva.domain.services.Math.isZeroOrLess;
 
 public class Product extends Entity {
-    private final ProductId productNameId;
+    private final ProductName productName;
     private ProductQuantity stock;
     private GainStrategy gainStrategy;
     private Money gainAmount;
@@ -49,9 +49,9 @@ public class Product extends Entity {
             Category category,
             BigDecimal purchasePrice
     ) throws DomainException {
-        ProductId tempId = new ProductId(productName);
+        ProductName tempId = new ProductName(productName);
         super(tempId);
-        this.productNameId = tempId;
+        this.productName = tempId;
         this.stock = new ProductQuantity(initialStock);
         this.gainAmount = new Money(gainAmount);
         this.gainStrategy = gainStrategy;
@@ -100,10 +100,10 @@ public class Product extends Entity {
             BigDecimal price,
             LocalDateTime registrationDate
     ) {
-        ProductId tempId;
+        ProductName tempId;
         try {
-            tempId = new ProductId(productName);
-            this.productNameId = tempId;
+            tempId = new ProductName(productName);
+            this.productName = tempId;
             this.stock = new ProductQuantity(stock);
             this.gainAmount = new Money(gainAmount);
             this.gainStrategy = gainStrategy;
@@ -185,8 +185,8 @@ public class Product extends Entity {
     }
     // ---------------------------------------------
 
-    public ProductId getNameId() {
-        return productNameId;
+    public ProductName getNameId() {
+        return productName;
     }
 
     public Optional<BarCode> getBarCode() {
@@ -231,11 +231,11 @@ public class Product extends Entity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(productNameId, product.productNameId);
+        return Objects.equals(productName, product.productName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(productNameId);
+        return Objects.hashCode(productName);
     }
 }

@@ -1,6 +1,6 @@
 package com.minerva.domain.entities.sale;
 
-import com.minerva.domain.valueObject.id.ProductId;
+import com.minerva.domain.valueObject.id.ProductName;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.entities.shared.Result;
@@ -98,14 +98,14 @@ public class Sale extends Entity {
 
     public record PayDTO(String payId, BigDecimal amount, PaymentMethod paymentMethod, LocalDateTime registrationDate) {}
 
-    public Result<Void> addDetail(String productIdStr, BigDecimal unitPrice, BigDecimal quantityBigDecimal) {
+    public Result<Void> addDetail(String productNameStr, BigDecimal unitPrice, BigDecimal quantityBigDecimal) {
         try {
-            ProductId productId = new ProductId(productIdStr);
+            ProductName productName = new ProductName(productNameStr);
             Money price = new Money(unitPrice);
             ProductQuantity quantity = new ProductQuantity(quantityBigDecimal);
 
             Optional<SaleDetail> existingDetailOpt = saleDetails.stream()
-                    .filter(detail -> detail.getProductNameId().equals(productId))
+                    .filter(detail -> detail.getProductName().equals(productName))
                     .findFirst();
 
             if (existingDetailOpt.isPresent()) {
@@ -116,7 +116,7 @@ public class Sale extends Entity {
                 saleDetails.remove(existingDetail);
             }
 
-            SaleDetail newDetail = new SaleDetail(productId, quantity, price);
+            SaleDetail newDetail = new SaleDetail(productName, quantity, price);
 
             saleDetails.add(newDetail);
 
@@ -213,7 +213,7 @@ public class Sale extends Entity {
         for (SaleDetail detail : saleDetails) {
             detailsDTO.add(new SaleDetailDTO(
                 detail.getId().toString(),
-                detail.getProductNameId().value,
+                detail.getProductName().value,
                 detail.getQuantity().value,
                 detail.getUnitPrice().value));
         }
