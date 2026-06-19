@@ -10,6 +10,9 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.domain.repositories.SupplierRepository;
 import com.minerva.domain.entities.stockEntry.StockEntry;
+import com.minerva.domain.valueObject.BarCode;
+import com.minerva.domain.valueObject.ProductQuantity;
+import com.minerva.domain.valueObject.id.ProductId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,12 +1,12 @@
 package com.minerva.application.service;
 
-import com.minerva.domain.entities.customer.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerId;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.SaleRepository;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.entities.sale.Sale.SaleItem;
-import com.minerva.domain.entities.sale.SaleId;
+import com.minerva.domain.valueObject.id.SaleId;
 import com.minerva.domain.repositories.CustomerRepository;
 
 import java.util.List;
