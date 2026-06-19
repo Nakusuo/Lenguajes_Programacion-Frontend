@@ -20,20 +20,20 @@ public class InventoryLoss extends Entity {
     private final LocalDateTime registrationDate;
 
     public InventoryLoss(
-            ProductName productNameId,
+            ProductName productName,
             ProductQuantity quantity,
             ReasonProductLoss reason,
             String observation
     ) throws DomainException {
 
-        if (productNameId == null) throw new DomainException("El nombre del producto no puede estar vacío.");
+        if (productName == null) throw new DomainException("El nombre del producto no puede estar vacío.");
         if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La cantidad debe ser mayor a cero.");
         if (reason == null) throw new DomainException("Debe especificar la razón de la pérdida.");
 
         InventoryLossId inventoryLossId = InventoryLossId.generate();
         super(inventoryLossId);
 
-        this.productName = productNameId;
+        this.productName = productName;
         this.quantity = quantity;
         this.reason = reason;
         this.observation = observation;
