@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.minerva.domain.entities.customer.CustomerId;
-import com.minerva.domain.entities.sale.PayId;
+import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.PayId;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.entities.sale.Sale.PayDTO;
 import com.minerva.domain.entities.sale.Sale.SaleDetailDTO;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.entities.sale.SaleDetailId;
-import com.minerva.domain.entities.sale.SaleId;
+import com.minerva.domain.valueObject.id.SaleDetailId;
+import com.minerva.domain.valueObject.id.SaleId;
 import com.minerva.domain.repositories.SaleRepository;
 import com.minerva.infrastructure.persistence.entity.CustomerEntity;
 import com.minerva.infrastructure.persistence.entity.PayEntity;

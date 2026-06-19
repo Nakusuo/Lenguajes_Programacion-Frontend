@@ -1,10 +1,10 @@
 package com.minerva.domain.repositories;
 
-import com.minerva.domain.entities.customer.CustomerId;
-import com.minerva.domain.entities.sale.PayId;
+import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.PayId;
 import com.minerva.domain.entities.sale.Sale;
-import com.minerva.domain.entities.sale.SaleDetailId;
-import com.minerva.domain.entities.sale.SaleId;
+import com.minerva.domain.valueObject.id.SaleDetailId;
+import com.minerva.domain.valueObject.id.SaleId;
 
 import java.util.List;
 import java.util.Optional;
