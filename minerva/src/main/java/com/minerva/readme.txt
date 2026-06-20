@@ -55,3 +55,12 @@ barCode
 -- recordar: desaparecer la carpeta id al final, simplemente es para no marearme xd
 
 -- revisar que no se este usando expetion en todo el proyecto, solo se debe usar domain exepction
+
+--   que esto reciba la interface id  @Override
+    public Optional<Product> findProductById(String productId) {     
+        try {
+            return productRepository.findById(new ProductName(productId));
+        } catch (DomainException e) {
+            return Optional.empty();
+        }  
+    }
