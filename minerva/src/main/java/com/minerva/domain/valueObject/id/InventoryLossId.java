@@ -2,19 +2,24 @@ package com.minerva.domain.valueObject.id;
 
 import java.util.UUID;
 
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Id;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.interfaces.ValueObject;
 
-public class InventoryLossId implements Id {
-    public final String value;
+public class InventoryLossId extends ValueObject<String> implements Id {
 
-    private InventoryLossId(String value) {
-        this.value = value;
+    private InventoryLossId(String value) throws DomainException {
+        super(value);
     }
 
     public static InventoryLossId generate() {
-        String value = java.util.UUID.randomUUID().toString();
-        return new InventoryLossId(value);
+        String value = UUID.randomUUID().toString();
+        try {
+            return new InventoryLossId(value);
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al generar el ID de pérdida de inventario: " + e.getMessage(), e);
+        }
     }
 
     public static InventoryLossId fromString(String value) throws DomainException {

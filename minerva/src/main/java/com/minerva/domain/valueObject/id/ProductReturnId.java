@@ -4,17 +4,22 @@ import java.util.UUID;
 
 import com.minerva.domain.interfaces.Id;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.ValueObject;
 
-public class ProductReturnId implements Id {
-    public final String value;
+public class ProductReturnId extends ValueObject<String> implements Id {
 
-    private ProductReturnId(String value) {
-        this.value = value;
+    private ProductReturnId(String value) throws DomainException {
+        super(value);
     }
 
     public static ProductReturnId generate() {
         String value = UUID.randomUUID().toString();
-        return new ProductReturnId(value);
+        try {
+            return new ProductReturnId(value);
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al generar el ID de devolución de producto: " + e.getMessage(), e);
+        }
     }
 
     public static ProductReturnId fromString(String value) throws DomainException {

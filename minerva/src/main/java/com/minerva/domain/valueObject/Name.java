@@ -3,8 +3,6 @@ package com.minerva.domain.valueObject;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-import java.util.Objects;
-
 public class Name extends ValueObject<String> {
     private static final Integer MIN_LENGTH = 3;
     private static final Integer MAX_LENGTH = 50;

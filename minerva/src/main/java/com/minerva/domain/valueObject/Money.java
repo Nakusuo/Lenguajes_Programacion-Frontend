@@ -3,23 +3,19 @@ package com.minerva.domain.valueObject;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.ValueObject;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
-public final class Money {
+public final class Money extends ValueObject<BigDecimal> {
     public static final BigDecimal MIN_AMOUNT = BigDecimal.ZERO;
     public static final int MAX_DECIMALS = 2;
 
-    public final BigDecimal value;
-
     public Money(BigDecimal value) throws DomainException {
+        super(value);
 
-        if (value == null) throw new DomainException("Ingrese el monto.");
         if (value.scale() > MAX_DECIMALS) throw new DomainException("El monto solo puede tener " + MAX_DECIMALS + " decimales.");
         if (value.compareTo(MIN_AMOUNT) < 0) throw new MinimumAmountException(MIN_AMOUNT.toString());
-
-        this.value = value;
     }
 
     public boolean isGreaterThanZero() {
@@ -88,16 +84,5 @@ public final class Money {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Money money = (Money) o;
-        return Objects.equals(value, money.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(value);
-    }
 }
 
