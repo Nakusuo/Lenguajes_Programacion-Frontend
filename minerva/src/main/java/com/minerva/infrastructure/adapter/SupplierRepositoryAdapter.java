@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.valueObject.RUC;
 import com.minerva.domain.entities.supplier.Supplier;
-import com.minerva.domain.valueObject.id.SupplierId;
+import com.minerva.domain.valueObject.id.SupplierName;
 import com.minerva.domain.repositories.SupplierRepository;
 import com.minerva.infrastructure.persistence.entity.SupplierEntity;
 import com.minerva.infrastructure.persistence.repository.JpaSupplierRepository;
@@ -25,7 +25,7 @@ public class SupplierRepositoryAdapter implements SupplierRepository{
     }
 
     @Override
-    public boolean existsById(SupplierId id) {
+    public boolean existsById(SupplierName id) {
         return jpaSupplierRepository.existsById(id.value);
     }
 
@@ -48,7 +48,7 @@ public class SupplierRepositoryAdapter implements SupplierRepository{
     }
 
     @Override
-    public Optional<Supplier> findById(SupplierId id) {
+    public Optional<Supplier> findById(SupplierName id) {
         return jpaSupplierRepository.findById(id.value)
                 .map(this::toDomain);
     }
@@ -68,7 +68,7 @@ public class SupplierRepositoryAdapter implements SupplierRepository{
 
     private SupplierEntity toEntity(Supplier supplier) {
         return new SupplierEntity(
-                supplier.getSupplierNameId().value,
+                supplier.getSupplierName().value,
                 supplier.getRuc().map(r -> r.value).orElse(null),
                 supplier.getPhoneNumber().map(p -> p.value).orElse(null),
                 supplier.getRegistrationDate()

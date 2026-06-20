@@ -60,7 +60,7 @@ public class ProductService implements ProductUseCase {
             return Result.fail("Ya existe un producto con el mismo código de barras.");
 
 
-        if (!supplierRepository.existsById(stockEntryCreated.getSupplierNameId()))
+        if (!supplierRepository.existsById(stockEntryCreated.getSupplierName()))
             return Result.fail("El proveedor no esta registrado.");
 
         // Esto debe tratarsse como una operación atómica, por lo que si falla el registro de la entrada de stock, se debería eliminar el producto registrado para mantener la consistencia. Esto se puede
@@ -96,7 +96,7 @@ public class ProductService implements ProductUseCase {
 
         productToUpdate.processDeliveryFromSupplier(stockEntryCreated.getQuantity().value);
 
-        if (!supplierRepository.existsById(stockEntryCreated.getSupplierNameId()))
+        if (!supplierRepository.existsById(stockEntryCreated.getSupplierName()))
             return Result.fail("El proveedor no esta registrado.");
 
         productRepository.saveStockEntry(stockEntryCreated, productToUpdate);

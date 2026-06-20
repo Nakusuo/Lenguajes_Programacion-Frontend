@@ -116,7 +116,7 @@ public class SupplierController {
 
     private SupplierResponse mapToResponse(Supplier supplier) {
         return new SupplierResponse(
-                supplier.getSupplierNameId().value,
+                supplier.getSupplierName().value,
                 supplier.getRuc().map(r -> r.value).orElse(null),
                 supplier.getPhoneNumber().map(p -> p.value).orElse(null)
         );
