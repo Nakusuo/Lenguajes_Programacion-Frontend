@@ -149,7 +149,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
                 entityManager.getReference(ProductEntity.class, stockEntry.getProductName().value);
 
         SupplierEntity supplierEntity =
-                entityManager.getReference(SupplierEntity.class, stockEntry.getSupplierNameId().value);
+                entityManager.getReference(SupplierEntity.class, stockEntry.getSupplierName().value);
 
         return new StockEntryEntity(
                 stockEntry.getStockEntryId().toString(),

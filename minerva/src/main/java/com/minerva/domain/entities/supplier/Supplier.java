@@ -6,13 +6,13 @@ import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.valueObject.RUC;
-import com.minerva.domain.valueObject.id.SupplierId;
+import com.minerva.domain.valueObject.id.SupplierName;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class Supplier extends Entity {
-    private final SupplierId supplierNameId;
+    private final SupplierName supplierName;
     // Puede ser null
     private RUC ruc;
     private PhoneNumber phoneNumber;
@@ -20,21 +20,21 @@ public class Supplier extends Entity {
     private final LocalDateTime registrationDate;
 
     public Supplier(String supplierName, String ruc, String phoneNumber) throws DomainException {
-        SupplierId tempId = new SupplierId(supplierName);
+        SupplierName tempId = new SupplierName(supplierName);
         super(tempId);
-        this.supplierNameId = tempId;
+        this.supplierName = tempId;
         this.ruc = (ruc == null) ? null : new RUC(ruc);
         this.phoneNumber = (phoneNumber == null) ? null : new PhoneNumber(phoneNumber);
         // VALORES POR DEFECTO
         this.registrationDate = LocalDateTime.now();
     }
 
-    public Supplier(String supplierNameId, String ruc, String phoneNumber, LocalDateTime registrationDate) {
-        SupplierId tempId;
+    public Supplier(String supplierName, String ruc, String phoneNumber, LocalDateTime registrationDate) {
+        SupplierName tempId;
         try {
-            tempId = new SupplierId(supplierNameId);
+            tempId = new SupplierName(supplierName);
             
-            this.supplierNameId = tempId;
+            this.supplierName = tempId;
             this.registrationDate = registrationDate;
             this.ruc = ruc != null ? new RUC(ruc) : null;
             this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
@@ -62,8 +62,8 @@ public class Supplier extends Entity {
         return Result.success(null);
     }
 
-    public SupplierId getSupplierNameId() {
-        return supplierNameId;
+    public SupplierName getSupplierName() {
+        return supplierName;
     }
 
     public LocalDateTime getRegistrationDate() {

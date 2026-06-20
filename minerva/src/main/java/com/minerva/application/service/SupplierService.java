@@ -5,7 +5,7 @@ import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.valueObject.RUC;
 import com.minerva.domain.entities.supplier.Supplier;
-import com.minerva.domain.valueObject.id.SupplierId;
+import com.minerva.domain.valueObject.id.SupplierName;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.SupplierRepository;
 
@@ -30,7 +30,7 @@ public class SupplierService implements SupplierUseCase {
             return Result.fail(e.getMessage());
         }
 
-        if (supplierRepository.existsById(supplierCreated.getSupplierNameId()))
+        if (supplierRepository.existsById(supplierCreated.getSupplierName()))
             return Result.fail("Ya existe un proveedor con el mismo nombre.");
 
         if (supplierCreated.getRuc().isPresent() && supplierRepository.existsByRuc(supplierCreated.getRuc().get()))
@@ -91,7 +91,7 @@ public class SupplierService implements SupplierUseCase {
     @Override
     public Optional<Supplier> findById(String supplierName) {
         try {
-            return supplierRepository.findById(new SupplierId(supplierName));
+            return supplierRepository.findById(new SupplierName(supplierName));
         } catch (DomainException e) {
             return Optional.empty();
         }
