@@ -3,25 +3,20 @@ package com.minerva.domain.valueObject;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.ValueObject;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
-public class ProductQuantity {
+public class ProductQuantity extends ValueObject<BigDecimal> {
     // DECIMAL(10,3)
     private static final BigDecimal MIN_AMOUNT = BigDecimal.ZERO;
     private static final int MAX_DECIMALS = 3;
 
-
-    public final BigDecimal value;
-
     public ProductQuantity(BigDecimal value) throws DomainException {
+        super(value);
 
-        if (value == null) throw new DomainException("Ingrese la cantidad del producto.");
         if (value.scale() > MAX_DECIMALS) throw new DomainException("La cantidad no puede tener decimales.");
         if (value.compareTo(MIN_AMOUNT) < 0) throw new MinimumAmountException(MIN_AMOUNT.toString());
-
-        this.value = value;
     }
 
     // Nota: Mejorar el nombre
@@ -88,15 +83,4 @@ public class ProductQuantity {
         return value.scale() == 0;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductQuantity that = (ProductQuantity) o;
-        return Objects.equals(value, that.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(value);
-    }
 }

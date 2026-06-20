@@ -3,18 +3,22 @@ package com.minerva.domain.valueObject.id;
 import java.util.UUID;
 
 import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.interfaces.ValueObject;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 
-public class SaleId implements Id {
-    public final String value;
-
-    private SaleId(String value) {
-        this.value = value;
+public class SaleId extends ValueObject<String> implements Id {
+    private SaleId(String value) throws DomainException {
+        super(value);
     }
 
     public static SaleId generate() {
         String value = UUID.randomUUID().toString();
-        return new SaleId(value);
+        try {
+            return new SaleId(value);
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al generar el ID de venta: " + e.getMessage(), e);
+        }
     }
 
     public static SaleId fromString(String value) throws DomainException {

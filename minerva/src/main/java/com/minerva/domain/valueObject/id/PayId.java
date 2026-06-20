@@ -2,19 +2,24 @@ package com.minerva.domain.valueObject.id;
 
 import java.util.UUID;
 
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Id;
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.interfaces.ValueObject;
 
-public class PayId implements Id {
-    public final String value;
+public class PayId extends ValueObject<String> implements Id {
 
-    private PayId(String value) {
-        this.value = value;
+    private PayId(String value) throws DomainException {
+        super(value);
     }
 
     public static PayId generate() {
         String value = UUID.randomUUID().toString();
-        return new PayId(value);
+        try {
+            return new PayId(value);
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al generar el ID de pago: " + e.getMessage(), e);
+        }
     }
 
     public static PayId fromString(String value) throws DomainException {

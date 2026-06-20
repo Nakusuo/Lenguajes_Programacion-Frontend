@@ -3,18 +3,23 @@ package com.minerva.domain.valueObject.id;
 import java.util.UUID;
 
 import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.interfaces.ValueObject;
 
-public class UserActionId implements Id {
-    public final String value;
-
-    private UserActionId(String value) {
-        this.value = value;
+public class UserActionId extends ValueObject<String> implements Id {
+    
+    private UserActionId(String value) throws DomainException {
+        super(value);
     }
 
     public static UserActionId generate() {
         String value = UUID.randomUUID().toString();
-        return new UserActionId(value);
+        try {
+            return new UserActionId(value);
+        } catch (DomainException e) {
+            throw new UnexpectedDomainException("Error al generar el ID de acción de usuario: " + e.getMessage(), e);
+        }
     }
 
     public static UserActionId fromString(String value) throws DomainException {
