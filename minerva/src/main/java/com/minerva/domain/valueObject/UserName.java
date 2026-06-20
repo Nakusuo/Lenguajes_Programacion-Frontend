@@ -5,8 +5,8 @@ import com.minerva.domain.interfaces.ValueObject;
 
 public final class UserName extends ValueObject<String> {
 
-    private static final Integer MIN_LENGTH = 3;
-    private static final Integer MAX_LENGTH = 30;
+    private static final int MIN_LENGTH = 3;
+    private static final int MAX_LENGTH = 30;
 
     public UserName(String value) throws DomainException {
         super(value);

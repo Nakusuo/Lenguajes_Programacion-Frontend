@@ -5,8 +5,8 @@ import com.minerva.domain.interfaces.ValueObject;
 import com.minerva.domain.exceptions.DomainException;
 
 public class SupplierId extends ValueObject<String> implements Id {
-    private static final Integer MIN_LENGTH = 3;
-    private static final Integer MAX_LENGTH = 100;
+    private static final int MIN_LENGTH = 3;
+    private static final int MAX_LENGTH = 100;
 
     public SupplierId(String value) throws DomainException {
         super(value);

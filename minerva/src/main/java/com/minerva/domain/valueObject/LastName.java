@@ -4,8 +4,8 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
 public class LastName extends ValueObject<String> {
-    private static final Integer MIN_LENGTH = 3;
-    private static final Integer MAX_LENGTH = 50;
+    private static final int MIN_LENGTH = 3;
+    private static final int MAX_LENGTH = 50;
 
     public LastName(String value) throws DomainException {
         super(value);
