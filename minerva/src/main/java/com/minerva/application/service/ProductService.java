@@ -72,10 +72,10 @@ public class ProductService implements ProductUseCase {
 
     // OJAZOOOOOOO se puede mejorar el control de expeciones a la ora de crear los id
     @Override
-    public Result<Void> registerStockEntry(String productId, String supplierNameId, BigDecimal unitPrice, BigDecimal quantity, LocalDateTime expirationDate) {
+    public Result<Void> registerStockEntry(String productName, String supplierName, BigDecimal unitPrice, BigDecimal quantity, LocalDateTime expirationDate) {
         StockEntry stockEntryCreated;
         try {
-            stockEntryCreated = new StockEntry(productId, supplierNameId, unitPrice, quantity, expirationDate);
+            stockEntryCreated = new StockEntry(productName, supplierName, unitPrice, quantity, expirationDate);
         } catch (DomainException e) {
             return Result.fail(e.getMessage());
         }
@@ -84,7 +84,7 @@ public class ProductService implements ProductUseCase {
         Optional<Product> product;
 
         try {
-            product = productRepository.findById(new ProductName(productId));
+            product = productRepository.findById(new ProductName(productName));
         } catch (DomainException e) {
             return Result.fail("El producto no esta registrado.");
         }

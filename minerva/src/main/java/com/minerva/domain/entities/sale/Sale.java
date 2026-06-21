@@ -8,7 +8,7 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.constants.PaymentMethod;
-import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.valueObject.id.SaleId;
 
 import java.math.BigDecimal;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class Sale extends Entity {
     private final SaleId saleId;
-    private final CustomerId customerId;
+    private final CustomerName customerName;
     private final LocalDateTime registrationDate;
 
     private final List<Pay>  pays =  new LinkedList<>();
@@ -29,7 +29,7 @@ public class Sale extends Entity {
     public Sale(String customerNameId, List<SaleItem> items) throws DomainException {    
         SaleId tempId = SaleId.generate();
         super(tempId);
-        this.customerId = new CustomerId(customerNameId);
+        this.customerName = new CustomerName(customerNameId);
         if (items == null || items.isEmpty()) {
             throw new DomainException("La venta debe tener al menos un item");
         }
@@ -56,7 +56,7 @@ public class Sale extends Entity {
         try {
             tempId = SaleId.fromString(saleId);
             this.saleId = tempId;
-            this.customerId = new CustomerId(customerNameId);
+            this.customerName = new CustomerName(customerNameId);
             this.registrationDate = registrationDate;             
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear la venta: " + e.getMessage(), e);
@@ -192,8 +192,8 @@ public class Sale extends Entity {
         return registrationDate;
     }
 
-    public CustomerId getCustomerId() {
-        return customerId;
+    public CustomerName getCustomerId() {
+        return customerName;
     }
 
     public List<PayDTO> getPays() {

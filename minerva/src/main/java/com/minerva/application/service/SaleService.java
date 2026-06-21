@@ -1,6 +1,6 @@
 package com.minerva.application.service;
 
-import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.SaleRepository;
@@ -27,7 +27,7 @@ public class SaleService {
     public Result<Void> registerSale(String customerId, List<Sale.PayData> pays, List<SaleItem> items) {
         try {
             Sale saleCreated = new Sale(customerId, items);
-            if (customerRepository.findById(new CustomerId(customerId)).isEmpty())
+            if (customerRepository.findById(new CustomerName(customerId)).isEmpty())
                 return Result.fail("Cliente no encontrado.");
 
             Result<Void> addPaysResult = saleCreated.addPays(pays);
@@ -72,7 +72,7 @@ public class SaleService {
 
     public List<Sale> findSalesByCustomerId(String customerId) {
         try {
-            return saleRepository.findByCustomerId(new CustomerId(customerId));
+            return saleRepository.findByCustomerId(new CustomerName(customerId));
         } catch (DomainException e) {
             return List.of();
         }

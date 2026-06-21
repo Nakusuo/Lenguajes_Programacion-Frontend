@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.minerva.domain.repositories.CustomerRepository;
 import com.minerva.domain.entities.customer.Customer;
-import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
@@ -21,7 +21,7 @@ public class CustomerService {
     public Result<Void> registerCustomer(String customerName, String phoneNumber) {
         try {
             Customer customerCreated = new Customer(customerName, phoneNumber);
-            if (customerRepository.existsById(customerCreated.getCustomerNameId()))
+            if (customerRepository.existsById(customerCreated.getCustomerName()))
                 return Result.fail("Ya existe un cliente con el mismo nombre.");
 
             if (customerCreated.getPhoneNumber().isPresent() && customerRepository.existsByPhoneNumber(customerCreated.getPhoneNumber().get()))
@@ -37,7 +37,7 @@ public class CustomerService {
 
     public Result<Void> updatePhoneNumber(String customerId, String newPhoneNumber) {
         try {
-            Optional<Customer> customerOpt = customerRepository.findById(new CustomerId(customerId));
+            Optional<Customer> customerOpt = customerRepository.findById(new CustomerName(customerId));
 
             if (customerOpt.isEmpty()) return Result.fail("Cliente no encontrado.");                
 
@@ -59,7 +59,7 @@ public class CustomerService {
     // --------------------- READ ---------------------
     public Optional<Customer> findCustomerById(String customerId) {
         try {
-            return customerRepository.findById(new CustomerId(customerId));
+            return customerRepository.findById(new CustomerName(customerId));
         } catch (DomainException e) {
             return Optional.empty();
         }
