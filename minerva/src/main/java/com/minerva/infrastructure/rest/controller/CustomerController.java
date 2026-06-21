@@ -64,7 +64,7 @@ public class CustomerController {
         return customerService.findCustomerById(customerId)
                 .map(customer -> ResponseEntity.ok(
                         new CustomerResponse(
-                            customer.getCustomerNameId().value,
+                            customer.getCustomerName().value,
                             customer.getPhoneNumber()
                                     .map(phone -> phone.value)
                                     .orElse(null),
@@ -81,7 +81,7 @@ public class CustomerController {
                 customerService.getAllCustomers()
                         .stream()
                         .map(customer -> new CustomerResponse(
-                                customer.getCustomerNameId().value,
+                                customer.getCustomerName().value,
                                 customer.getPhoneNumber()
                                         .map(phone -> phone.value)
                                         .orElse(null),
@@ -98,7 +98,7 @@ public class CustomerController {
         return customerService.findCustomerByPhoneNumber(phoneNumber)
                 .map(customer -> ResponseEntity.ok(
                         new CustomerResponse(
-                                customer.getCustomerNameId().value,
+                                customer.getCustomerName().value,
                                 customer.getPhoneNumber()
                                         .map(phone -> phone.value)
                                         .orElse(null),

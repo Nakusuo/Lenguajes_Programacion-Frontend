@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.valueObject.id.PayId;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.entities.sale.Sale.PayDTO;
@@ -100,8 +100,8 @@ public class SaleRepositoryAdapter implements SaleRepository {
     }
 
     @Override
-    public List<Sale> findByCustomerId(CustomerId customerId) {
-        List<SaleEntity> saleEntities = saleRepository.findByCustomerEntity_CustomerNameId(customerId.value);
+    public List<Sale> findByCustomerId(CustomerName customerName) {
+        List<SaleEntity> saleEntities = saleRepository.findByCustomerEntity_CustomerNameId(customerName.value);
 
         return saleEntities.stream()
         .map(saleEntity -> {

@@ -5,23 +5,22 @@ import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.valueObject.id.CustomerId;
+import com.minerva.domain.valueObject.id.CustomerName;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 public class Customer extends Entity {
-    private final CustomerId customerNameId;
+    private final CustomerName customerName;
     // Puede ser null
     private PhoneNumber phoneNumber;
     // ------------
     private final LocalDateTime registrationDate;
 
     public Customer(String name, String phoneNumber) throws DomainException {
-        CustomerId tempId = new CustomerId(name);
+        CustomerName tempId = new CustomerName(name);
         super(tempId);
-        this.customerNameId = tempId;
+        this.customerName = tempId;
         this.phoneNumber = (phoneNumber != null)
                 ? new PhoneNumber(phoneNumber)
                 : null;
@@ -30,11 +29,11 @@ public class Customer extends Entity {
         this.registrationDate = LocalDateTime.now();
     }
 
-    public Customer(String customerNameId, LocalDateTime registrationDate, String phoneNumber) {
-        CustomerId tempId;
+    public Customer(String customerName, LocalDateTime registrationDate, String phoneNumber) {
+        CustomerName tempId;
         try {
-            tempId = new CustomerId(customerNameId);
-            this.customerNameId = tempId;
+            tempId = new CustomerName(customerName);
+            this.customerName = tempId;
             this.registrationDate = registrationDate;
             this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
         } catch (DomainException e) {
@@ -43,8 +42,8 @@ public class Customer extends Entity {
         super(tempId);
     }
 
-    public CustomerId getCustomerNameId() {
-        return customerNameId;
+    public CustomerName getCustomerName() {
+        return customerName;
     }
 
     public Optional<PhoneNumber> getPhoneNumber() {
