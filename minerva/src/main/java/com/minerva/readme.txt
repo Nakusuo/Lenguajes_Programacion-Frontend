@@ -16,7 +16,7 @@ id
 
 Debe ser:
 
-String customerId
+String customerName
 
 -- cambiar todos los nombres que terminene en obj por el tipo de dato que son sus contraposiciones
 
