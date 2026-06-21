@@ -11,7 +11,6 @@ import com.minerva.domain.valueObject.id.StockEntryId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 public class StockEntry extends Entity {
