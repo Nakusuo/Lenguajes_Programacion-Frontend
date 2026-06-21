@@ -227,15 +227,4 @@ public class Product extends Entity {
         return price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(productName, product.productName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(productName);
-    }
 }

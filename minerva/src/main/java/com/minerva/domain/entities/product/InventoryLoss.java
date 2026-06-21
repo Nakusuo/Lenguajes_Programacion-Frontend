@@ -66,15 +66,4 @@ public class InventoryLoss extends Entity {
         return registrationDate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        InventoryLoss that = (InventoryLoss) o;
-        return Objects.equals(inventoryLossId, that.inventoryLossId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(inventoryLossId);
-    }
 }
