@@ -8,7 +8,6 @@ import com.minerva.domain.valueObject.id.InventoryLossId;
 import com.minerva.domain.valueObject.id.ProductName;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class InventoryLoss extends Entity {
 

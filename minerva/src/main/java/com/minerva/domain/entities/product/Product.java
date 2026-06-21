@@ -16,7 +16,6 @@ import com.minerva.domain.valueObject.id.ProductName;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.minerva.domain.services.Math.isDecimal;
