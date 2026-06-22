@@ -13,11 +13,11 @@ public class UserAction extends Entity {
     private final UserActionId userActionId;
     private final DNI userDNI;
     private final Permission permission;
-    private final String entityId;
+    private final Id entityId;
     
     private final LocalDateTime registrationDate;
 
-    public UserAction(String userDNI, Permission permission, Id entityId) throws DomainException {
+    public UserAction(String userDNI, Permission permission, Entity entity) throws DomainException {
         UserActionId tempId = UserActionId.generate();
         super(tempId);
         this.userActionId = tempId;
@@ -26,11 +26,29 @@ public class UserAction extends Entity {
         if (permission == null) throw new DomainException("El permiso no puede ser nulo.");
         this.permission = permission;
 
-        if (entityId == null) throw new DomainException("El ID de la entidad no puede ser nulo.");
-        this.entityId = entityId.value();
-        
+        if (entity == null) throw new DomainException("El ID de la entidad no puede ser nulo.");
+        this.entityId = entity.getId();
+
         this.registrationDate = LocalDateTime.now();
     }
 
+    public UserActionId getUserActionId() {
+        return userActionId;
+    }
 
+    public DNI getUserDNI() {
+        return userDNI;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public Id getEntityId() {
+        return entityId;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
 }
