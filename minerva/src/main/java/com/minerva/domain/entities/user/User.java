@@ -20,7 +20,7 @@ public class User extends Entity {
     private boolean isActive;
     private final LocalDateTime registrationDate;
 
-    public User( PasswordHasher passwordHasher, String dni, String names, String lastNames, String username, String password, Role role) throws DomainException {
+    public User(PasswordHasher passwordHasher, String dni, String names, String lastNames, String username, String password, Role role) throws DomainException {
         DNI tempDni = new DNI(dni);
         super(tempDni);
         this.dni = tempDni;
