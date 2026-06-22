@@ -64,3 +64,5 @@ barCode
             return Optional.empty();
         }  
     }
+
+-- Agregar un campo de estado activo en user
