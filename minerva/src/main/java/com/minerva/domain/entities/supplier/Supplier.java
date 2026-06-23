@@ -11,7 +11,7 @@ import com.minerva.domain.valueObject.id.SupplierName;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class Supplier extends Entity {
+public class Supplier extends Entity<SupplierId> {
     private final SupplierName supplierName;
     // Puede ser null
     private RUC ruc;
