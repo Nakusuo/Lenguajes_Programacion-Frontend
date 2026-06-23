@@ -7,20 +7,20 @@ import com.minerva.domain.valueObject.id.DNI;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.interfaces.Id;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.valueObject.id.UserActionId;
+import com.minerva.domain.valueObject.id.UserActionIdImpl;
 
-public class UserAction extends Entity {
-    private final UserActionId userActionId;
+public class UserAction extends Entity<UserActionId> {
+    private final UserActionIdImpl userActionIdImpl;
     private final DNI userDNI;
     private final Permission permission;
-    private final Id entityId;
+    private final Id<?> entityId;
     
     private final LocalDateTime registrationDate;
 
-    public UserAction(String userDNI, Permission permission, Entity entity) throws DomainException {
-        UserActionId tempId = UserActionId.generate();
+    public UserAction(String userDNI, Permission permission, Entity<?> entity) throws DomainException {
+        UserActionIdImpl tempId = UserActionIdImpl.generate();
         super(tempId);
-        this.userActionId = tempId;
+        this.userActionIdImpl = tempId;
         this.userDNI = new DNI(userDNI);
 
         if (permission == null) throw new DomainException("El permiso no puede ser nulo.");
@@ -32,8 +32,8 @@ public class UserAction extends Entity {
         this.registrationDate = LocalDateTime.now();
     }
 
-    public UserActionId getUserActionId() {
-        return userActionId;
+    public UserActionIdImpl getUserActionId() {
+        return userActionIdImpl;
     }
 
     public DNI getUserDNI() {
@@ -44,7 +44,7 @@ public class UserAction extends Entity {
         return permission;
     }
 
-    public Id getEntityId() {
+    public Id<?> getEntityId() {
         return entityId;
     }
 
