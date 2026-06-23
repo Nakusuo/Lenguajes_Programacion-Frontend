@@ -5,13 +5,12 @@ import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
-import com.minerva.domain.valueObject.id.PayId;
+import com.minerva.domain.valueObject.id.PayIdImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 class Pay extends Entity {
-    private final PayId payId;
     private final Money amount;
     private final PaymentMethod paymentMethod;
     private final LocalDateTime registrationDate;
@@ -22,22 +21,18 @@ class Pay extends Entity {
         if (paymentMethod == null) throw new DomainException("El método de pago no puede estar vacío.");
         if (amount != null && amount.isLessThan(MIN_AMOUNT)) throw new DomainException("El MONTO debe ser mayor o igual a S/" + MIN_AMOUNT);
 
-        PayId tempId = PayId.generate();
-
-        super(tempId);
+        super(PayIdImpl.generate());
 
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         // Valores por defecto
-        this.payId = tempId;
         this.registrationDate = LocalDateTime.now();
     }
 
     Pay(String payId, BigDecimal amount, PaymentMethod paymentMethod, LocalDateTime registrationDate) {
-        PayId tempId;
+        PayIdImpl tempId;
         try {
-            tempId = PayId.fromString(payId);
-            this.payId = tempId;
+            tempId = PayIdImpl.fromString(payId);
             this.amount = new Money(amount);
             this.paymentMethod = paymentMethod;
             this.registrationDate = registrationDate;
@@ -47,10 +42,6 @@ class Pay extends Entity {
         super(tempId);
     }
 
-    public PayId getPayId() {
-        return payId;
-    }    
-        
     public Money getAmount() {
         return amount;
     }
