@@ -5,14 +5,14 @@ import com.minerva.domain.exceptions.UnexpectedDomainException;
 import java.util.Objects;
 
 public abstract class Entity {
-    private final Id id;
+    private final Id<?> id;
 
-    public Entity(Id id) {
+    public Entity(Id<?> id) {
         if (id == null) throw new UnexpectedDomainException("El ID no puede ser nulo");
         this.id = id;
     }
 
-    public Id getId() {
+    public Id<?> getId() {
         return id;
     }
 
