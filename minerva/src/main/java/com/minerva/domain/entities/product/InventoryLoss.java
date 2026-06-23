@@ -9,7 +9,7 @@ import com.minerva.domain.valueObject.id.ProductName;
 
 import java.time.LocalDateTime;
 
-public class InventoryLoss extends Entity {
+public class InventoryLoss extends Entity<InventoryLossId> {
 
     private final ProductName productName;
     private final ProductQuantity quantity;

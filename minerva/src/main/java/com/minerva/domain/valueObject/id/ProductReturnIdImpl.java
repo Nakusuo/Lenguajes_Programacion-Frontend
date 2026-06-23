@@ -2,12 +2,12 @@ package com.minerva.domain.valueObject.id;
 
 import java.util.UUID;
 
-import com.minerva.domain.entities.product.ProductId;
+import com.minerva.domain.entities.sale.ProductReturnId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-public class ProductReturnIdImpl extends ValueObject<String> implements ProductId {
+public class ProductReturnIdImpl extends ValueObject<String> implements ProductReturnId {
 
     private ProductReturnIdImpl(String value) throws DomainException {
         super(value);

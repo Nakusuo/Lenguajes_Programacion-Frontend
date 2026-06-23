@@ -8,7 +8,7 @@ import com.minerva.domain.valueObject.id.ProductReturnIdImpl;
 
 import java.time.LocalDateTime;
 
-class ProductReturn extends Entity {
+class ProductReturn extends Entity<ProductReturnId> {
     private final ProductQuantity quantity;
     private final ReasonProductReturn reason;
     private final LocalDateTime registrationDate;
