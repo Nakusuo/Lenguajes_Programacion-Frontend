@@ -15,7 +15,7 @@ public class User extends Entity<UserId> {
     private Name names;
     private LastName lastNames;
     private final UserName username;
-    private PasswordHash password;
+    private PasswordHash passwordHash;
     private Role role;
     private boolean isActive;
     private final LocalDateTime registrationDate;
@@ -27,7 +27,7 @@ public class User extends Entity<UserId> {
         this.names = new Name(names);
         this.lastNames = new LastName(lastNames);
         this.username = new UserName(username);
-        this.password = passwordHasher.hash(new Password(password));
+        this.passwordHash = passwordHasher.hash(new Password(password));
         if (role == null) {
             throw new DomainException("El ROL no puede ser nulo.");
         } else {
@@ -45,7 +45,7 @@ public class User extends Entity<UserId> {
             this.username = new UserName(username);
             this.names = new Name(names);
             this.lastNames = new LastName(lastNames);
-            this.password = new PasswordHash(password);
+            this.passwordHash = new PasswordHash(password);
             this.role = role;
             this.isActive = isActive;
             this.registrationDate = registrationDate;
@@ -67,8 +67,8 @@ public class User extends Entity<UserId> {
         return lastNames;
     }
 
-    public PasswordHash getPassword() {
-        return password;
+    public PasswordHash getPasswordHash() {
+        return passwordHash;
     }
 
     public UserName getUsername() {
