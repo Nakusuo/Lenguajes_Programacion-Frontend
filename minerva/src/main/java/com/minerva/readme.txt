@@ -6,17 +6,6 @@ Nota:
 - revisar que solo se use BigDecimal en las value keys
 - seguir la convencion de id de la db a la hora de nombrar los atributos, osea no es necesario qye una clase se entere que atributo se usa como id de otra
 
-. Nombre confuso: customerNameId
-String customerNameId
-
-Eso mezcla dos conceptos:
-
-name
-id
-
-Debe ser:
-
-String customerName
 
 -- cambiar todos los nombres que terminene en obj por el tipo de dato que son sus contraposiciones
 
@@ -56,13 +45,5 @@ barCode
 
 -- revisar que no se este usando expetion en todo el proyecto, solo se debe usar domain exepction
 
---   que esto reciba la interface id  @Override
-    public Optional<Product> findProductById(String productId) {     
-        try {
-            return productRepository.findById(new ProductName(productId));
-        } catch (DomainException e) {
-            return Optional.empty();
-        }  
-    }
-
 -- Agregar un campo de estado activo en user
+-- ver el tema de vulnerabilidades del pom.xml las pendencias
