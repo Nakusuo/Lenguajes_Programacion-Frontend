@@ -20,7 +20,7 @@ public class UserService {
     }
 
     // --------------------- WRITE ---------------------
-    public Result<Void> registerUser(String dni, String names, String lastNames, String username, String password, Role role) {
+    public Result<Void> register(String dni, String names, String lastNames, String username, String password, Role role) {
         User userCreated;
         try {
             userCreated = new User(passwordHasher, dni, names, lastNames, username, password, role);
@@ -37,7 +37,7 @@ public class UserService {
         userRepository.save(userCreated);
         return Result.success(null);
     }
-    
+
     // aqui devolveria un token de autenticacion, pero por simplicidad devolvere un Result<Void>
     public Result<Void> authenticate(String username, String password) {
         UserName userName;
