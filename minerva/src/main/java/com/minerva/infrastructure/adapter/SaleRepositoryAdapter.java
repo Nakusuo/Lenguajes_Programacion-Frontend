@@ -192,7 +192,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
         .getReference(CustomerEntity.class, sale.getCustomerId());
 
         return new SaleEntity(
-                sale.getId().toString(),
+                sale.getId().value(),
                 customerEntity,
                 sale.getRegistrationDate()
         );
