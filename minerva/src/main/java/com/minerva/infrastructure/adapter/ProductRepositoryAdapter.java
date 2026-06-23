@@ -70,8 +70,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public boolean existsById(ProductName id) {
-        return jpaProductRepository.existsById(id.value);
+    public boolean existsById(ProductId id) {
+        return jpaProductRepository.existsById(id.value());
     }
 
     @Override
@@ -80,8 +80,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findById(ProductName id) {
-        return jpaProductRepository.findById(id.value)
+    public Optional<Product> findById(ProductId id) {
+        return jpaProductRepository.findById(id.value())
                 .map(this::toDomain);
     }
 
@@ -89,13 +89,6 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public Optional<Product> findByBarCode(BarCode barCode) {
         return jpaProductRepository.findByBarCode(barCode.value)
                 .map(this::toDomain);
-    }
-
-    // OJAZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-    // ESTO FALTA
-    @Override
-    public Optional<StockEntry> findLatestEntryBeforeToday(ProductName id) {
-        return Optional.empty();
     }
 
     @Override
@@ -107,8 +100,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public List<StockEntry> findAllEntriesByProductId(ProductName id) {
-        return jpaStockEntryRepository.findByProductEntity_ProductNameId(id.value)
+    public List<StockEntry> findAllEntriesByProductId(ProductId id) {
+        return jpaStockEntryRepository.findByProductEntity_ProductNameId(id.value())
                 .stream()
                 .map(this::toDomain)
                 .toList();
