@@ -4,12 +4,11 @@ import com.minerva.domain.constants.ReasonProductReturn;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.Entity;
-import com.minerva.domain.valueObject.id.ProductReturnId;
+import com.minerva.domain.valueObject.id.ProductReturnIdImpl;
 
 import java.time.LocalDateTime;
 
 class ProductReturn extends Entity {
-    private final ProductReturnId productReturnId;
     private final ProductQuantity quantity;
     private final ReasonProductReturn reason;
     private final LocalDateTime registrationDate;
@@ -18,18 +17,12 @@ class ProductReturn extends Entity {
         if (quantity != null && quantity.isZeroOrLess()) throw new DomainException("La cantidad a devolver debe ser mayor a cero.");
         if (reason == null) throw new DomainException("La razón de la devolución no puede estar vacío.");
 
-        ProductReturnId tempId = ProductReturnId.generate();
-        super(tempId);
+        super(ProductReturnIdImpl.generate());
 
         this.quantity = quantity;
         this.reason = reason;
         // DATOS INICIALES
-        this.productReturnId = tempId;
         this.registrationDate = LocalDateTime.now();
-    }
-
-    public ProductReturnId getId() {
-        return productReturnId;
     }
 
     public ProductQuantity getQuantity() {
