@@ -1,6 +1,7 @@
 package com.minerva.infrastructure.adapter;
 
 import com.minerva.domain.entities.customer.Customer;
+import com.minerva.domain.entities.customer.CustomerId;
 import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.repositories.CustomerRepository;
@@ -24,8 +25,8 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
     }
 
     @Override
-    public boolean existsById(CustomerName id) {
-        return jpaCustomerRepository.existsById(id.value);
+    public boolean existsById(CustomerId id) {
+        return jpaCustomerRepository.existsById(id.value());
     }
 
     @Override
@@ -34,8 +35,8 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
     }
 
     @Override
-    public Optional<Customer> findById(CustomerName id) {
-        return jpaCustomerRepository.findById(id.value)
+    public Optional<Customer> findById(CustomerId id) {
+        return jpaCustomerRepository.findById(id.value())
                 .map(this::toDomain);
     }
 
