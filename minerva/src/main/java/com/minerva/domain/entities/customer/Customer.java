@@ -10,7 +10,7 @@ import com.minerva.domain.valueObject.id.CustomerName;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class Customer extends Entity {
+public class Customer extends Entity<CustomerId> {
     private final CustomerName customerName;
     // Puede ser null
     private PhoneNumber phoneNumber;

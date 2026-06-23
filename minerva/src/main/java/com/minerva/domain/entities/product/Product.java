@@ -21,7 +21,7 @@ import java.util.Optional;
 import static com.minerva.domain.services.Math.isDecimal;
 import static com.minerva.domain.services.Math.isZeroOrLess;
 
-public class Product extends Entity {
+public class Product extends Entity<ProductId> {
     private final ProductName productName;
     private ProductQuantity stock;
     private GainStrategy gainStrategy;

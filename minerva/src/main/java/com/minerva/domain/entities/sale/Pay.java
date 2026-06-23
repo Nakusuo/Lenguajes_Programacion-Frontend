@@ -10,7 +10,7 @@ import com.minerva.domain.valueObject.id.PayIdImpl;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-class Pay extends Entity {
+class Pay extends Entity<PayId> {
     private final Money amount;
     private final PaymentMethod paymentMethod;
     private final LocalDateTime registrationDate;
