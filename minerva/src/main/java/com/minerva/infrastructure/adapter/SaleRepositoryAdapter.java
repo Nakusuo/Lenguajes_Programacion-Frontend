@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.minerva.domain.entities.sale.PayId;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.minerva.domain.valueObject.id.CustomerName;
-import com.minerva.domain.valueObject.id.PayId;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.entities.sale.Sale.PayDTO;
 import com.minerva.domain.entities.sale.Sale.SaleDetailDTO;
@@ -169,7 +169,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Override
     public List<PayDTO> findPaysById(PayId id) {
-        return payRepository.findById(id.value)
+        return payRepository.findById(id.value())
                 .stream()
                 .map(this::toPayDTO)
                 .toList();
