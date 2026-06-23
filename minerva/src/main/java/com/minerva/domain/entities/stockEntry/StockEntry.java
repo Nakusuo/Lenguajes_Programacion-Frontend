@@ -7,15 +7,14 @@ import com.minerva.domain.valueObject.id.SupplierName;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
-import com.minerva.domain.valueObject.id.StockEntryId;
+import com.minerva.domain.valueObject.id.StockEntryIdImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class StockEntry extends Entity {
+public class StockEntry extends Entity<StockEntryId> {
 
-    private final StockEntryId stockEntryId;
     private final ProductName productName;
     private final SupplierName supplierName;
     private final Money unitPrice;
@@ -38,8 +37,7 @@ public class StockEntry extends Entity {
         this.unitPrice = new Money(unitPrice);
         this.quantity = new ProductQuantity(quantity);
 
-        StockEntryId tempId = StockEntryId.generate();
-        super(tempId);
+        super(StockEntryIdImpl.generate());
 
         if (this.unitPrice.isZeroOrLess()) throw new DomainException("El precio del producto debe ser mayor a 0.");
         if (this.quantity.isZeroOrLess()) throw new DomainException("La cantidad del producto debe ser mayor a 0.");
@@ -49,7 +47,6 @@ public class StockEntry extends Entity {
 
         this.expirationDate = expirationDate;
 
-        this.stockEntryId = tempId;
         this.registrationDate = LocalDateTime.now();
     }
 
@@ -62,10 +59,9 @@ public class StockEntry extends Entity {
             LocalDateTime expirationDate,
             LocalDateTime registrationDate
     ) {
-        StockEntryId tempId;
+        StockEntryIdImpl tempId;
         try {
-            tempId = StockEntryId.fromString(stockEntryId);
-            this.stockEntryId = tempId;
+            tempId = StockEntryIdImpl.fromString(stockEntryId);
             this.productName = new ProductName(productName);
             this.supplierName = new SupplierName(supplierName);
             this.unitPrice = new Money(unitPrice);
@@ -77,11 +73,7 @@ public class StockEntry extends Entity {
         }
         super(tempId);
     }
-
-    public StockEntryId getStockEntryId() {
-        return stockEntryId;
-    }
-
+    
     public SupplierName getSupplierName() {
         return supplierName;
     }
