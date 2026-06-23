@@ -10,7 +10,7 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
 
-public class User extends Entity {
+public class User extends Entity<UserId> {
     private final DNI dni;
     private Name names;
     private LastName lastNames;

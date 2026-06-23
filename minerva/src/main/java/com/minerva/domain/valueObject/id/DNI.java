@@ -1,10 +1,10 @@
 package com.minerva.domain.valueObject.id;
 
-import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.entities.user.UserId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-public class DNI extends ValueObject<String> implements Id {
+public class DNI extends ValueObject<String> implements UserId {
 
     private static final int LENGTH = 8;
 
