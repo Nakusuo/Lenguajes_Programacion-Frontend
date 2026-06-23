@@ -200,7 +200,7 @@ public class Sale extends Entity {
         List<PayDTO> paysDTO = new ArrayList<>(pays.size());
         for (Pay pay : pays) {
             paysDTO.add(new PayDTO(
-                pay.getPayId().toString(), 
+                pay.getId().toString(),
                 pay.getAmount().value, 
                 pay.getPaymentMethod(), 
                 pay.getRegistrationDate()));
