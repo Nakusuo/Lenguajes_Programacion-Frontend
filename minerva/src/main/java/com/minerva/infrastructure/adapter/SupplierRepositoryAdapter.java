@@ -3,6 +3,7 @@ package com.minerva.infrastructure.adapter;
 import java.util.List;
 import java.util.Optional;
 
+import com.minerva.domain.entities.supplier.SupplierId;
 import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.valueObject.RUC;
 import com.minerva.domain.entities.supplier.Supplier;
@@ -25,8 +26,8 @@ public class SupplierRepositoryAdapter implements SupplierRepository{
     }
 
     @Override
-    public boolean existsById(SupplierName id) {
-        return jpaSupplierRepository.existsById(id.value);
+    public boolean existsById(SupplierId id) {
+        return jpaSupplierRepository.existsById(id.value());
     }
 
     @Override
@@ -48,8 +49,8 @@ public class SupplierRepositoryAdapter implements SupplierRepository{
     }
 
     @Override
-    public Optional<Supplier> findById(SupplierName id) {
-        return jpaSupplierRepository.findById(id.value)
+    public Optional<Supplier> findById(SupplierId id) {
+        return jpaSupplierRepository.findById(id.value())
                 .map(this::toDomain);
     }
     
