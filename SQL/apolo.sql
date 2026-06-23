@@ -9,6 +9,7 @@ CREATE TABLE user (
     userName VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     roleNameId VARCHAR(50) NOT NULL,
+    isActive BOOLEAN NOT NULL,
 
     registrationDate TIMESTAMP NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
