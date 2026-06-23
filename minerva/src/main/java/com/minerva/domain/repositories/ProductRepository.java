@@ -15,11 +15,10 @@ public interface ProductRepository {
     void saveStockEntry(StockEntry stockEntry, Product product);
     void saveUnitToBulk(ProductName unitProductName, ProductName bulkProductName, ProductQuantity quantity);
 
-    boolean existsById(ProductName id);
+    boolean existsById(ProductId id);
     boolean existByBarCode(BarCode barCode);
-    Optional<Product> findById(ProductName id);
+    Optional<Product> findById(ProductId id);
     Optional<Product> findByBarCode(BarCode barCode);
-    Optional<StockEntry> findLatestEntryBeforeToday(ProductName id);
     List<Product> findAllProducts();
-    List<StockEntry> findAllEntriesByProductId(ProductName id);
+    List<StockEntry> findAllEntriesByProductId(ProductId id);
 }

@@ -1,10 +1,10 @@
 package com.minerva.domain.valueObject.id;
 
-import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-public class ProductName extends ValueObject<String> implements Id {
+public class ProductName extends ValueObject<String> implements ProductId {
     private static final int MIN_LENGTH = 3;
     private static final int MAX_LENGTH = 100;
 
