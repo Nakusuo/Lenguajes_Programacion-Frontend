@@ -6,17 +6,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.minerva.domain.entities.customer.CustomerId;
 import com.minerva.domain.entities.sale.PayId;
+import com.minerva.domain.entities.sale.SaleId;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.entities.sale.Sale.PayDTO;
 import com.minerva.domain.entities.sale.Sale.SaleDetailDTO;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.valueObject.id.SaleDetailId;
-import com.minerva.domain.valueObject.id.SaleId;
+import com.minerva.domain.valueObject.id.SaleIdImpl;
 import com.minerva.domain.repositories.SaleRepository;
 import com.minerva.infrastructure.persistence.entity.CustomerEntity;
 import com.minerva.infrastructure.persistence.entity.PayEntity;
@@ -54,7 +55,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Transactional
     public void saveSaleDetails(List<SaleDetailDTO> saleDetails, SaleId saleId) {
-        SaleEntity saleEntity = entityManager.getReference(SaleEntity.class, saleId.value);
+        SaleEntity saleEntity = entityManager.getReference(SaleEntity.class, saleId.value());
 
         for (SaleDetailDTO saleDetailDTO : saleDetails) {
             ProductEntity productEntity = entityManager.getReference(ProductEntity.class, saleDetailDTO.productId());
@@ -66,7 +67,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Transactional
     public void savePays(List<PayDTO> pays, SaleId saleId) {
-        SaleEntity saleEntity = entityManager.getReference(SaleEntity.class, saleId.value);
+        SaleEntity saleEntity = entityManager.getReference(SaleEntity.class, saleId.value());
 
         for (PayDTO payDTO : pays) {
             PayEntity payEntity = new PayEntity(payDTO.payId(), saleEntity, payDTO.amount(), payDTO.paymentMethod(), payDTO.registrationDate());
@@ -75,14 +76,14 @@ public class SaleRepositoryAdapter implements SaleRepository {
     }
 
     public List<SaleDetailDTO> findSaleDetailBySaleId(SaleId saleId) {
-        return saleDetailRepository.findBySaleEntity_SaleId(saleId.value)
+        return saleDetailRepository.findBySaleEntity_SaleId(saleId.value())
                 .stream()
                 .map(this::toSaleDetailDTO)
                 .toList();
     }
 
     public List<PayDTO> findPayBySaleId(SaleId saleId) {
-        return payRepository.findBySaleEntity_SaleId(saleId.value)
+        return payRepository.findBySaleEntity_SaleId(saleId.value())
                 .stream()
                 .map(this::toPayDTO)
                 .toList();
@@ -90,7 +91,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Override
     public Optional<Sale> findById(SaleId saleId) {
-        Optional<SaleEntity> saleEntity = saleRepository.findById(saleId.value);
+        Optional<SaleEntity> saleEntity = saleRepository.findById(saleId.value());
         if (saleEntity.isEmpty()) return Optional.empty();
 
         List<SaleDetailDTO> saleDetails = findSaleDetailBySaleId(saleId);
@@ -100,26 +101,26 @@ public class SaleRepositoryAdapter implements SaleRepository {
     }
 
     @Override
-    public List<Sale> findByCustomerId(CustomerName customerName) {
-        List<SaleEntity> saleEntities = saleRepository.findByCustomerEntity_CustomerNameId(customerName.value);
+    public List<Sale> findByCustomerId(CustomerId customerId) {
+        List<SaleEntity> saleEntities = saleRepository.findByCustomerEntity_CustomerNameId(customerId.value());
 
         return saleEntities.stream()
         .map(saleEntity -> {
-            SaleId saleId;
+            SaleIdImpl saleIdImpl;
 
             // OJAZOOO, esto hay que revisar porque no creo que el domain expecion deberia manejarse aqui y/o asi
             // aparte, tengo dudas sobre si deberia lanzar UnexpectedDomainException
             try {
-                saleId = SaleId.fromString(saleEntity.getSaleId());
+                saleIdImpl = SaleIdImpl.fromString(saleEntity.getSaleId());
             } catch (DomainException e) {
                 throw new UnexpectedDomainException("Error al convertir el ID de venta: " + e.getMessage(), e);
             }
 
             List<SaleDetailDTO> saleDetails =
-                    findSaleDetailBySaleId(saleId);
+                    findSaleDetailBySaleId(saleIdImpl);
 
             List<PayDTO> pays =
-                    findPayBySaleId(saleId);
+                    findPayBySaleId(saleIdImpl);
 
             return toDomain(saleEntity, saleDetails, pays);
         })

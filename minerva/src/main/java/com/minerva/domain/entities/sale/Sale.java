@@ -9,7 +9,7 @@ import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.constants.PaymentMethod;
 import com.minerva.domain.valueObject.id.CustomerName;
-import com.minerva.domain.valueObject.id.SaleId;
+import com.minerva.domain.valueObject.id.SaleIdImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,8 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class Sale extends Entity {
-    private final SaleId saleId;
+public class Sale extends Entity<SaleId> {
     private final CustomerName customerName;
     private final LocalDateTime registrationDate;
 
@@ -27,8 +26,7 @@ public class Sale extends Entity {
     private final List<SaleDetail> saleDetails = new LinkedList<SaleDetail>();
 
     public Sale(String customerNameId, List<SaleItem> items) throws DomainException {    
-        SaleId tempId = SaleId.generate();
-        super(tempId);
+        super(SaleIdImpl.generate());
         this.customerName = new CustomerName(customerNameId);
         if (items == null || items.isEmpty()) {
             throw new DomainException("La venta debe tener al menos un item");
@@ -47,15 +45,13 @@ public class Sale extends Entity {
         }
 
         // Valores por defecto
-        this.saleId = tempId;
         this.registrationDate = LocalDateTime.now();
     }
 
     public Sale(String saleId, String customerNameId, LocalDateTime registrationDate, List<SaleDetailDTO> saleDetails, List<PayDTO> pays) {
-        SaleId tempId;
+        SaleIdImpl tempId;
         try {
-            tempId = SaleId.fromString(saleId);
-            this.saleId = tempId;
+            tempId = SaleIdImpl.fromString(saleId);
             this.customerName = new CustomerName(customerNameId);
             this.registrationDate = registrationDate;             
         } catch (DomainException e) {
@@ -184,10 +180,6 @@ public class Sale extends Entity {
         return calculateAmountDue().isZero();
     }
 
-    public SaleId getId() {
-        return saleId;
-    }
-
     public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
@@ -219,4 +211,9 @@ public class Sale extends Entity {
         }
         return detailsDTO;
     }
+
+//    @Override
+//    public SaleId getId() {
+//        return (SaleId) super.getId();
+//    }
 }
