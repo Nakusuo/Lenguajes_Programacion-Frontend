@@ -2,15 +2,16 @@ package com.minerva.infrastructure.rest.service;
 
 import com.minerva.infrastructure.persistence.repository.JpaUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final JpaUserRepository jpaUserRepository;
 
-    public UserDetailsService(JpaUserRepository jpaUserRepository) {
+    public UserDetailsServiceImpl(JpaUserRepository jpaUserRepository) {
         this.jpaUserRepository = jpaUserRepository;
     }
 
