@@ -6,7 +6,7 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.repositories.SaleRepository;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.entities.sale.Sale.SaleItem;
-import com.minerva.domain.valueObject.id.SaleId;
+import com.minerva.domain.valueObject.id.SaleIdImpl;
 import com.minerva.domain.repositories.CustomerRepository;
 
 import java.util.List;
@@ -41,13 +41,13 @@ public class SaleService {
     }
 
     public Result<Void> addPaymentToSale(String saleIdStr, List<Sale.PayData> pays) {
-        SaleId saleId;
+        SaleIdImpl saleIdImpl;
         try {
-            saleId = SaleId.fromString(saleIdStr);
+            saleIdImpl = SaleIdImpl.fromString(saleIdStr);
         } catch (DomainException e) {
             return Result.fail(e.getMessage());
         }
-        Optional<Sale> saleOpt = saleRepository.findById(saleId);
+        Optional<Sale> saleOpt = saleRepository.findById(saleIdImpl);
         if (saleOpt.isEmpty()) return Result.fail("Venta no encontrada.");
 
         Sale sale = saleOpt.get();
@@ -64,7 +64,7 @@ public class SaleService {
 
     public Optional<Sale> findSaleById(String saleId) {
         try {
-            return saleRepository.findById(SaleId.fromString(saleId));
+            return saleRepository.findById(SaleIdImpl.fromString(saleId));
         } catch (DomainException e) {
             return Optional.empty();
         }
