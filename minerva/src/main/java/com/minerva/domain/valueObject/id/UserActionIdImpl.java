@@ -7,16 +7,15 @@ import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-public class UserActionIdImpl extends ValueObject<String> implements UserActionId {
+public class UserActionIdImpl extends ValueObject<UUID> implements UserActionId {
     
-    private UserActionIdImpl(String value) throws DomainException {
+    private UserActionIdImpl(UUID value) throws DomainException {
         super(value);
     }
 
     public static UserActionIdImpl generate() {
-        String value = UUID.randomUUID().toString();
         try {
-            return new UserActionIdImpl(value);
+            return new UserActionIdImpl(UUID.randomUUID());
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al generar el ID de acción de usuario: " + e.getMessage(), e);
         }
@@ -24,23 +23,19 @@ public class UserActionIdImpl extends ValueObject<String> implements UserActionI
 
     public static UserActionIdImpl fromString(String value) throws DomainException {
         try {
-            if (value == null || value.isEmpty()) {
-                throw new DomainException("El ID de acción de usuario no puede ser nulo o vacío.");
-            }
-            UUID.fromString(value);
+            return new UserActionIdImpl(UUID.fromString(value));
         } catch (IllegalArgumentException e) {
             throw new DomainException("El ID de acción de usuario no tiene un formato válido: " + value);
         }
-        return new UserActionIdImpl(value);
     }
 
     @Override
     public String asString() {
-        return value;
+        return value.toString();
     }
 
     @Override
-    public String value() {
+    public UUID value() {
         return value;
     }
 }
