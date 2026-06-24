@@ -13,6 +13,11 @@ public class SupplierName extends Name implements SupplierId {
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

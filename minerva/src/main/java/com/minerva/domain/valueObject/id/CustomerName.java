@@ -13,6 +13,11 @@ public class CustomerName extends Name implements CustomerId {
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

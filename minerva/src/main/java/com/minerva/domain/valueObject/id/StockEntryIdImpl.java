@@ -34,6 +34,11 @@ public class StockEntryIdImpl extends ValueObject<String> implements StockEntryI
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

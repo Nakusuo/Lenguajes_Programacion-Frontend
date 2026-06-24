@@ -35,6 +35,11 @@ public class SaleDetailIdImpl extends ValueObject<String> implements SaleDetailI
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

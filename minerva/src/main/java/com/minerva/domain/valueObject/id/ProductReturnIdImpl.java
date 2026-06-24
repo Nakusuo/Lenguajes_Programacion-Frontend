@@ -35,6 +35,11 @@ public class ProductReturnIdImpl extends ValueObject<String> implements ProductR
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

@@ -35,6 +35,11 @@ public class UserActionIdImpl extends ValueObject<String> implements UserActionI
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

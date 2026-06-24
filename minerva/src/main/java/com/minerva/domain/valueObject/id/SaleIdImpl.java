@@ -34,6 +34,11 @@ public class SaleIdImpl extends ValueObject<String> implements SaleId {
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

@@ -17,6 +17,11 @@ public class DNI extends ValueObject<String> implements UserId {
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }
