@@ -37,9 +37,14 @@ public class AuthController {
 
         String jwtToken = jwtService.generateToken(request.username, result.getData());
 
+        AuthResponse response = new AuthResponse(
+                jwtToken,
+                "Bearer",
+                request.username(),
+                result.getData().name()
+        );
 
-
-        return ResponseEntity.ok("Login exitoso");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
@@ -73,5 +78,12 @@ public class AuthController {
     public record LoginRequest(
             String username,
             String password
+    ) {}
+
+    public record AuthResponse(
+        String accessToken,
+        String tokenType,
+        String username,
+        String role
     ) {}
 }
