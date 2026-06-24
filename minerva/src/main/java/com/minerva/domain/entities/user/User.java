@@ -5,10 +5,11 @@ import java.time.LocalDateTime;
 import com.minerva.domain.constants.Role;
 import com.minerva.domain.interfaces.PasswordHasher;
 import com.minerva.domain.valueObject.*;
-import com.minerva.domain.valueObject.id.DNI;
+import com.minerva.domain.valueObject.DNI;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.valueObject.id.UserName;
 
 public class User extends Entity<UserId> {
     private final DNI dni;
@@ -21,12 +22,12 @@ public class User extends Entity<UserId> {
     private final LocalDateTime registrationDate;
 
     public User(PasswordHasher passwordHasher, String dni, String names, String lastNames, String username, String password, Role role) throws DomainException {
-        DNI tempDni = new DNI(dni);
-        super(tempDni);
-        this.dni = tempDni;
+        UserName tempUserName = new UserName(username);
+        super(tempUserName);
+        this.dni = new DNI(dni);
         this.names = new Name(names);
         this.lastNames = new LastName(lastNames);
-        this.username = new UserName(username);
+        this.username = tempUserName;
         this.passwordHash = passwordHasher.hash(new Password(password));
         if (role == null) {
             throw new DomainException("El ROL no puede ser nulo.");
@@ -38,11 +39,11 @@ public class User extends Entity<UserId> {
     }
 
     public User(String dni, String names, String lastNames, String username, String password, Role role, boolean isActive, LocalDateTime registrationDate) {
-        DNI tempDni;
+        UserName tempUserName;
         try {
-            tempDni = new DNI(dni);
-            this.dni = tempDni;
-            this.username = new UserName(username);
+            tempUserName = new UserName(username);
+            this.dni = new DNI(dni);
+            this.username = tempUserName;
             this.names = new Name(names);
             this.lastNames = new LastName(lastNames);
             this.passwordHash = new PasswordHash(password);
@@ -52,7 +53,7 @@ public class User extends Entity<UserId> {
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al cargar el usuario", e);
         }
-        super(tempDni);
+        super(tempUserName);
     }
 
     public DNI getDni() {
