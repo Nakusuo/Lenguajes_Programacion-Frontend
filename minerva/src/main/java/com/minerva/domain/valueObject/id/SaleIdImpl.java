@@ -7,15 +7,14 @@ import com.minerva.domain.interfaces.ValueObject;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 
-public class SaleIdImpl extends ValueObject<String> implements SaleId {
-    private SaleIdImpl(String value) throws DomainException {
+public class SaleIdImpl extends ValueObject<UUID> implements SaleId {
+    private SaleIdImpl(UUID value) throws DomainException {
         super(value);
     }
 
     public static SaleIdImpl generate() {
-        String value = UUID.randomUUID().toString();
         try {
-            return new SaleIdImpl(value);
+            return new SaleIdImpl(UUID.randomUUID());
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al generar el ID de venta: " + e.getMessage(), e);
         }
@@ -23,23 +22,19 @@ public class SaleIdImpl extends ValueObject<String> implements SaleId {
 
     public static SaleIdImpl fromString(String value) throws DomainException {
         try {
-            if (value == null || value.isEmpty()) {
-                throw new DomainException("El ID de venta no puede ser nulo o vacío.");
-            }
-            UUID.fromString(value);
-        } catch (IllegalArgumentException e) {
+            return new SaleIdImpl(UUID.fromString(value));
+        } catch (Exception e) {
             throw new DomainException("El ID de venta no tiene un formato válido: " + value);
         }
-        return new SaleIdImpl(value);
     }
 
     @Override
     public String asString() {
-        return value;
+        return value.toString();
     }
 
     @Override
-    public String value() {
+    public UUID value() {
         return value;
     }
 }

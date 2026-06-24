@@ -25,7 +25,7 @@ public class InventoryLossIdImpl extends ValueObject<UUID> implements InventoryL
         try {
             return new InventoryLossIdImpl(UUID.fromString(value));
         } catch (Exception e) {
-            throw new UnexpectedDomainException("El ID de pérdida de inventario no tiene un formato válido: " + value);
+            throw new DomainException("El ID de pérdida de inventario no tiene un formato válido: " + value);
         }
     }
 
