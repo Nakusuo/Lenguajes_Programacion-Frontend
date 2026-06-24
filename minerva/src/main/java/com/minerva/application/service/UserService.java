@@ -8,7 +8,7 @@ import com.minerva.domain.entities.user.User;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.PasswordHasher;
 import com.minerva.domain.repositories.UserRepository;
-import com.minerva.domain.valueObject.UserName;
+import com.minerva.domain.valueObject.id.UserName;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -28,11 +28,11 @@ public class UserService {
             return Result.fail(e.getMessage());
         }
 
-        if (userRepository.existsById(userCreated.getDni()))
-            return Result.fail("Ya existe un usuario con el mismo DNI.");
+        if (userRepository.existsById(userCreated.getUsername()))
+            return Result.fail("Ya existe el usuario");
 
-        if (userRepository.existsByUsername(userCreated.getUsername()))
-            return Result.fail("Ya existe un usuario con el mismo nombre de usuario.");
+        if (userRepository.existsByDNI(userCreated.getDni()))
+            return Result.fail("El DNI esta registrado con otro usuario");
 
         userRepository.save(userCreated);
         return Result.success(null);
@@ -47,7 +47,7 @@ public class UserService {
             return Result.fail(e.getMessage());
         }
 
-        Optional<User> userOptional = userRepository.findByUsername(userName);
+        Optional<User> userOptional = userRepository.findById(userName);
 
         if (userOptional.isEmpty())
             return Result.fail("Credenciales invalidas");
