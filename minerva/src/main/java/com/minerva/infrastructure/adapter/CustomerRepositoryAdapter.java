@@ -6,10 +6,12 @@ import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.repositories.CustomerRepository;
 import com.minerva.infrastructure.persistence.entity.CustomerEntity;
 import com.minerva.infrastructure.persistence.repository.JpaCustomerRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class CustomerRepositoryAdapter implements CustomerRepository {
 
     private final JpaCustomerRepository jpaCustomerRepository;
