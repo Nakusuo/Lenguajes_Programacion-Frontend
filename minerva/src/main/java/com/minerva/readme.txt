@@ -47,3 +47,5 @@ barCode
 
 -- Agregar un campo de estado activo en user
 -- ver el tema de vulnerabilidades del pom.xml las pendencias
+
+-- falta agregar el refreshToken
