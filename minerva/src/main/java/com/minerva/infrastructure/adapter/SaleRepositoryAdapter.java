@@ -172,7 +172,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Override
     public List<PayDTO> findPaysById(PayId id) {
-        return payRepository.findById(id.value())
+        return payRepository.findById(id.asString())
                 .stream()
                 .map(this::toPayDTO)
                 .toList();

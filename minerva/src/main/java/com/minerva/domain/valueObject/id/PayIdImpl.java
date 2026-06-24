@@ -7,16 +7,15 @@ import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-public class PayIdImpl extends ValueObject<String> implements PayId {
+public class PayIdImpl extends ValueObject<UUID> implements PayId {
 
-    private PayIdImpl(String value) throws DomainException {
+    private PayIdImpl(UUID value) throws DomainException {
         super(value);
     }
 
     public static PayIdImpl generate() {
-        String value = UUID.randomUUID().toString();
         try {
-            return new PayIdImpl(value);
+            return new PayIdImpl(UUID.randomUUID());
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al generar el ID de pago: " + e.getMessage(), e);
         }
@@ -24,23 +23,19 @@ public class PayIdImpl extends ValueObject<String> implements PayId {
 
     public static PayIdImpl fromString(String value) throws DomainException {
         try {
-            if (value == null || value.isEmpty()) {
-                throw new DomainException("El ID de pago no puede ser nulo o vacío.");
-            }
-            UUID.fromString(value);
-        } catch (IllegalArgumentException e) {
+            return new PayIdImpl(UUID.fromString(value));
+        } catch (Exception e) {
             throw new DomainException("El ID de pago no tiene un formato válido: " + value);
         }
-        return new PayIdImpl(value);
     }
 
     @Override
     public String asString() {
-        return value;
+        return value.toString();
     }
 
     @Override
-    public String value() {
+    public UUID value() {
         return value;
     }
     
