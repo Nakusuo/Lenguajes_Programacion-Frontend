@@ -8,19 +8,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
-    private final JpaUserRepository jpaUserRepository;
+    private JpaUserRepository jpaUserRepository;
 
     public UserDetailsServiceImpl(JpaUserRepository jpaUserRepository) {
         this.jpaUserRepository = jpaUserRepository;
     }
 
-    // NOTA: EN el retrun se puede usar el Build de User.withUsername(usuario.getUsername).password(usuario.getPassowrd)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return jpaUserRepository.findById(username)
                 .orElseThrow(() -> {
-                    return new UsernameNotFoundException("Usuario no encontrado");
+                    throw new UsernameNotFoundException("Usuario NO Encontrado!");
                 });
     }
 }
