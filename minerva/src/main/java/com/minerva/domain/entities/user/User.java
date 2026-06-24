@@ -37,7 +37,7 @@ public class User extends Entity<UserId> {
         this.registrationDate = LocalDateTime.now();
     }
 
-    public User(String dni, String username, LocalDateTime registrationDate, String names, String lastNames, String password, Role role, boolean isActive) {
+    public User(String dni, String names, String lastNames, String username, String password, Role role, boolean isActive, LocalDateTime registrationDate) {
         DNI tempDni;
         try {
             tempDni = new DNI(dni);
