@@ -10,7 +10,9 @@ import com.minerva.domain.entities.supplier.Supplier;
 import com.minerva.domain.repositories.SupplierRepository;
 import com.minerva.infrastructure.persistence.entity.SupplierEntity;
 import com.minerva.infrastructure.persistence.repository.JpaSupplierRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class SupplierRepositoryAdapter implements SupplierRepository{
 
     private final JpaSupplierRepository jpaSupplierRepository;
