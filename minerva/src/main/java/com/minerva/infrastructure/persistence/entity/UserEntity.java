@@ -22,6 +22,9 @@ import java.util.List;
 public class UserEntity implements UserDetails {
 
     @Id
+    @Column(name = "userName", length = 30, nullable = false, unique = true)
+    private String userName;
+
     @Column(name = "DNI", columnDefinition = "CHAR(8)")
     private String dni;
 
@@ -31,18 +34,15 @@ public class UserEntity implements UserDetails {
     @Column(name = "lastNames", length = 50, nullable = false)
     private String lastNames;
 
-    @Column(name = "userName", length = 30, nullable = false, unique = true)
-    private String userName;
-
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "roleNameId", length = 50, nullable = false)
+    @Column(name = "roleName", length = 50, nullable = false)
     private Role role;
 
     @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
+    private boolean isActive;
 
     @Column(
             name = "registrationDate",
