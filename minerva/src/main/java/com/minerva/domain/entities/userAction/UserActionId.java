@@ -2,5 +2,7 @@ package com.minerva.domain.entities.userAction;
 
 import com.minerva.domain.interfaces.Id;
 
-public interface UserActionId extends Id<String> {
+import java.util.UUID;
+
+public interface UserActionId extends Id<UUID> {
 }
