@@ -24,8 +24,10 @@ public class PayIdImpl extends ValueObject<UUID> implements PayId {
     public static PayIdImpl fromString(String value) throws DomainException {
         try {
             return new PayIdImpl(UUID.fromString(value));
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new DomainException("El ID de pago no tiene un formato válido: " + value);
+        } catch (Exception e) {
+            throw new UnexpectedDomainException(e.getMessage(), e);
         }
     }
 
