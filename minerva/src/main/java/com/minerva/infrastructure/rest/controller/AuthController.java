@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        Result<Void> result = userService.authenticate(request.username(), request.password());
+        Result<Role> result = userService.authenticate(request.username(), request.password());
 
         if (result.isFail()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result.getMessage());
