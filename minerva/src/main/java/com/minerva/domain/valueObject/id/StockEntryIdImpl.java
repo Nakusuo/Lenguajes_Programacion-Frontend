@@ -23,8 +23,10 @@ public class StockEntryIdImpl extends ValueObject<UUID> implements StockEntryId 
     public static StockEntryIdImpl fromString(String value) throws DomainException {
         try {
             return new StockEntryIdImpl(UUID.fromString(value));
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new DomainException("El ID de entrada de stock no tiene un formato válido: " + value);
+        } catch (Exception e) {
+            throw new UnexpectedDomainException(e.getMessage(), e);
         }
     }
 

@@ -26,6 +26,8 @@ public class UserActionIdImpl extends ValueObject<UUID> implements UserActionId 
             return new UserActionIdImpl(UUID.fromString(value));
         } catch (IllegalArgumentException e) {
             throw new DomainException("El ID de acción de usuario no tiene un formato válido: " + value);
+        } catch (Exception e) {
+            throw new UnexpectedDomainException(e.getMessage(), e);
         }
     }
 

@@ -23,8 +23,10 @@ public class SaleIdImpl extends ValueObject<UUID> implements SaleId {
     public static SaleIdImpl fromString(String value) throws DomainException {
         try {
             return new SaleIdImpl(UUID.fromString(value));
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new DomainException("El ID de venta no tiene un formato válido: " + value);
+        } catch (Exception e) {
+            throw new UnexpectedDomainException(e.getMessage(), e);
         }
     }
 
