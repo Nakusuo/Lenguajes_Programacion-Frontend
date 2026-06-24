@@ -1,6 +1,5 @@
 package com.minerva.infrastructure.adapter;
 
-import com.minerva.domain.constants.Role;
 import com.minerva.domain.entities.user.User;
 import com.minerva.domain.entities.user.UserId;
 import com.minerva.domain.repositories.UserRepository;
@@ -42,11 +41,6 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public Optional<User> findByUsername(UserName username) {
         return jpaUserRepository.findByUsername(username.value).map(this::toDomain);
-    }
-
-    @Override
-    public Role findRoleById(UserId dni) {
-        return jpaUserRepository.findRoleByDni(dni.value());
     }
 
     private User toDomain(UserEntity userEntity) {
