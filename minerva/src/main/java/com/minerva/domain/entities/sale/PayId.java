@@ -2,5 +2,7 @@ package com.minerva.domain.entities.sale;
 
 import com.minerva.domain.interfaces.Id;
 
-public interface PayId extends Id<String> {
+import java.util.UUID;
+
+public interface PayId extends Id<UUID> {
 }
