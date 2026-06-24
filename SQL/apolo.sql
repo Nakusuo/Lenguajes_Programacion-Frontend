@@ -3,12 +3,12 @@ USE apolo;
 
 
 CREATE TABLE user (
-    DNI CHAR(8) PRIMARY KEY,
+    userName VARCHAR(30) PRIMARY KEY,
+    DNI CHAR(8) UNIQUE NOT NULL,
     names VARCHAR(50) NOT NULL,
     lastNames VARCHAR(50) NOT NULL,
-    userName VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    roleNameId VARCHAR(50) NOT NULL,
+    roleName VARCHAR(50) NOT NULL,
     isActive BOOLEAN NOT NULL,
 
     registrationDate TIMESTAMP NOT NULL
@@ -17,7 +17,7 @@ CREATE TABLE user (
 CREATE TABLE userAction (
     userActionId CHAR(36) PRIMARY KEY,
 
-    userDNI CHAR(8) NOT NULL,
+    userName VARCHAR(30) NOT NULL,
     permission VARCHAR(50) NOT NULL,
 
     entityId VARCHAR(100) NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE userAction (
     registrationDate TIMESTAMP NOT NULL,
 
     CONSTRAINT fk_userAction_user
-        FOREIGN KEY (userDNI)
-        REFERENCES user(DNI)
+        FOREIGN KEY (userName)
+        REFERENCES user(userName)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
