@@ -25,3 +25,6 @@ server:
 # 🚨 Propiedad opcional para MySQL 8.x
 #spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
 # ❗ Si usas MySQL 8, descomentar para evitar problemas con el dialect
+jwt:
+  secret: YTRjYWI0YmYtNTI0OS00MmExLTlkOWQtMzA3NDVhYjU3YjYzMWIwNWRhYjYtZWQwZi00NjAwLWI1NTgtMGZmNWZlMTUzZTYwY2Q4ZjliNmYtNmNmOC00M2ZiLTg3OTgtZTkzMDdmYmY4NDBj
+  expirationMs: 86000000
