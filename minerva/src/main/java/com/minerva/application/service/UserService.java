@@ -50,17 +50,17 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByUsername(userName);
 
         if (userOptional.isEmpty())
-            return Result.fail("Usuario no encontrado.");
+            return Result.fail("Credenciales invalidas");
 
         User user = userOptional.get();
 
         if (!user.isActive())
-            return Result.fail("Usuario inactivo.");
+            return Result.fail("Credenciales invalidas");
 
         if (passwordHasher.matches(password, user.getPasswordHash()))
             return Result.success(user.getRole());
         else
-            return Result.fail("Contraseña incorrecta.");
+            return Result.fail("Credenciales invalidas");
     }
 
 }
