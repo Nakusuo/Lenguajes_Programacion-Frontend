@@ -3,6 +3,8 @@ package com.minerva.infrastructure.rest.controller;
 
 import com.minerva.domain.constants.Role;
 import com.minerva.domain.entities.shared.Result;
+import com.minerva.infrastructure.rest.service.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,29 +15,35 @@ import com.minerva.application.service.UserService;
 
 // revisar si los verbos htttp corresponede con la accion que se realiza, por ejemplo login es un verbo de accion, pero register es un verbo de creacion, por lo que deberia ser un post
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
         Result<Void> result = userService.authenticate(request.username(), request.password());
 
         if (result.isFail()) {
-            return ResponseEntity.badRequest().body(result.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result.getMessage());
         }
+
+        String jwtToken = jwtService.generateToken(request.username);
+
+
 
         return ResponseEntity.ok("Login exitoso");
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
         Result<Void> result = userService.register(
                 request.dni(),
@@ -50,7 +58,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(result.getMessage());
         }
 
-        return ResponseEntity.ok("Registro exitoso");
+        return ResponseEntity.ok("");
     }
 
     public record RegisterRequest(
