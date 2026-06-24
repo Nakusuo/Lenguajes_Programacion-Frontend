@@ -49,7 +49,7 @@ public class UserService {
 
         Optional<User> userOptional = userRepository.findByUsername(userName);
 
-        if (!userOptional.isPresent())
+        if (userOptional.isEmpty())
             return Result.fail("Usuario no encontrado.");
 
         User user = userOptional.get();
