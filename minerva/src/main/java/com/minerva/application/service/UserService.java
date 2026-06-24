@@ -39,7 +39,7 @@ public class UserService {
     }
 
     // aqui devolveria un token de autenticacion, pero por simplicidad devolvere un Result<Void>
-    public Result<Void> authenticate(String username, String password) {
+    public Result<Role> authenticate(String username, String password) {
         UserName userName;
         try {
             userName = new UserName(username);
@@ -58,7 +58,7 @@ public class UserService {
             return Result.fail("Usuario inactivo.");
 
         if (passwordHasher.matches(password, user.getPasswordHash()))
-            return Result.success(null);
+            return Result.success(user.getRole());
         else
             return Result.fail("Contraseña incorrecta.");
     }
