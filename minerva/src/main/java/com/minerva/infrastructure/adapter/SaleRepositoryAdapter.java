@@ -10,6 +10,7 @@ import com.minerva.domain.entities.customer.CustomerId;
 import com.minerva.domain.entities.sale.PayId;
 import com.minerva.domain.entities.sale.SaleDetailId;
 import com.minerva.domain.entities.sale.SaleId;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.minerva.domain.entities.sale.Sale;
@@ -31,6 +32,7 @@ import com.minerva.infrastructure.persistence.repository.JpaSaleRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+@Repository
 public class SaleRepositoryAdapter implements SaleRepository {
     @PersistenceContext
     private EntityManager entityManager;
