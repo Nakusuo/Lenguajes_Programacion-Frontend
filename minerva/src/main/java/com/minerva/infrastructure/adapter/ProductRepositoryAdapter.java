@@ -15,6 +15,7 @@ import com.minerva.infrastructure.persistence.repository.JpaStockEntryRepository
 import com.minerva.infrastructure.persistence.repository.JpaUnitToBulkRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ProductRepositoryAdapter implements ProductRepository {
     @PersistenceContext
     private EntityManager entityManager;
