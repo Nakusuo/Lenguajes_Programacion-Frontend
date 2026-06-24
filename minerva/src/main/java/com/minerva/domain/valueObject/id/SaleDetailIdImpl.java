@@ -25,7 +25,7 @@ public class SaleDetailIdImpl extends ValueObject<UUID> implements SaleDetailId 
         try {
             return new SaleDetailIdImpl(UUID.fromString(value));
         } catch (Exception e) {
-            throw new UnexpectedDomainException("El ID de detalle de venta no tiene un formato válido: " + value);
+            throw new DomainException("El ID de detalle de venta no tiene un formato válido: " + value);
         }
     }
 

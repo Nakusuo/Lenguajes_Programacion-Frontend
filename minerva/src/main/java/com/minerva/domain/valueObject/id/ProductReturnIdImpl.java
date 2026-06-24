@@ -25,7 +25,7 @@ public class ProductReturnIdImpl extends ValueObject<UUID> implements ProductRet
         try {
             return new ProductReturnIdImpl(UUID.fromString(value));
         } catch (Exception e) {
-            throw new UnexpectedDomainException("El ID de devolución de producto no tiene un formato válido: " + value);
+            throw new DomainException("El ID de devolución de producto no tiene un formato válido: " + value);
         } 
     }
 

@@ -78,14 +78,14 @@ public class SaleRepositoryAdapter implements SaleRepository {
     }
 
     public List<SaleDetailDTO> findSaleDetailBySaleId(SaleId saleId) {
-        return saleDetailRepository.findBySaleEntity_SaleId(saleId.value())
+        return saleDetailRepository.findBySaleEntity_SaleId(saleId.asString())
                 .stream()
                 .map(this::toSaleDetailDTO)
                 .toList();
     }
 
     public List<PayDTO> findPayBySaleId(SaleId saleId) {
-        return payRepository.findBySaleEntity_SaleId(saleId.value())
+        return payRepository.findBySaleEntity_SaleId(saleId.asString())
                 .stream()
                 .map(this::toPayDTO)
                 .toList();
@@ -93,7 +93,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Override
     public Optional<Sale> findById(SaleId saleId) {
-        Optional<SaleEntity> saleEntity = saleRepository.findById(saleId.value());
+        Optional<SaleEntity> saleEntity = saleRepository.findById(saleId.asString());
         if (saleEntity.isEmpty()) return Optional.empty();
 
         List<SaleDetailDTO> saleDetails = findSaleDetailBySaleId(saleId);
@@ -194,7 +194,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
         .getReference(CustomerEntity.class, sale.getCustomerId());
 
         return new SaleEntity(
-                sale.getId().value(),
+                sale.getId().asString(),
                 customerEntity,
                 sale.getRegistrationDate()
         );
