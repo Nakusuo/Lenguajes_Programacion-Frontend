@@ -1,9 +1,10 @@
-package com.minerva.domain.valueObject;
+package com.minerva.domain.valueObject.id;
 
+import com.minerva.domain.entities.user.UserId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.ValueObject;
 
-public final class UserName extends ValueObject<String> {
+public final class UserName extends ValueObject<String> implements UserId {
 
     private static final int MIN_LENGTH = 3;
     private static final int MAX_LENGTH = 30;
@@ -17,4 +18,13 @@ public final class UserName extends ValueObject<String> {
         if (!value.matches("^[a-zA-Z0-9]+$")) throw new DomainException("El USERNAME solo puede contener letras (sin tilde) y números");
     }
 
+    @Override
+    public String value() {
+        return value;
+    }
+
+    @Override
+    public String asString() {
+        return value;
+    }
 }
