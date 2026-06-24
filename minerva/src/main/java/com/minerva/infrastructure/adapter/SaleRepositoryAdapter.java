@@ -164,7 +164,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
 
     @Override
     public List<SaleDetailDTO> findSaleDetailsById(SaleDetailId id) {
-        return saleDetailRepository.findById(id.value())
+        return saleDetailRepository.findById(id.asString())
                 .stream()
                 .map(this::toSaleDetailDTO)
                 .toList();
