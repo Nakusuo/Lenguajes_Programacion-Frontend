@@ -35,6 +35,11 @@ public class InventoryLossIdImpl extends ValueObject<String> implements Inventor
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }

@@ -35,6 +35,11 @@ public class PayIdImpl extends ValueObject<String> implements PayId {
     }
 
     @Override
+    public String asString() {
+        return value;
+    }
+
+    @Override
     public String value() {
         return value;
     }
