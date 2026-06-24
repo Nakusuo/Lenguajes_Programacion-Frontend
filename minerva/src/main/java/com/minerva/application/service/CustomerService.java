@@ -3,6 +3,7 @@ package com.minerva.application.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.minerva.domain.constants.Role;
 import com.minerva.domain.repositories.CustomerRepository;
 import com.minerva.domain.entities.customer.Customer;
 import com.minerva.domain.valueObject.id.CustomerName;
@@ -10,10 +11,11 @@ import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
 
-public class CustomerService {
+public class CustomerService extends Service{
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, Role userRole) {
+        super(userRole);
         this.customerRepository = customerRepository;
     }
 
