@@ -35,7 +35,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result.getMessage());
         }
 
-        String jwtToken = jwtService.generateToken(request.username);
+        String jwtToken = jwtService.generateToken(request.username, result.getData());
 
 
 
