@@ -2,5 +2,7 @@ package com.minerva.domain.entities.product;
 
 import com.minerva.domain.interfaces.Id;
 
-public interface InventoryLossId extends Id<String> {
+import java.util.UUID;
+
+public interface InventoryLossId extends Id<UUID> {
 }
