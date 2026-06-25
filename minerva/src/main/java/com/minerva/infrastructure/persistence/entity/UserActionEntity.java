@@ -23,7 +23,7 @@ public class UserActionEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "userName", referencedColumnName = "userName")
-    private UserEntity user;
+    private UserEntity userName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "permission", length = 50, nullable = false)
