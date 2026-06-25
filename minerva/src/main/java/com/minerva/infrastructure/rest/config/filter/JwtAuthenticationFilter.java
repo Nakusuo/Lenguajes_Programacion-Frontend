@@ -41,6 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader(AUTH_HEADER);
 
         //bearer
+        // Si no se encunetra el Authorization entonces pasa como anonimo
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
             log.debug("No se encontro token");
             filterChain.doFilter(request, response);
@@ -52,32 +53,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String jwt = authHeader.substring(BEARER_PREFIX.length());
             final String username = jwtService.extractUsername(jwt);
 
+            // Aqui evito autenticar dos veces
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 log.debug("extrayendo usuario del token: {}", username);
 
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
-
-                    log.debug("token valido para: {}", username);
-
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-
-                    log.info("User logeado: {} - Ruta: {}", username, request.getRequestURI());
-
-
-                } else {
-                    log.warn("error en filtro: {}", username);
+                if (!userDetails.isEnabled() || !jwtService.isTokenValid(jwt, userDetails)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
                 }
+
+                log.debug("token valido para: {}", username);
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                log.info("User logeado: {} - Ruta: {}", username, request.getRequestURI());
             }
 
         } catch (Exception e) {
