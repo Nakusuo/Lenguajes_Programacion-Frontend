@@ -50,17 +50,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(BEARER_PREFIX.length());
-            final String userEmail = jwtService.extractUsername(jwt);
+            final String username = jwtService.extractUsername(jwt);
 
-            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                log.debug("extrayendo usuario del token: {}", userEmail);
+                log.debug("extrayendo usuario del token: {}", username);
 
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
 
-                    log.debug("token valido para: {}", userEmail);
+                    log.debug("token valido para: {}", username);
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -72,11 +72,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    log.info("User logeado: {} - Ruta: {}", userEmail, request.getRequestURI());
+                    log.info("User logeado: {} - Ruta: {}", username, request.getRequestURI());
 
 
                 } else {
-                    log.warn("error en filtro: {}", userEmail);
+                    log.warn("error en filtro: {}", username);
                 }
             }
 
