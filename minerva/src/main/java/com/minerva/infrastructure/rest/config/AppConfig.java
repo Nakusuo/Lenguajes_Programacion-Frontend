@@ -1,5 +1,6 @@
 package com.minerva.infrastructure.rest.config;
 
+import com.minerva.application.port.driven.CurrentUserProvider;
 import com.minerva.application.service.*;
 import com.minerva.domain.interfaces.PasswordHasher;
 import com.minerva.domain.repositories.*;
@@ -10,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
     @Bean
-    public CustomerService customerService(CustomerRepository customerRepository) {
-        return new CustomerService(customerRepository);
+    public CustomerService customerService(CustomerRepository customerRepository, CurrentUserProvider currentUserProvider) {
+        return new CustomerService(customerRepository, currentUserProvider);
     }   
 
     @Bean
