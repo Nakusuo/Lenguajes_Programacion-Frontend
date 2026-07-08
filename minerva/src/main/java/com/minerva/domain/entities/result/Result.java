@@ -18,10 +18,10 @@ public class Result<D> {
         this.exception = null;
     }
 
-    private Result(D data, DomainException exception) {
+    private Result(DomainException exception) {
         this.success = false;
         this.message = exception.getMessage();
-        this.data = data;
+        this.data = null;
         this.exception = exception;
     }
 
@@ -37,8 +37,8 @@ public class Result<D> {
         return new Result<>(false, message, null);
     }
 
-    public static <D, E extends DomainException> Result<D> fail(D data, E exception) {
-        return new Result<>(data, exception);
+    public static <D, E extends DomainException> Result<D> fail(E exception) {
+        return new Result<>(exception);
     }
 
     public boolean isSuccess() { return success; }
