@@ -4,7 +4,7 @@ import com.minerva.domain.valueObject.id.ProductName;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.entities.product.ProductId;
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;

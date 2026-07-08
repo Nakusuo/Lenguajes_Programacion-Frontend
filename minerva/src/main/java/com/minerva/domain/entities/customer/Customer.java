@@ -2,8 +2,8 @@ package com.minerva.domain.entities.customer;
 
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.valueObject.PhoneNumber;
+import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.valueObject.id.CustomerName;
 
