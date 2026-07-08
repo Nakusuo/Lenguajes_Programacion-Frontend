@@ -51,4 +51,8 @@ public enum Role {
     public boolean hasPermission (Permission permission) {
         return permissions.contains(permission);
     }
+
+    public boolean lacksPermission(Permission permission) {
+        return !hasPermission(permission);
+    }
 }
