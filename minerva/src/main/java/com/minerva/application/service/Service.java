@@ -6,13 +6,14 @@ import com.minerva.domain.entities.userAction.UserAction;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.Entity;
 import com.minerva.domain.repositories.UserRepository;
+import com.minerva.domain.valueObject.id.UserName;
 
 public abstract class Service {
     protected final Role userRole;
-    private final String userName;
-    protected final UserRepository userRepository;
+    private final UserName userName;
+    private final UserRepository userRepository;
 
-    public Service(Role userRole, String userName, UserRepository userRepository) {
+    public Service(Role userRole, UserName userName, UserRepository userRepository) {
         if (userRole == null) throw new RuntimeException("El usuario debe tener un rol, no puede ser nulo");
         if (userName == null) throw new RuntimeException("El usuarioName no puede ser nulo");
 
@@ -20,7 +21,8 @@ public abstract class Service {
         this.userName = userName;
         this.userRepository = userRepository;
     }
-
+    // Como segunda barrera de defensa aqui tambien se deberia validar si el rol del usuario tiene permiso para ejecer la accion
+    // caso contrario se lanzaria runtime exepction (decision para ti del futuro), no lo puse por pereza xd
     protected void registerUserAction(Permission permission, Entity<?> entity) {
         try {
             userRepository.save(new UserAction(userName, permission, entity));
