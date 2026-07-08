@@ -3,6 +3,7 @@ package com.minerva.domain.entities.sale;
 import com.minerva.domain.valueObject.id.ProductName;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.Money;
+import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
@@ -14,16 +15,17 @@ import com.minerva.domain.valueObject.id.SaleIdImpl;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public class Sale extends Entity<SaleId> {
     private final CustomerName customerName;
     private final LocalDateTime registrationDate;
 
     private final List<Pay>  pays =  new LinkedList<>();
-    private final List<SaleDetail> saleDetails = new LinkedList<SaleDetail>();
+    private final Map<ProductId, SaleDetail> saleDetails = new HashMap<>();
 
     public Sale(String customerNameId, List<SaleItem> items) throws DomainException {    
         super(SaleIdImpl.generate());
@@ -62,12 +64,13 @@ public class Sale extends Entity<SaleId> {
         try {
             if (saleDetails != null && !saleDetails.isEmpty()) {
                 for (SaleDetailDTO detailDTO : saleDetails) {
-                    this.saleDetails.add(new SaleDetail(
+                    SaleDetail saleDetail = new SaleDetail(
                         detailDTO.saleDetailId,
                         detailDTO.productId,
                         detailDTO.quantity,
                         detailDTO.unitPrice
-                    ));
+                    );
+                    this.saleDetails.put(saleDetail.getProductId(), saleDetail);
                 }
             } else {
                 throw new DomainException("La venta debe tener al menos un detalle");
@@ -100,21 +103,17 @@ public class Sale extends Entity<SaleId> {
             Money price = new Money(unitPrice);
             ProductQuantity quantity = new ProductQuantity(quantityBigDecimal);
 
-            Optional<SaleDetail> existingDetailOpt = saleDetails.stream()
-                    .filter(detail -> detail.getProductName().equals(productName))
-                    .findFirst();
-
-            if (existingDetailOpt.isPresent()) {
-                SaleDetail existingDetail = existingDetailOpt.get();
+            if (saleDetails.containsKey(productName)) {
+                SaleDetail existingDetail = saleDetails.get(productName);
 
                 quantity = quantity.add(existingDetail.getQuantity());
 
-                saleDetails.remove(existingDetail);
-            }
+                saleDetails.remove(existingDetail.getProductId());
+            };
 
             SaleDetail newDetail = new SaleDetail(productName, quantity, price);
 
-            saleDetails.add(newDetail);
+            saleDetails.put(productName, newDetail);
 
             return Result.success(null);
 
@@ -157,7 +156,7 @@ public class Sale extends Entity<SaleId> {
     public record PayData(BigDecimal amount, PaymentMethod paymentMethod) {}
 
     public Money calculateTotal() {
-        return saleDetails.stream()
+        return saleDetails.values().stream()
                 .map(SaleDetail::calculateSubTotal)
                 .reduce(Money.zero(), Money::add);
     }
@@ -201,19 +200,13 @@ public class Sale extends Entity<SaleId> {
     }
 
     public List<SaleDetailDTO> getSaleDetails() {
-        List<SaleDetailDTO> detailsDTO = new ArrayList<>(saleDetails.size());
-        for (SaleDetail detail : saleDetails) {
-            detailsDTO.add(new SaleDetailDTO(
-                detail.getId().toString(),
-                detail.getProductName().value,
-                detail.getQuantity().value,
-                detail.getUnitPrice().value));
-        }
-        return detailsDTO;
+        return saleDetails.values().stream()
+                .map(detail -> new SaleDetailDTO(
+                        detail.getId().toString(),
+                        detail.getProductId().asString(),
+                        detail.getQuantity().value,
+                        detail.getUnitPrice().value))
+                .toList();
     }
 
-//    @Override
-//    public SaleId getId() {
-//        return (SaleId) super.getId();
-//    }
 }
