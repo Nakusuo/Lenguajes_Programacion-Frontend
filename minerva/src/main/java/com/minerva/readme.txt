@@ -52,6 +52,8 @@ barCode
 
 -- Separar los result en dos, uno para mensajes normales y otro para mensajes con codigo
 
+-- El AllId es solo para registrar el caso donde se hacen consultas a muchas entidades
+
 -- No deberia lanzar exepciones el service para el flujo de permisos 
     public enum DomainError {
         UNAUTHORIZED
