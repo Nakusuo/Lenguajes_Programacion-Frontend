@@ -1,4 +1,4 @@
-package com.minerva.domain.entities.shared;
+package com.minerva.domain.entities.result;
 
 // Nota: chat gpt recomienda usar la palbra fuilure en vez de fail, porque dice que failure es sutatntivo
 public class Result<D> {
