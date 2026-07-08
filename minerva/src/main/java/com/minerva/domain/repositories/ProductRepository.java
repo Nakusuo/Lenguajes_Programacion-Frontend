@@ -2,6 +2,7 @@ package com.minerva.domain.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.minerva.domain.entities.product.*;
 import com.minerva.domain.entities.stockEntry.StockEntry;
@@ -21,4 +22,5 @@ public interface ProductRepository {
     Optional<Product> findByBarCode(BarCode barCode);
     List<Product> findAllProducts();
     List<StockEntry> findAllEntriesByProductId(ProductId id);
+    Set<Product> findAllByIds(Set<ProductId> productIds);
 }

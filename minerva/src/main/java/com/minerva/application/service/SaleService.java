@@ -1,5 +1,9 @@
 package com.minerva.application.service;
 
+import com.minerva.domain.entities.product.Product;
+import com.minerva.domain.entities.product.ProductId;
+import com.minerva.domain.repositories.ProductRepository;
+import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.entities.sale.Sale;
 import com.minerva.domain.exceptions.DomainException;
@@ -10,15 +14,20 @@ import com.minerva.domain.valueObject.id.SaleIdImpl;
 import com.minerva.domain.repositories.CustomerRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 
 public class SaleService {
     private final SaleRepository saleRepository;
     private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
 
-    public SaleService(SaleRepository saleRepository, CustomerRepository customerRepository) {
+    public SaleService(SaleRepository saleRepository, CustomerRepository customerRepository, ProductRepository productRepository) {
         this.saleRepository = saleRepository;
         this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
     }
 
     // --------------------- WRITE ---------------------
@@ -33,7 +42,16 @@ public class SaleService {
             Result<Void> addPaysResult = saleCreated.addPays(pays);
             if (addPaysResult.isFail()) return addPaysResult;
 
-            saleRepository.save(saleCreated);
+            Map<ProductId, ProductQuantity> productQuantities = saleCreated.getProductQuantities();
+            Set<Product> products = productRepository.findAllByIds(productQuantities.keySet());
+
+            if (products.size() != productQuantities.size()) return Result.fail("Uno o más productos no encontrados.");
+
+            for (Product product : products) {
+                product.processSale(productQuantities.get(product.getId()).value);
+            }
+
+            saleRepository.save(saleCreated, products);
             return Result.success(null);
         } catch (DomainException e) {
             return Result.fail(e.getMessage());
@@ -55,7 +73,7 @@ public class SaleService {
         Result<Void> addPaymentResult = sale.addPays(pays);
         if (addPaymentResult.isFail()) return addPaymentResult;
 
-        saleRepository.save(sale);
+        saleRepository.updatePayments(sale);
         return Result.success(null);
     }
 
