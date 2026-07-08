@@ -1,5 +1,6 @@
 package com.minerva.domain.entities.sale;
 
+import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.interfaces.Entity;
@@ -11,7 +12,7 @@ import com.minerva.domain.valueObject.id.SaleDetailIdImpl;
 import java.math.BigDecimal;
 
 class SaleDetail extends Entity<SaleDetailId> {
-    private final ProductName productName;
+    private final ProductId productName;
     private final ProductQuantity quantity;
     private final Money unitPrice;
 
@@ -53,7 +54,7 @@ class SaleDetail extends Entity<SaleDetailId> {
         }
     }
 
-    public ProductName getProductName() {
+    public ProductId getProductId() {
         return productName;
     }
 
