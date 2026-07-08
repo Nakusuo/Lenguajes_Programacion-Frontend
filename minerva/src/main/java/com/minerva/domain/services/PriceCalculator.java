@@ -1,8 +1,8 @@
 package com.minerva.domain.services;
 
 import com.minerva.domain.constants.GainStrategy;
+import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.valueObject.Money;
-import com.minerva.domain.entities.shared.Result;
 import com.minerva.domain.exceptions.DomainException;
 
 import java.math.BigDecimal;

@@ -3,7 +3,7 @@ package com.minerva.application.service;
 import java.util.Optional;
 
 import com.minerva.domain.constants.Role;
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.entities.user.User;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.interfaces.PasswordHasher;
