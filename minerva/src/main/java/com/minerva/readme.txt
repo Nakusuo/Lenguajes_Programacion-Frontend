@@ -37,7 +37,7 @@ barCode
 
 -- en los dto recibidos falta agregar logica de validacion, pero por factor tiempo se dejo asi nomas
 
--- deberia agregar un pepper a la incrptacion
+-- deberia agregar un pepper a la encriptación
 
 -- debria agregar un palabra caracteristirca a cada entidad para su id a la hora de registrarse
 

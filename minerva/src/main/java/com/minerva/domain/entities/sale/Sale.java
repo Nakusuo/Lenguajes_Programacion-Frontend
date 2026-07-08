@@ -209,4 +209,14 @@ public class Sale extends Entity<SaleId> {
                 .toList();
     }
 
+    public Map<ProductId, ProductQuantity> getProductQuantities() {
+        HashMap<ProductId, ProductQuantity> productIds = new HashMap<>();
+
+        for (SaleDetail detail : saleDetails.values()) {
+            productIds.put(detail.getProductId(), detail.getQuantity());
+        }
+
+        return productIds;
+    }
+
 }
