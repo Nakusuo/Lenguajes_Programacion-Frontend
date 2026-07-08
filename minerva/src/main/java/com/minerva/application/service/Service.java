@@ -9,7 +9,7 @@ import com.minerva.domain.repositories.UserRepository;
 import com.minerva.domain.valueObject.id.UserName;
 
 public abstract class Service {
-    protected final Role userRole;
+    private final Role userRole;
     private final UserName userName;
     private final UserRepository userRepository;
 
@@ -29,5 +29,9 @@ public abstract class Service {
         } catch (DomainException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    public Role getUserRole() {
+        return userRole;
     }
 }
