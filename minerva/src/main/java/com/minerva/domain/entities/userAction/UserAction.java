@@ -17,7 +17,7 @@ public class UserAction extends Entity<UserActionId> {
     
     private final LocalDateTime registrationDate;
 
-    public UserAction(UserName userName, Permission permission, Entity<?> entity) throws DomainException {
+    public UserAction(UserName userName, Permission permission, Id<?> entityId) throws DomainException {
         UserActionIdImpl tempId = UserActionIdImpl.generate();
         super(tempId);
         this.userActionIdImpl = tempId;
@@ -26,8 +26,8 @@ public class UserAction extends Entity<UserActionId> {
         if (permission == null) throw new DomainException("El permiso no puede ser nulo.");
         this.permission = permission;
 
-        if (entity == null) throw new DomainException("El ID de la entidad no puede ser nulo.");
-        this.entityId = entity.getId();
+        if (entityId == null) throw new DomainException("El ID de la entidad no puede ser nulo.");
+        this.entityId = entityId;
 
         this.registrationDate = LocalDateTime.now();
     }
