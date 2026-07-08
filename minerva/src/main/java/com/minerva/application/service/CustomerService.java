@@ -91,15 +91,10 @@ public class CustomerService extends Service {
             throw new UnauthorizedActionException("El usuario no tiene permiso para buscar clientes por número de teléfono.");
 
         try {            
-            return customerRepository
-                        .findByPhoneNumber(new PhoneNumber(phoneNumber))
-                        .map(customer -> {
-                            registerUserAction(
-                                Permission.CUSTOMER_FIND_BY_PHONE_NUMBER,
-                                customer.getId()
-                            );
-                            return customer;
-                        });
+            return customerRepository.findByPhoneNumber(new PhoneNumber(phoneNumber)).map(customer -> {
+                registerUserAction(Permission.CUSTOMER_FIND_BY_PHONE_NUMBER, customer.getId());
+                return customer;
+            });
         } catch (DomainException e) {
             return Optional.empty();
         }
