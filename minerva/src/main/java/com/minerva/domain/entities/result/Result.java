@@ -1,7 +1,5 @@
 package com.minerva.domain.entities.result;
 
-import com.minerva.domain.constants.DomainError;
-
 // Nota: chat gpt recomienda usar la palbra fuilure en vez de fail, porque dice que failure es sutatntivo
 public class Result<D> {
     private final boolean success;
@@ -24,10 +22,6 @@ public class Result<D> {
 
     public static <D> Result<D> fail(String message) {
         return new Result<>(false, message, null);
-    }
-
-    public static <D> Result<D> fail(DomainError domainError) {
-        return new Result<>(false, domainError.name(), null);
     }
 
     public boolean isSuccess() { return success; }
