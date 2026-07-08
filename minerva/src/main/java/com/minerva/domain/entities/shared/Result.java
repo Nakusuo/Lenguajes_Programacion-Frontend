@@ -1,36 +1,36 @@
 package com.minerva.domain.entities.shared;
 
 // Nota: chat gpt recomienda usar la palbra fuilure en vez de fail, porque dice que failure es sutatntivo
-public class Result<T> {
+public class Result<D> {
     private final boolean success;
     private final String message;
-    private final T data;
+    private final D data;
 
-    private Result(boolean success, String message, T data) {
+    protected Result(boolean success, String message, D data) {
         this.success = success;
         this.message = message;
         this.data = data;
     }
 
-    public static <T> Result<T> success(T data) {
+    public static <D> Result<D> success(D data) {
         return new Result<>(true, "", data);
     }
 
-    public static <T> Result<T> success(T data, String message) {
+    public static <D> Result<D> success(D data, String message) {
         return new Result<>(true, message, data);
     }
 
-    public static <T> Result<T> fail(String message) {
+    public static <D> Result<D> fail(String message) {
         return new Result<>(false, message, null);
     }
 
-    public static <T> Result<T> fail() {
+    public static <D> Result<D> fail() {
         return new Result<>(false, "", null);
     }
 
     public boolean isSuccess() { return success; }
     public boolean isFail() {return !success;}
     public String getMessage() { return message; }
-    public T getData() { return data; }
+    public D getData() { return data; }
 
 }
