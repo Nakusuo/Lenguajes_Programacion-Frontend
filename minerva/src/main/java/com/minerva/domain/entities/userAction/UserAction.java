@@ -17,11 +17,11 @@ public class UserAction extends Entity<UserActionId> {
     
     private final LocalDateTime registrationDate;
 
-    public UserAction(String userName, Permission permission, Entity<?> entity) throws DomainException {
+    public UserAction(UserName userName, Permission permission, Entity<?> entity) throws DomainException {
         UserActionIdImpl tempId = UserActionIdImpl.generate();
         super(tempId);
         this.userActionIdImpl = tempId;
-        this.userName = new UserName(userName);
+        this.userName = userName;
 
         if (permission == null) throw new DomainException("El permiso no puede ser nulo.");
         this.permission = permission;
