@@ -1,6 +1,6 @@
 package com.minerva.domain.entities.stockEntry;
 
-import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.valueObject.id.Id;
 
 import java.util.UUID;
 

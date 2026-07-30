@@ -1,7 +1,7 @@
 package com.minerva.domain.entities;
 
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.valueObject.id.Id;
 
 import java.util.Objects;
 
