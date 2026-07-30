@@ -4,9 +4,6 @@ Nota:
 
 
 - revisar que solo se use BigDecimal en las value keys
-- seguir la convencion de id de la db a la hora de nombrar los atributos, osea no es necesario qye una clase se entere que atributo se usa como id de otra
-
-
 -- cambiar todos los nombres que terminene en obj por el tipo de dato que son sus contraposiciones
 
 -- evitar esar esto en todo el proyecto .compareTo(BigDecimal.ZERO) < 0
@@ -96,3 +93,39 @@ barCode
         public Optional<DomainError> getDomainError() { return Optional.ofNullable(domainError); }
 
     }
+
+ojo revisar con chatcito
+--  Corregir la sitnexis en ingels                  exists by bar code <-- esto es corrrecto
+                                                    exist by bar code <-- esto es incorrrecto
+
+Un detalle adicional: en tu update_phone_number() del servicio tienes un posible bug de lógica:
+
+if self._customer_repository.exists_by_phone_number(
+    PhoneNumber(new_phone_number)
+):
+    return Result.failure(
+        "Ya existe un cliente con el mismo número de teléfono."
+    )
+
+Si el cliente ya tiene ese mismo número, también devolverá error. Lo ideal sería validar que el teléfono pertenece a otro cliente antes de rechazarlo.
+
+para que pinses como solucionarlo: 
+product_name UNIQUE puede darte problemas
+
+Tienes:
+
+product_name VARCHAR(100) NOT NULL UNIQUE
+
+Ejemplo:
+
+Coca Cola 500ml
+Coca-Cola 500 ML
+Coca Cola Botella 500 ml
+
+Son productos iguales pero PostgreSQL los acepta como diferentes.
+
+Normalmente:
+
+product_name VARCHAR(100) NOT NULL
+
+sin UNIQUE.
