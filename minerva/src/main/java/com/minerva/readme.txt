@@ -129,3 +129,6 @@ Normalmente:
 product_name VARCHAR(100) NOT NULL
 
 sin UNIQUE.
+
+
+-- cambiar el tamano de la contrsean en el sql para que se adapte a lo generado
