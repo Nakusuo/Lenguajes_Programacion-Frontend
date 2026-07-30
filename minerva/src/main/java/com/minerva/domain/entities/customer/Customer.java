@@ -47,8 +47,7 @@ public class Customer extends Entity<CustomerId> {
     }
 
     public Optional<PhoneNumber> getPhoneNumber() {
-        if (phoneNumber == null) return Optional.empty();
-        return Optional.of(phoneNumber);
+        return Optional.ofNullable(phoneNumber);
     }
 
     public Result<Void> updatePhoneNumber(String newPhoneNumber) {

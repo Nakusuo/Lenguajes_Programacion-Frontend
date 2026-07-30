@@ -87,8 +87,7 @@ public class StockEntry extends Entity<StockEntryId> {
     }
 
     public Optional<LocalDateTime> getExpirationDate() {
-        if (expirationDate == null) return Optional.empty();
-        return Optional.of(expirationDate);
+        return Optional.ofNullable(expirationDate);
     }
 
     public ProductQuantity getQuantity() {

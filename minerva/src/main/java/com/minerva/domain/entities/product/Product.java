@@ -189,8 +189,7 @@ public class Product extends Entity<ProductId> {
     }
 
     public Optional<BarCode> getBarCode() {
-        if (barCode == null) return Optional.empty();
-        return Optional.of(barCode);
+        return Optional.ofNullable(barCode);
     }
 
     public Money getGainAmount() {
@@ -202,8 +201,7 @@ public class Product extends Entity<ProductId> {
     }
 
     public Optional<ProductQuantity> getReorderLevel() {
-        if (reorderLevel == null) return Optional.empty();
-        return Optional.of(reorderLevel);
+        return Optional.ofNullable(reorderLevel);
     }
 
     public GainStrategy getGainStrategy() {
