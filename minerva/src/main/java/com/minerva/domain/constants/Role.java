@@ -43,11 +43,7 @@ public enum Role {
     private Role(Set<Permission> permissions) {
         this.permissions = permissions;
     }
-
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-
+    
     public boolean hasPermission (Permission permission) {
         return permissions.contains(permission);
     }
