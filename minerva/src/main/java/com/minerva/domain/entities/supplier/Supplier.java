@@ -1,9 +1,9 @@
 package com.minerva.domain.entities.supplier;
 
+import com.minerva.domain.exceptions.EntityRestoreException;
 import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.RUC;
 import com.minerva.domain.valueObject.id.SupplierName;
@@ -39,7 +39,7 @@ public class Supplier extends Entity<SupplierId> {
             this.ruc = ruc != null ? new RUC(ruc) : null;
             this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
         } catch (DomainException e) {
-            throw new UnexpectedDomainException("Error al crear el proveedor: " + e.getMessage(), e);
+            throw new EntityRestoreException("Error al crear el proveedor: " + e.getMessage(), e);
         }        
         super(tempId);
     }
@@ -71,13 +71,11 @@ public class Supplier extends Entity<SupplierId> {
     }
 
     public Optional<RUC> getRuc() {
-        if  (ruc == null) return Optional.empty();
-        return Optional.of(ruc);
+        return Optional.ofNullable(ruc);
     }
 
     public Optional<PhoneNumber> getPhoneNumber() {
-        if (phoneNumber == null) return Optional.empty();
-        return Optional.of(phoneNumber);
+        return Optional.ofNullable(phoneNumber);
     }
 }
 
