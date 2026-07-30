@@ -1,4 +1,4 @@
-package com.minerva.domain.interfaces;
+package com.minerva.domain.services;
 
 import com.minerva.domain.valueObject.Password;
 import com.minerva.domain.valueObject.PasswordHash;

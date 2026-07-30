@@ -3,7 +3,7 @@ package com.minerva.domain.entities.user;
 import java.time.LocalDateTime;
 
 import com.minerva.domain.constants.Role;
-import com.minerva.domain.interfaces.PasswordHasher;
+import com.minerva.domain.services.PasswordHasher;
 import com.minerva.domain.valueObject.*;
 import com.minerva.domain.valueObject.DNI;
 import com.minerva.domain.exceptions.DomainException;

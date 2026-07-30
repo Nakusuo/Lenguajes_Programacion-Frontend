@@ -2,7 +2,7 @@ package com.minerva.infrastructure.adapter;
 
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.PasswordHasher;
+import com.minerva.domain.services.PasswordHasher;
 import com.minerva.domain.valueObject.Password;
 import com.minerva.domain.valueObject.PasswordHash;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
