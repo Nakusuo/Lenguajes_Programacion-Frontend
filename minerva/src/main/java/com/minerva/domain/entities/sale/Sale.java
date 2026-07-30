@@ -7,7 +7,7 @@ import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.constants.PaymentMethod;
 import com.minerva.domain.valueObject.id.CustomerName;
 import com.minerva.domain.valueObject.id.SaleIdImpl;

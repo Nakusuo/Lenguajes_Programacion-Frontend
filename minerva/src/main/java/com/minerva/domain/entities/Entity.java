@@ -1,6 +1,7 @@
-package com.minerva.domain.interfaces;
+package com.minerva.domain.entities;
 
 import com.minerva.domain.exceptions.UnexpectedDomainException;
+import com.minerva.domain.interfaces.Id;
 
 import java.util.Objects;
 

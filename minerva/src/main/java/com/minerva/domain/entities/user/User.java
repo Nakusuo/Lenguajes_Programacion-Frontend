@@ -8,7 +8,7 @@ import com.minerva.domain.valueObject.*;
 import com.minerva.domain.valueObject.DNI;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.id.UserName;
 
 public class User extends Entity<UserId> {

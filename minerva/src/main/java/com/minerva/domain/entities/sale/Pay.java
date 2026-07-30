@@ -4,7 +4,7 @@ import com.minerva.domain.constants.PaymentMethod;
 import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.id.PayIdImpl;
 
 import java.math.BigDecimal;

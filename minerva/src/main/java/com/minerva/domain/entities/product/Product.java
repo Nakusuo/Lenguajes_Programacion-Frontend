@@ -4,7 +4,7 @@ import com.minerva.domain.constants.Category;
 import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.result.Result;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.BarCode;
 import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.exceptions.DomainException;

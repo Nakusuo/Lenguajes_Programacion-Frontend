@@ -4,7 +4,7 @@ import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.RUC;
 import com.minerva.domain.valueObject.id.SupplierName;
 
