@@ -132,7 +132,7 @@ CREATE TABLE user_action (
     user_action_id UUID PRIMARY KEY,
     user_name VARCHAR(30) NOT NULL,
     permission permission NOT NULL,
-    entity_id VARCHAR(100) NOT NULL,
+    entity_id TEXT NOT NULL,
     registration_date TIMESTAMP NOT NULL,
 
     CONSTRAINT fk_user_action_user
@@ -299,7 +299,8 @@ INSERT INTO customer (customer_name_id, registration_date)
 VALUES ('anonimo', NOW());
 
 -- ==========================
--- AUDITORIA
+-- AUDITORIA 
+-- AJENO A LAS REGLAS DE NEGOCIO, EN CONSECUENCIA SE TOMARON MAS LIBERTADES CON RESPECTO AL TRATAMIENTO DE LOS DATOS
 -- ==========================
 
 CREATE TABLE audit_log (
