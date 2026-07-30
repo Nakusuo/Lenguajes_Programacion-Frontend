@@ -239,3 +239,150 @@ VALUES ('anonimo', NOW());
 
 INSERT INTO customer (customer_name_id, registration_date)
 VALUES ('anonimo', NOW());
+
+-- ==========================
+-- AUDITORIA
+-- ==========================
+
+CREATE TABLE audit_log (
+    audit_id BIGSERIAL PRIMARY KEY,
+    table_name TEXT NOT NULL,
+    operation CHAR(1) NOT NULL CHECK (operation IN ('I', 'U', 'D')),
+    record_id TEXT,
+    old_data JSONB,
+    new_data JSONB,
+    user_name TEXT,
+    audit_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE FUNCTION audit_trigger()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    entity_id TEXT;
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        entity_id := to_jsonb(NEW)->>TG_ARGV[0];
+
+        INSERT INTO audit_log(
+            table_name,
+            operation,
+            record_id,
+            user_name,
+            new_data
+        )
+        VALUES (
+            TG_TABLE_NAME,
+            'I',
+            entity_id,
+            current_user,
+            to_jsonb(NEW)
+        );
+
+        RETURN NEW;
+
+    ELSIF TG_OP = 'UPDATE' THEN
+        entity_id := to_jsonb(NEW)->>TG_ARGV[0];
+
+        INSERT INTO audit_log(
+            table_name,
+            operation,
+            record_id,
+            old_data,
+            new_data,
+            user_name
+        )
+        VALUES (
+            TG_TABLE_NAME,
+            'U',
+            entity_id,
+            to_jsonb(OLD),
+            to_jsonb(NEW),
+            current_user
+        );
+
+        RETURN NEW;
+
+    ELSE
+        entity_id := to_jsonb(OLD)->>TG_ARGV[0];
+
+        INSERT INTO audit_log(
+            table_name,
+            operation,
+            record_id,
+            old_data,
+            user_name
+        )
+        VALUES (
+            TG_TABLE_NAME,
+            'D',
+            entity_id,
+            to_jsonb(OLD),
+            current_user
+        );
+
+        RETURN OLD;
+    END IF;
+END;
+$$;
+
+CREATE TRIGGER trg_audit_app_user
+AFTER INSERT OR UPDATE OR DELETE ON app_user
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('user_name');
+
+CREATE TRIGGER trg_audit_supplier
+AFTER INSERT OR UPDATE OR DELETE ON supplier
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('supplier_name_id');
+
+CREATE TRIGGER trg_audit_customer
+AFTER INSERT OR UPDATE OR DELETE ON customer
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('customer_name_id');
+
+CREATE TRIGGER trg_audit_product
+AFTER INSERT OR UPDATE OR DELETE ON product
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('product_id');
+
+CREATE TRIGGER trg_audit_unit_to_bulk
+AFTER INSERT OR UPDATE OR DELETE ON unit_to_bulk
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('bulk_product_id');
+
+CREATE TRIGGER trg_audit_stock_entry
+AFTER INSERT OR UPDATE OR DELETE ON stock_entry
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('stock_entry_id');
+
+CREATE TRIGGER trg_audit_sale
+AFTER INSERT OR UPDATE OR DELETE ON sale
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('sale_id');
+
+CREATE TRIGGER trg_audit_sale_detail
+AFTER INSERT OR UPDATE OR DELETE ON sale_detail
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('sale_detail_id');
+
+CREATE TRIGGER trg_audit_inventory_loss
+AFTER INSERT OR UPDATE OR DELETE ON inventory_loss
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('inventory_loss_id');
+
+CREATE TRIGGER trg_audit_pay
+AFTER INSERT OR UPDATE OR DELETE ON pay
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('pay_id');
+
+CREATE TRIGGER trg_audit_product_return
+AFTER INSERT OR UPDATE OR DELETE ON product_return
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('product_return_id');
+
+CREATE TRIGGER trg_audit_user_action
+AFTER INSERT OR UPDATE OR DELETE ON user_action
+FOR EACH ROW
+EXECUTE FUNCTION audit_trigger('user_action_id');
