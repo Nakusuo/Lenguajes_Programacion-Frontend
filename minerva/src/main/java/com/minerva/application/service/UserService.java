@@ -6,7 +6,7 @@ import com.minerva.domain.constants.Role;
 import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.entities.user.User;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.PasswordHasher;
+import com.minerva.domain.services.PasswordHasher;
 import com.minerva.domain.repositories.UserRepository;
 import com.minerva.domain.valueObject.id.UserName;
 

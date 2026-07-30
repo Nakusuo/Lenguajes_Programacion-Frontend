@@ -2,7 +2,7 @@ package com.minerva.infrastructure.rest.config;
 
 import com.minerva.application.port.driven.CurrentUserProvider;
 import com.minerva.application.service.*;
-import com.minerva.domain.interfaces.PasswordHasher;
+import com.minerva.domain.services.PasswordHasher;
 import com.minerva.domain.repositories.*;
 import com.minerva.infrastructure.adapter.*;
 import org.springframework.context.annotation.Bean;
