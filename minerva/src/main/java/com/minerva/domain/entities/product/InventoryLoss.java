@@ -2,7 +2,7 @@ package com.minerva.domain.entities.product;
 
 import com.minerva.domain.constants.ReasonProductLoss;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.valueObject.id.InventoryLossIdImpl;
 import com.minerva.domain.valueObject.id.ProductName;

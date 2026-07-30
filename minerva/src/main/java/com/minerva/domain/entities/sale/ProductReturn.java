@@ -3,7 +3,7 @@ package com.minerva.domain.entities.sale;
 import com.minerva.domain.constants.ReasonProductReturn;
 import com.minerva.domain.valueObject.ProductQuantity;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.Entity;
+import com.minerva.domain.entities.Entity;
 import com.minerva.domain.valueObject.id.ProductReturnIdImpl;
 
 import java.time.LocalDateTime;
