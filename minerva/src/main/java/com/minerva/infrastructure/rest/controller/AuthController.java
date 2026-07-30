@@ -2,7 +2,7 @@ package com.minerva.infrastructure.rest.controller;
 
 
 import com.minerva.domain.constants.Role;
-import com.minerva.domain.entities.shared.Result;
+import com.minerva.domain.entities.result.Result;
 import com.minerva.infrastructure.rest.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

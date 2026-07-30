@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.minerva.domain.constants.Category;
-import com.minerva.domain.entities.shared.Result;
+
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import com.minerva.application.service.ProductService;
 import com.minerva.domain.constants.GainStrategy;
 import com.minerva.domain.constants.SaleType;
 import com.minerva.domain.entities.product.Product;
+import com.minerva.domain.entities.result.Result;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

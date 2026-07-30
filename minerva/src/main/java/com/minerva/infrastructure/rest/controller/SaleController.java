@@ -1,8 +1,9 @@
 package com.minerva.infrastructure.rest.controller;
 
 import com.minerva.application.service.SaleService;
+import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.entities.sale.Sale;
-import com.minerva.domain.entities.shared.Result;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
