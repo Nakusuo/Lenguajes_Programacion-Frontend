@@ -3,7 +3,6 @@ package com.minerva.domain.valueObject;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.ValueObject;
 
 import java.math.BigDecimal;
 

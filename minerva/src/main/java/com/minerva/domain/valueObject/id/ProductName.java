@@ -2,7 +2,7 @@ package com.minerva.domain.valueObject.id;
 
 import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.ValueObject;
+import com.minerva.domain.valueObject.ValueObject;
 
 public class ProductName extends ValueObject<String> implements ProductId {
     private static final int MIN_LENGTH = 3;

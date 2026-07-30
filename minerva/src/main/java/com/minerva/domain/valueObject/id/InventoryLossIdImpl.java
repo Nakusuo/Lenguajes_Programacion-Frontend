@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.minerva.domain.entities.product.InventoryLossId;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.ValueObject;
+import com.minerva.domain.valueObject.ValueObject;
 
 public class InventoryLossIdImpl extends ValueObject<UUID> implements InventoryLossId {
 

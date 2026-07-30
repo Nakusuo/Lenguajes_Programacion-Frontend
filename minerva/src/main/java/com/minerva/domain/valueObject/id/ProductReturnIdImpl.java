@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.minerva.domain.entities.sale.ProductReturnId;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.interfaces.ValueObject;
+import com.minerva.domain.valueObject.ValueObject;
 
 public class ProductReturnIdImpl extends ValueObject<UUID> implements ProductReturnId {
 
