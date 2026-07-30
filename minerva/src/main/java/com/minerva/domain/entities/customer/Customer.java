@@ -1,10 +1,10 @@
 package com.minerva.domain.entities.customer;
 
 import com.minerva.domain.entities.Entity;
+import com.minerva.domain.exceptions.EntityRestoreException;
 import com.minerva.domain.valueObject.PhoneNumber;
 import com.minerva.domain.entities.result.Result;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.exceptions.UnexpectedDomainException;
 import com.minerva.domain.valueObject.id.CustomerName;
 
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public class Customer extends Entity<CustomerId> {
             this.registrationDate = registrationDate;
             this.phoneNumber = phoneNumber != null ? new PhoneNumber(phoneNumber) : null;
         } catch (DomainException e) {
-            throw new UnexpectedDomainException("Error al crear el cliente: " + e.getMessage(), e);
+            throw new EntityRestoreException("Error al crear el cliente: " + e.getMessage(), e);
         }
         super(tempId);
     }
