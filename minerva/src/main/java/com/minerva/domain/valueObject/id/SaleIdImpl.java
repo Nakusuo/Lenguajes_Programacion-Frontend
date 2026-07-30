@@ -3,7 +3,7 @@ package com.minerva.domain.valueObject.id;
 import java.util.UUID;
 
 import com.minerva.domain.entities.sale.SaleId;
-import com.minerva.domain.interfaces.ValueObject;
+import com.minerva.domain.valueObject.ValueObject;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 

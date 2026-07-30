@@ -2,7 +2,7 @@ package com.minerva.domain.valueObject.id;
 
 import com.minerva.domain.entities.user.UserId;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.ValueObject;
+import com.minerva.domain.valueObject.ValueObject;
 
 public final class UserName extends ValueObject<String> implements UserId {
 

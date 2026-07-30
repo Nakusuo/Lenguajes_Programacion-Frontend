@@ -1,4 +1,4 @@
-package com.minerva.domain.interfaces;
+package com.minerva.domain.valueObject;
 
 import java.util.Objects;
 

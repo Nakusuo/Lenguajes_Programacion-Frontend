@@ -1,7 +1,6 @@
 package com.minerva.domain.valueObject;
 
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.interfaces.ValueObject;
 
 public class Name extends ValueObject<String> {
     private static final int MIN_LENGTH = 3;
