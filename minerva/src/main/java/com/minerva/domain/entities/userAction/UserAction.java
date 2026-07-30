@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.minerva.domain.constants.Permission;
 import com.minerva.domain.entities.Entity;
-import com.minerva.domain.interfaces.Id;
+import com.minerva.domain.valueObject.id.Id;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.valueObject.id.UserActionIdImpl;
 import com.minerva.domain.valueObject.id.UserName;
