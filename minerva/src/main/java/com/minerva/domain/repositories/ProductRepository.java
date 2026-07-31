@@ -8,7 +8,7 @@ import com.minerva.domain.entities.product.*;
 import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.valueObject.BarCode;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductName;
+import com.minerva.domain.valueObject.ProductName;
 
 public interface ProductRepository {
     void registerProduct(Product product, StockEntry stockEntry);

@@ -5,7 +5,7 @@ import com.minerva.domain.entities.stockEntry.StockEntry;
 import com.minerva.domain.repositories.ProductRepository;
 import com.minerva.domain.valueObject.BarCode;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductName;
+import com.minerva.domain.valueObject.ProductName;
 import com.minerva.infrastructure.persistence.entity.ProductEntity;
 import com.minerva.infrastructure.persistence.entity.StockEntryEntity;
 import com.minerva.infrastructure.persistence.entity.SupplierEntity;
