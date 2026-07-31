@@ -1,10 +1,8 @@
-package com.minerva.domain.valueObject.id;
+package com.minerva.domain.valueObject;
 
-import com.minerva.domain.entities.product.ProductId;
 import com.minerva.domain.exceptions.DomainException;
-import com.minerva.domain.valueObject.ValueObject;
 
-public class ProductName extends ValueObject<String> implements ProductId {
+public class ProductName extends ValueObject<String> {
     private static final int MIN_LENGTH = 3;
     private static final int MAX_LENGTH = 100;
 
@@ -17,13 +15,4 @@ public class ProductName extends ValueObject<String> implements ProductId {
         if (!value.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$")) throw new DomainException("El nombre del producto solo puede contener letras y números.");
     }
 
-    @Override
-    public String asString() {
-        return value;
-    }
-
-    @Override
-    public String value() {
-        return value;
-    }
 }
