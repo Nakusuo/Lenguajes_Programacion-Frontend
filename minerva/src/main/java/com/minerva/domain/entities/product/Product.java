@@ -10,13 +10,15 @@ import com.minerva.domain.valueObject.Money;
 import com.minerva.domain.exceptions.DomainException;
 import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
-import com.minerva.domain.services.PriceCalculator;
 import com.minerva.domain.valueObject.ProductQuantity;
-import com.minerva.domain.valueObject.id.ProductName;
+import com.minerva.domain.valueObject.ProductName;
+import com.minerva.domain.valueObject.id.ProductIdImpl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.minerva.domain.services.Math.isDecimal;
 import static com.minerva.domain.services.Math.isZeroOrLess;
@@ -48,9 +50,8 @@ public class Product extends Entity<ProductId> {
             Category category,
             BigDecimal purchasePrice
     ) throws DomainException {
-        ProductName tempId = new ProductName(productName);
-        super(tempId);
-        this.productName = tempId;
+        super(ProductIdImpl.generate());
+        this.productName = new ProductName(productName);
         this.stock = new ProductQuantity(initialStock);
         this.gainAmount = new Money(gainAmount);
         this.gainStrategy = gainStrategy;
@@ -80,7 +81,7 @@ public class Product extends Entity<ProductId> {
             this.barCode = new BarCode(barCode);
         }
 
-        Result<Money> priceResult = PriceCalculator.calculate(new Money(purchasePrice), gainStrategy, this.gainAmount);
+        Result<Money> priceResult = calculatePrice(new Money(purchasePrice), gainStrategy, this.gainAmount);
         if (priceResult.isFail()) throw new DomainException(priceResult.getMessage());
 
         this.price = priceResult.getData();
@@ -88,6 +89,7 @@ public class Product extends Entity<ProductId> {
     }
 
     public Product(
+            UUID productId,
             String productName,
             GainStrategy gainStrategy,
             BigDecimal gainAmount,
@@ -99,10 +101,10 @@ public class Product extends Entity<ProductId> {
             BigDecimal price,
             LocalDateTime registrationDate
     ) {
-        ProductName tempId;
+        ProductId tempId;
         try {
-            tempId = new ProductName(productName);
-            this.productName = tempId;
+            tempId = new ProductIdImpl(productId);
+            this.productName = new ProductName(productName);
             this.stock = new ProductQuantity(stock);
             this.gainAmount = new Money(gainAmount);
             this.gainStrategy = gainStrategy;
@@ -115,7 +117,7 @@ public class Product extends Entity<ProductId> {
 
         } catch (DomainException e) {
             throw new UnexpectedDomainException("Error al crear el producto: " + e.getMessage(), e);
-        } 
+        }
         super(tempId);
     }
 
@@ -181,6 +183,58 @@ public class Product extends Entity<ProductId> {
         if (quantity.isZeroOrLess()) return Result.fail("La cantidad debe ser mayor a cero");
 
         return Result.success(null);
+    }
+    // ---------------------------------------------
+
+    private Result<Money> calculatePrice(Money purchasePrice, GainStrategy gainStrategy, Money gainAmount) {
+        if (purchasePrice == null)
+            return Result.fail("Se necesita un precio de compra para calcular el precio.");
+
+        if (gainStrategy == null)
+            return Result.fail("Se necesita una estrategia de ganancia para calcular el precio.");
+
+        if (gainAmount == null)
+            return Result.fail("Se necesita un monto de ganancia para calcular el precio.");
+
+        BigDecimal finalPrice = switch (gainStrategy) {
+            case INCREMENTAL -> purchasePrice.value.add(gainAmount.value);
+
+            case PORCENTAJE -> purchasePrice.value.multiply(gainFactor(gainAmount));
+        };
+
+        try {
+            return Result.success(new Money(finalPrice));
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
+    }
+
+    public Result<Money> calculateCost() {
+        BigDecimal purchasePrice = switch (gainStrategy) {
+            case INCREMENTAL -> price.value.subtract(gainAmount.value);
+
+            case PORCENTAJE -> price.value.divide(
+                    gainFactor(gainAmount),
+                    Money.MAX_DECIMALS,
+                    RoundingMode.HALF_UP
+            );
+        };
+
+        try {
+            return Result.success(new Money(purchasePrice));
+        } catch (DomainException e) {
+            return Result.fail(e.getMessage());
+        }
+    }
+
+    private BigDecimal gainFactor(Money gainAmount) {
+        return BigDecimal.ONE.add(
+                gainAmount.value.divide(
+                        BigDecimal.valueOf(100),
+                        Money.MAX_DECIMALS,
+                        RoundingMode.HALF_UP
+                )
+        );
     }
     // ---------------------------------------------
 
