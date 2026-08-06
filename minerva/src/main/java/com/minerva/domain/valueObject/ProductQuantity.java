@@ -1,6 +1,6 @@
 package com.minerva.domain.valueObject;
 
-import com.minerva.domain.exceptions.DomainException;
+import com.minerva.domain.exceptions.InvalidDomainArgumentException;
 import com.minerva.domain.exceptions.MinimumAmountException;
 import com.minerva.domain.exceptions.UnexpectedDomainException;
 
@@ -11,10 +11,10 @@ public class ProductQuantity extends ValueObject<BigDecimal> {
     private static final BigDecimal MIN_AMOUNT = BigDecimal.ZERO;
     private static final int MAX_DECIMALS = 3;
 
-    public ProductQuantity(BigDecimal value) throws DomainException {
+    public ProductQuantity(BigDecimal value) throws InvalidDomainArgumentException {
         super(value);
 
-        if (value.scale() > MAX_DECIMALS) throw new DomainException("La cantidad no puede tener decimales.");
+        if (value.scale() > MAX_DECIMALS) throw new InvalidDomainArgumentException("La cantidad no puede tener decimales.");
         if (value.compareTo(MIN_AMOUNT) < 0) throw new MinimumAmountException(MIN_AMOUNT.toString());
     }
 
@@ -22,7 +22,7 @@ public class ProductQuantity extends ValueObject<BigDecimal> {
     public static ProductQuantity zero() {
         try {
             return new ProductQuantity(BigDecimal.ZERO);
-        } catch (DomainException e) {
+        } catch (InvalidDomainArgumentException e) {
             // Si esto truena, récenle al de arriba
             throw new UnexpectedDomainException("Error al crear la cantidad cero.", e);
         }
@@ -57,7 +57,7 @@ public class ProductQuantity extends ValueObject<BigDecimal> {
     public ProductQuantity add(ProductQuantity other) {
         try {
             return new ProductQuantity(this.value.add(other.value));
-        } catch (DomainException e) {
+        } catch (InvalidDomainArgumentException e) {
             // Si esto truena, récenle al de arriba
             throw new UnexpectedDomainException("Error al sumar cantidades de producto: " + e.getMessage(), e);
         }
@@ -68,7 +68,7 @@ public class ProductQuantity extends ValueObject<BigDecimal> {
             return new ProductQuantity(this.value.subtract(other.value));
         } catch (MinimumAmountException e) {
             throw e;
-        } catch (DomainException e) {
+        } catch (InvalidDomainArgumentException e) {
             // Si esto truena, récenle al de arriba
             throw new UnexpectedDomainException("Error al restar cantidades de producto: " + e.getMessage(), e);
         }
