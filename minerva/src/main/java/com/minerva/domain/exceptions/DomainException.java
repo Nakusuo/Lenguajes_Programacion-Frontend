@@ -6,12 +6,12 @@ public class DomainException extends Exception {
 
     public DomainException(String message) {
         super(message);
-        this.errorType = ErrorType .GENERIC;
+        this.errorType = ErrorType.GENERIC;
     }
 
     public DomainException(String message, Throwable cause) {
         super(message, cause);
-        this.errorType = ErrorType .GENERIC;
+        this.errorType = ErrorType.GENERIC;
     }
 
     protected DomainException(String message, Throwable cause, ErrorType errorType) {
@@ -26,7 +26,9 @@ public class DomainException extends Exception {
 
     public enum ErrorType  {
         GENERIC,
-        UNAUTHORIZED_ACTION
+        UNAUTHORIZED_ACTION,
+        NULL_VALUE,
+        MINIMUM_AMOUNT_VIOLATION
     }
 
 }
