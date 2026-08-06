@@ -28,7 +28,8 @@ public class DomainException extends Exception {
         GENERIC,
         UNAUTHORIZED_ACTION,
         NULL_VALUE,
-        MINIMUM_AMOUNT_VIOLATION
+        MINIMUM_AMOUNT_VIOLATION,
+        INVALID_ARGUMENT
     }
 
 }
