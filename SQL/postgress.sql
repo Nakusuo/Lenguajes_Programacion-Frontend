@@ -311,7 +311,7 @@ CREATE TABLE exception_log (
     cause_type      TEXT,
     cause_message   TEXT,
     stack_trace     TEXT,
-    occurred_at     TIMESTAMPT NOT NULL
+    occurred_at     TIMESTAMP NOT NULL
 );
 
 CREATE TABLE audit_log (
