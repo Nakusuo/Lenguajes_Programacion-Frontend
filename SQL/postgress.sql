@@ -304,6 +304,16 @@ VALUES ('anonimo', NOW());
 -- AJENO A LAS REGLAS DE NEGOCIO, EN CONSECUENCIA SE TOMARON MAS LIBERTADES CON RESPECTO AL TRATAMIENTO DE LOS DATOS
 -- ==========================
 
+CREATE TABLE exception_log (
+    id              BIGSERIAL PRIMARY KEY,
+    exception_type  TEXT NOT NULL,
+    message         TEXT,
+    cause_type      TEXT,
+    cause_message   TEXT,
+    stack_trace     TEXT,
+    occurred_at     TIMESTAMPT NOT NULL
+);
+
 CREATE TABLE audit_log (
     audit_id BIGSERIAL PRIMARY KEY,
     table_name TEXT NOT NULL,
