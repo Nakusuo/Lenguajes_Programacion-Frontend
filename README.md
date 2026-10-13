@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://github.com/Nakusuo"><img src="https://raw.githubusercontent.com/Nakusuo/Nakusuo/main/assets/covers/Lenguajes_Programacion-Frontend.svg" width="100%" alt="Lenguajes_Programacion-Frontend — Nakusu"/></a>
+</p>
+
 # Minerva
 
 Minerva es el backend de un sistema para una **tienda o minimarket**: lleva los productos y su stock, registra las ventas y los pagos, y guarda clientes y proveedores. Lo hicimos para el curso de **Lenguajes de Programación**, y el objetivo era aprender a construir una API ordenada con **arquitectura hexagonal**.
